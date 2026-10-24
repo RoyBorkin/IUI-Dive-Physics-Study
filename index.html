@@ -45,13 +45,16 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .flag{width:30px;height:22px;border-radius:4px;flex:none;display:block}
 .brand b{font-family:var(--f-display);font-weight:400;font-size:19px;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .brand small{display:block;font-size:11.5px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
-.seg{position:relative;display:grid;grid-template-columns:1fr 1fr;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:3px}
+.seg{position:relative;display:grid;grid-template-columns:1fr 1fr 1fr;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:3px}
 .seg button{position:relative;z-index:1;border:0;background:none;padding:7px 16px;border-radius:999px;font-weight:600;font-size:14px;color:var(--muted);transition:color .2s}
 .seg button[aria-pressed="true"]{color:var(--ink)}
 .seg .thumb{position:absolute;top:3px;bottom:3px;inset-inline-start:3px;width:calc(50% - 3px);background:var(--surface);border-radius:999px;
   box-shadow:0 1px 2px rgb(0 0 0/.08),0 2px 8px rgb(0 0 0/.06);transition:transform .35s var(--ease)}
-[data-mode="exam"] .seg .thumb{transform:translateX(100%)}
-[dir="rtl"][data-mode="exam"] .seg .thumb{transform:translateX(-100%)}
+.seg .thumb{width:calc((100% - 6px) / 3)}
+[data-mode="sheet"] .seg .thumb{transform:translateX(100%)}
+[dir="rtl"][data-mode="sheet"] .seg .thumb{transform:translateX(-100%)}
+[data-mode="exam"] .seg .thumb{transform:translateX(200%)}
+[dir="rtl"][data-mode="exam"] .seg .thumb{transform:translateX(-200%)}
 .icons{display:flex;gap:6px}
 .ib{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center;font-weight:700;font-size:13px;
   transition:transform .15s var(--ease),background .2s}
@@ -234,6 +237,113 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .missed .e{color:var(--muted)}
 @media (max-width:560px){.res{grid-template-columns:1fr;justify-items:center;text-align:center}.bars div{grid-template-columns:minmax(0,1fr) 70px 46px;text-align:start}}
 
+/* ---------- cheat sheet ---------- */
+.seg button{white-space:nowrap}
+@media (max-width:420px){.seg button{padding:6px 10px;font-size:13.5px}}
+.sh-head{display:flex;flex-wrap:wrap;align-items:flex-end;gap:16px 24px;margin-bottom:22px}
+.sh-head>div{flex:1 1 320px;min-width:0}
+.sh-head h1{font-family:var(--f-display);font-weight:400;font-size:clamp(30px,4.4vw,46px);line-height:1.08}
+.find{position:relative;flex:0 1 320px;min-width:0;width:100%}
+.find input{width:100%;font:inherit;font-size:16px;padding:11px 40px 11px 14px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);-webkit-appearance:none;appearance:none}
+[dir="rtl"] .find input{padding:11px 14px 11px 40px}
+.find input:focus{outline:2px solid var(--sea);outline-offset:1px}
+.find svg{position:absolute;inset-inline-end:14px;top:50%;width:18px;height:18px;margin-top:-9px;color:var(--muted);pointer-events:none}
+.jump{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:0 calc(-1 * max(16px,env(safe-area-inset-left,0px))) 22px;padding:2px max(16px,env(safe-area-inset-left,0px))}
+.jump::-webkit-scrollbar{display:none}
+.jump a{flex:none;font-size:13px;color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:5px 11px;background:var(--surface)}
+.jump a:hover{color:var(--ink);border-color:var(--sea)}
+.grid{columns:3 320px;column-gap:16px}
+.blk{break-inside:avoid;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px 14px;margin-bottom:16px;scroll-margin-top:90px}
+.blk h2{font-size:17px;line-height:1.25;display:flex;align-items:baseline;gap:8px;margin-bottom:8px}
+.blk h2 i{font-style:normal;font-family:var(--f-mono);font-size:12px;color:var(--sea);font-weight:600}
+.blk .fx{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 10px}
+.blk .fx code{font-family:var(--f-mono);font-size:13.5px;background:var(--sea-soft);padding:4px 9px;border-radius:7px;direction:ltr;unicode-bidi:isolate}
+.blk ul{list-style:none;margin:0;padding:0;display:grid;gap:5px;font-size:14.5px;line-height:1.45}
+.blk li{position:relative;padding-inline-start:14px}
+.blk li::before{content:"";position:absolute;inset-inline-start:0;top:.6em;width:5px;height:5px;border-radius:50%;background:var(--sea)}
+.blk li.r::before{background:var(--flag)}
+.blk .nb{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;padding-top:10px;border-top:1px dashed var(--line)}
+.blk .nb span{font-size:12.5px;color:var(--muted);background:var(--sunk);border-radius:7px;padding:3px 8px}
+.blk .nb b{font-family:var(--f-mono);color:var(--ink);font-weight:600;direction:ltr;unicode-bidi:isolate}
+mark{background:color-mix(in srgb,var(--flag) 22%,transparent);color:inherit;border-radius:3px;padding:0 1px}
+.flow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:14px}
+.flow span{background:var(--ok-soft);color:var(--ink);border-radius:8px;padding:6px 10px;font-weight:500}
+.flow em{font-style:normal;color:var(--muted)}
+[dir="rtl"] .flow em{transform:scaleX(-1);display:inline-block}
+.wide{column-span:all}
+.empty{color:var(--muted);text-align:center;padding:40px 0}
+
+/* ---------- mode thumb for 4 tabs ---------- */
+.seg{grid-template-columns:repeat(4,1fr)!important}
+.seg .thumb{width:calc((100% - 6px) / 4)!important}
+[data-mode="sheet"] .seg .thumb{transform:translateX(100%)!important}
+[data-mode="calc"] .seg .thumb{transform:translateX(200%)!important}
+[data-mode="exam"] .seg .thumb{transform:translateX(300%)!important}
+[dir="rtl"][data-mode="sheet"] .seg .thumb{transform:translateX(-100%)!important}
+[dir="rtl"][data-mode="calc"] .seg .thumb{transform:translateX(-200%)!important}
+[dir="rtl"][data-mode="exam"] .seg .thumb{transform:translateX(-300%)!important}
+.tabs{display:none}
+@media (max-width:760px){
+  .seg{display:none}
+  .brand b{display:block!important}
+  .tabs{display:grid;grid-template-columns:repeat(4,1fr);position:fixed;inset:auto 0 0;z-index:25;
+    background:color-mix(in srgb,var(--surface) 88%,transparent);backdrop-filter:blur(16px) saturate(1.4);-webkit-backdrop-filter:blur(16px) saturate(1.4);
+    border-top:1px solid var(--line);padding:6px max(8px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px))}
+  .tabs button{border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 2px;border-radius:12px;font-size:11.5px;font-weight:600;color:var(--muted);transition:color .2s}
+  .tabs button svg{width:22px;height:22px;transition:transform .25s var(--ease)}
+  .tabs button[aria-pressed="true"]{color:var(--sea)}
+  .tabs button[aria-pressed="true"] svg{transform:translateY(-1px) scale(1.06)}
+  .tabs button:active svg{transform:scale(.9)}
+  .wrap{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
+  .toast{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+}
+
+/* ---------- calculators ---------- */
+.warnbar{display:flex;gap:10px;align-items:flex-start;background:var(--flag-soft);border-radius:12px;padding:10px 14px;font-size:14px;margin-bottom:20px;max-width:80ch}
+.warnbar b{color:var(--flag)}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,460px),1fr));gap:18px;align-items:start}
+.calc{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px 20px 20px;scroll-margin-top:90px;min-width:0}
+.calc>header{display:flex;gap:12px;align-items:flex-start;margin-bottom:14px}
+.calc>header .n{flex:none;width:30px;height:30px;border-radius:9px;background:var(--sea-soft);color:var(--sea);display:grid;place-items:center;font-family:var(--f-mono);font-weight:600;font-size:13px}
+.calc h2{font-size:18px;line-height:1.25}
+.calc header p{margin:2px 0 0;font-size:13.5px;color:var(--muted)}
+.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 14px}
+.fld{display:flex;flex-direction:column;gap:5px;min-width:0}
+.fld.full{grid-column:1/-1}
+.fld>span{font-size:12.5px;font-weight:600;color:var(--muted);display:flex;justify-content:space-between;gap:8px}
+.fld>span b{font-family:var(--f-mono);color:var(--ink);direction:ltr;unicode-bidi:isolate;font-weight:600}
+.box{display:flex;align-items:center;border:1px solid var(--line);border-radius:10px;background:var(--bg);overflow:hidden}
+.box:focus-within{border-color:var(--sea);box-shadow:0 0 0 3px color-mix(in srgb,var(--sea) 20%,transparent)}
+.box input{flex:1;min-width:0;border:0;background:none;font:inherit;font-size:16px;font-family:var(--f-mono);padding:9px 10px;color:var(--ink);direction:ltr;text-align:start;-moz-appearance:textfield}
+.box input::-webkit-inner-spin-button,.box input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+.box i{font-style:normal;font-size:12.5px;color:var(--muted);padding-inline-end:10px;white-space:nowrap}
+.fld input[type=range]{width:100%;accent-color:var(--sea);height:28px;margin:0}
+.cps{display:flex;flex-wrap:wrap;gap:6px}
+.cps button{border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:6px 11px;font-size:13.5px;transition:all .15s var(--ease)}
+.cps button[aria-pressed="true"]{background:var(--sea-soft);border-color:var(--sea);font-weight:600}
+.cps button:active{transform:scale(.95)}
+.out{margin-top:16px;border-top:1px dashed var(--line);padding-top:14px}
+.big{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.big div{background:var(--sunk);border-radius:12px;padding:10px 12px;min-width:0}
+.big strong{display:block;font-family:var(--f-mono);font-size:22px;font-weight:600;direction:ltr;text-align:start;font-variant-numeric:tabular-nums;line-height:1.25;overflow-wrap:anywhere}
+[dir="rtl"] .big strong{text-align:right}
+.big span{font-size:12.5px;color:var(--muted);line-height:1.35;display:block}
+.big .hero{background:var(--sea);color:var(--bg)}
+.big .hero span{color:inherit;opacity:.85}
+.big .bad strong{color:var(--bad)} .big .warn strong{color:var(--warn)} .big .good strong{color:var(--ok)}
+.work{margin-top:12px;font-family:var(--f-mono);font-size:13px;color:var(--muted);background:var(--bg);border-radius:10px;padding:10px 12px;direction:ltr;text-align:left;overflow-x:auto;white-space:pre;line-height:1.6}
+.note{margin:10px 0 0;font-size:13.5px;color:var(--muted)}
+.note.bad{color:var(--bad);font-weight:600}
+.note.warn{color:var(--warn);font-weight:600}
+.mini{width:100%;border-collapse:collapse;margin-top:12px;font-size:13.5px}
+.mini th,.mini td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:start}
+.mini th{font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.mini td{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.mini tr.me td{color:var(--sea);font-weight:600}
+.viz{display:flex;align-items:flex-end;justify-content:center;gap:28px;margin-top:12px;height:120px}
+.viz div{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:12px;color:var(--muted)}
+.viz i{display:block;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff 0 10%,color-mix(in srgb,var(--sea) 55%,#fff) 35%,var(--sea) 80%);transition:width .3s var(--ease),height .3s var(--ease)}
+
 .toast{position:fixed;inset-inline:0;bottom:calc(18px + env(safe-area-inset-bottom,0px));margin:auto;width:max-content;max-width:calc(100% - 32px);background:var(--ink);color:var(--bg);
   padding:10px 18px;border-radius:999px;font-size:14px;font-weight:600;z-index:40;transition:transform .3s var(--ease),opacity .3s;transform:translateY(20px);opacity:0;pointer-events:none}
 .toast.show{transform:none;opacity:1}
@@ -249,8 +359,10 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
     </div>
     <div class="seg" role="group" id="modeSeg">
       <span class="thumb" aria-hidden="true"></span>
-      <button id="mStudy" aria-pressed="true"></button>
-      <button id="mExam" aria-pressed="false"></button>
+      <button data-m="study" aria-pressed="false"></button>
+      <button data-m="sheet" aria-pressed="false"></button>
+      <button data-m="calc" aria-pressed="false"></button>
+      <button data-m="exam" aria-pressed="false"></button>
     </div>
     <div class="icons">
       <button class="ib" id="langBtn" aria-label="Language"></button>
@@ -259,6 +371,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
   </div>
 </header>
 <main class="wrap" id="main"></main>
+<nav class="tabs" id="tabs"><button data-m="study" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5"/></svg><span></span></button><button data-m="sheet" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg><span></span></button><button data-m="calc" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="2.5" width="14" height="19" rx="2"/><path d="M8 6.5h8M8 11h.01M12 11h.01M16 11h.01M8 14.5h.01M12 14.5h.01M16 14.5h.01M8 18h.01M12 18h.01M16 18h.01"/></svg><span></span></button><button data-m="exam" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9"/></svg><span></span></button></nav>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
@@ -278,7 +391,7 @@ const UI={
   lawacc:"Law → accident at a glance",law:"Law / topic",explains:"Accidents it explains",o2tbl:"Oxygen exposure limits (teaching values)",
   po2c:"PO₂ (bar)",maxc:"Max single exposure",usec:"Typical use",neuro:"5-minute field neuro exam",chk:"Check",look:"What to look for",
   coll:"Telling collapses apart",pres:"Presentation",cause:"Likely cause",resp:"Field response",dcs:"DCS types",type:"Type",cat:"Category",signs:"Key signs",
-  saved:"Saved",scoreMsg:["Keep diving into the material.","Getting there.","Solid.","Excellent."]},
+  sheet:"Cheat sheet",sheetT:"Cheat sheet",sheetS:"Every chapter on one page: formulas, key facts, figures and first aid.",find:"Search the sheet…",noHit:"Nothing matches",tables:"Reference tables",core:"First-aid core for any dive emergency",saved:"Saved",scoreMsg:["Keep diving into the material.","Getting there.","Solid.","Excellent."]},
  he:{name:"פיזיקת צלילה – לימוד",sub:"צוללן מדעי AAUS · פיזיקה, פיזיולוגיה ותאונות",study:"לימוד",exam:"מבחן",
   chapters:"פרקים",learned:"נלמדו",ch:"פרק",keypoints:"עיקרי הדברים",formula:"נוסחה",nums:"מספרים שחייבים לזכור",accidents:"תאונות ופציעות",
   aid:"עזרה ראשונה",prev:"הקודם",next:"הבא",mark:"סמן כנלמד",marked:"נלמד",quizThis:"תרגל פרק זה",
@@ -293,7 +406,7 @@ const UI={
   lawacc:"חוק ← תאונה במבט אחד",law:"חוק / נושא",explains:"התאונות שהוא מסביר",o2tbl:"גבולות חשיפה לחמצן (ערכי לימוד)",
   po2c:"PO₂ (bar)",maxc:"חשיפה בודדת מרבית",usec:"שימוש אופייני",neuro:"בדיקה נוירולוגית בשטח – 5 דקות",chk:"בדיקה",look:"מה מחפשים",
   coll:"איך מבדילים בין קריסות",pres:"הופעה",cause:"סיבה סבירה",resp:"תגובה בשטח",dcs:"סוגי DCS",type:"סוג",cat:"קטגוריה",signs:"סימנים עיקריים",
-  saved:"נשמר",scoreMsg:["כדאי לחזור על החומר.","בדרך הנכונה.","טוב מאוד.","מצוין."]}
+  sheet:"צ׳יט שיט",sheetT:"צ׳יט שיט",sheetS:"כל הפרקים בעמוד אחד: נוסחאות, עובדות מפתח, מספרים ועזרה ראשונה.",find:"חיפוש בדף…",noHit:"לא נמצאו תוצאות",tables:"טבלאות עזר",core:"ליבת העזרה הראשונה בכל חירום צלילה",saved:"נשמר",scoreMsg:["כדאי לחזור על החומר.","בדרך הנכונה.","טוב מאוד.","מצוין."]}
 };
 
 /* =========================== CHAPTERS =========================== */
@@ -468,8 +581,6 @@ const CH=[
   {t:L("Collapse unrelated to the dive","קריסה שלא קשורה לצלילה"),i:[L("Primary cardiac arrest","דום לב ראשוני"),L("Standard BLS: CPR 30:2, AED ASAP","החייאה בסיסית: 30:2, AED מוקדם ככל האפשר")]}],
  nums:[["30:2",L("compressions : breaths","עיסויים : הנשמות")],["10–15 L/min",L("NRB flow","זרימה במסכת NRB")],["60–80%+",L("O₂ via NRB","חמצן במסכת NRB")],["21%",L("room air","אוויר רגיל")]]},
 
-{id:"cheat",d:L("Log","יומן"),cheat:true,tag:L("Summary","סיכום"),t:L("Cheat sheet","דף נוסחאות"),
- lead:L("Law → accident, plus the tables you'll want in your head.","חוק ← תאונה, והטבלאות שכדאי לזכור בעל פה.")}
 ];
 
 /* =========================== QUESTIONS (first option = correct) =========================== */
@@ -661,6 +772,343 @@ const O2T=[["1.6","45",L("Absolute ceiling; contingency deco gas","תקרה מו
 const DCST=[[L("Type I","סוג I"),L("Musculoskeletal (bends)","שרירי-שלדי (bends)"),L("Deep joint/limb pain","כאב עמוק במפרקים/גפיים")],[L("Type I","סוג I"),L("Cutaneous (skin bends)","עורי"),L("Itching, marbled rash","גרד, פריחה משוישת")],[L("Type I","סוג I"),L("Lymphatic","לימפטי"),L("Swelling near lymph nodes","נפיחות ליד בלוטות לימפה")],[L("Type II","סוג II"),L("Neurological","נוירולוגי"),L("Numbness, weakness, paralysis","נימול, חולשה, שיתוק")],[L("Type II","סוג II"),L("Vestibular (staggers)","וסטיבולרי (staggers)"),L("Vertigo, tinnitus, hearing loss","ורטיגו, טנטון, אובדן שמיעה")],[L("Type II","סוג II"),L("Cardiopulmonary (chokes)","לב-ריאה (chokes)"),L("Dry cough, chest pain, breathlessness","שיעול יבש, כאב בחזה, קוצר נשימה")]];
 const NEURO=[[L("Orientation","התמצאות"),L("Name, age, place, date, time","שם, גיל, מקום, תאריך, שעה")],[L("Eyes","עיניים"),L("Track a finger; pupils; vision","מעקב אחרי אצבע; אישונים; ראייה")],[L("Forehead","מצח"),L("Sensation; raise eyebrows evenly","תחושה; הרמת גבות סימטרית")],[L("Face","פנים"),L("Whistle, smile, clench teeth","שריקה, חיוך, הידוק שיניים")],[L("Ears","אוזניים"),L("Hearing each side; ringing","שמיעה בכל צד; צלצולים")],[L("Gag reflex","רפלקס הקאה"),L("Swallow; watch the neck","בליעה; מעקב אחרי הצוואר")],[L("Tongue","לשון"),L("Drooping or drift","צניחה או סטייה לצד")],[L("Shoulders","כתפיים"),L("Raise against resistance","הרמה נגד התנגדות")],[L("Arms & hands","ידיים"),L("Sensation; squeeze strength","תחושה; כוח לחיצה")],[L("Chest","חזה"),L("Sensation; breathing pattern","תחושה; דפוס נשימה")],[L("Legs","רגליים"),L("Move against resistance","תנועה נגד התנגדות")],[L("Heel-to-toe","עקב-בוהן"),L("Balance (skip on a moving boat)","שיווי משקל (לא בסירה נעה)")]];
 
+/* =========================== CHEAT SHEET =========================== */
+const R="!"; /* lines starting with ! are red-flag (serious) */
+const SHEET={
+phys:[L("Breathing reflex ← blood CO₂, not O₂. Hypoxic drive is secondary","רפלקס הנשימה ← CO₂ בדם, לא O₂. הדחף ההיפוקסי משני"),
+ L("~300M alveoli; exchange = passive diffusion along the partial-pressure gradient","~300 מיליון נאדיות; החילוף = דיפוזיה סבילה לפי מפל הלחץ החלקי"),
+ L("O₂ rides on hemoglobin; CO₂ returns mostly as bicarbonate","O₂ נקשר להמוגלובין; CO₂ חוזר בעיקר כביקרבונט"),
+ L("Capillaries = tissue exchange · arteries out, veins back","נימים = חילוף עם רקמות · עורקים יוצאים, ורידים חוזרים"),
+ L("Pulmonary circuit heart ↔ lungs · systemic heart ↔ body","מעגל ריאתי לב ↔ ריאות · סיסטמי לב ↔ גוף")],
+water:[L("~800× denser than air → drag; streamline to save air","צפוף פי ~800 מאוויר ← התנגדות; תנוחה זורמת חוסכת אוויר"),
+ L("Refraction: looks 33% larger, 25% closer","שבירה: נראה גדול ב-33%, קרוב ב-25%"),
+ L("Diffraction in turbid water → visual reversal","עקיפה במים עכורים ← היפוך ראייתי"),
+ L("Red & orange lost first; blue-green by 15–20 m","אדום וכתום נעלמים ראשונים; כחול-ירוק ב-15–20 מ'"),
+ L("Sound 4× faster, direction hard to localize","קול מהיר פי 4, קשה לזהות כיוון"),
+ L("Heat loss 25× faster; shivering from a 1°C core drop","איבוד חום מהיר פי 25; רעד כבר בירידה של 1°C"),
+ L("Hypothermia → warm gradually · hyperthermia → cool + fluids","היפותרמיה ← חימום הדרגתי · היפרתרמיה ← קירור ושתייה")],
+arch:[L("Buoyant force = weight of displaced fluid","כוח העילוי = משקל הנוזל הנדחה"),
+ L("Control: weight (lead) or displaced volume (BCD, lungs, suit)","שליטה: משקל (משקולות) או נפח נדחה (מאזן, ריאות, חליפה)"),
+ L("Neutral = exact point; positive/negative = degrees","ניטרלי = נקודה מדויקת; חיובי/שלילי = דרגות"),
+ L("Neutral in the sea → sinks slightly in fresh water","ניטרלי בים ← שוקע מעט במים מתוקים"),
+ L("!Uncontrolled ascent: BCD air expands on ascent (Boyle)","!עלייה בלתי מבוקרת: האוויר במאזן מתפשט בעלייה (בויל)"),
+ L("Overweighting/task load and entanglement → panic, out-of-air","עודף משקל/עומס משימות והסתבכות ← פאניקה, חוסר אוויר")],
+press:[L("Absolute = atmosphere + water column","מוחלט = אטמוספרה + עמוד מים"),
+ L("+1 bar per 10 m sea · per 10.3 m fresh","+1 bar לכל 10 מ' ים · לכל 10.3 מ' מתוקים"),
+ L("Gauge pressure ignores the atmosphere (SPG, depth gauge)","לחץ מד מתעלם מהאטמוספרה (SPG, מד עומק)"),
+ L("Pressure vs depth is linear","לחץ מול עומק – ליניארי"),
+ L("Saltwater computer in fresh water reads deeper (more conservative)","מחשב מי ים במים מתוקים מראה עמוק יותר (שמרני)")],
+boyle:[L("Volume ∝ 1/pressure; biggest change in the first 10 m","נפח ∝ 1/לחץ; השינוי הגדול ב-10 מ' הראשונים"),
+ L("Gas use × ATA: 60 min at surface → 15 min at 30 m","צריכה × ATA: 60 דק' על פני המים ← 15 דק' ב-30 מ'"),
+ L("!Never hold your breath on scuba","!לעולם לא לעצור נשימה עם סקובה"),
+ L("Squeeze on descent, reverse block on ascent: ears, sinuses, mask, teeth, GI","מעיכה בירידה, חסימה הפוכה בעלייה: אוזניים, סינוסים, מסכה, שיניים, מעיים"),
+ L("Ear: eardrum rupture, round/oval window rupture, alternobaric vertigo","אוזן: קרע עור תוף, קרע חלון עגול/סגלגל, ורטיגו אלטרנוברי"),
+ L("!Lung over-expansion → pneumothorax, emphysema, AGE","!התפשטות יתר בריאות ← חזה אוויר, אמפיזמה, AGE"),
+ L("!AGE: immediate stroke-like signs or cardiac arrest","!AGE: סימנים דמויי שבץ מיידיים או דום לב"),
+ L("Fish swim bladder too → descending device","גם שלפוחית שחייה של דגים ← מתקן הורדה")],
+temp:[L("Charles: V ∝ T (P const) · Gay-Lussac: P ∝ T (V const)","שארל: V ∝ T (P קבוע) · גיי-ליסאק: P ∝ T (V קבוע)"),
+ L("Combined law: n constant · ideal gas adds n, R","החוק המשולב: n קבוע · גז אידיאלי מוסיף n ו-R"),
+ L("Always Kelvin or Rankine","תמיד קלווין או רנקין"),
+ L("Hot cylinder → pressure ↑ → burst disc; filling heats, draining cools","מיכל חם ← לחץ ↑ ← דיסק ביטחון; מילוי מחמם, ריקון מקרר"),
+ L("Cold first stage → icing, free-flow","שלב ראשון קר ← קפיאה, זרימה חופשית"),
+ L("Warm fill + cold water → less gas than the SPG showed","מילוי חם + מים קרים ← פחות גז ממה שהמד הראה")],
+dalton:[L("Fraction stays fixed; partial pressure rises with depth","השבר קבוע; הלחץ החלקי עולה עם העומק"),
+ L("Air at 40 m: PO₂ 1.05 · PN₂ 3.95 bar","אוויר ב-40 מ': PO₂ 1.05 · PN₂ 3.95 bar"),
+ L("Narcosis ~30 m → ascend with buddy; He less, Ar more narcotic","נרקוזיס ~30 מ' ← לעלות עם בן הזוג; הליום פחות, ארגון יותר נרקוטי"),
+ L("!CNS O₂ (ConVENTID): hold reg, ascend after convulsion","!רעילות חמצן CNS (ConVENTID): להחזיק ווסת, לעלות אחרי הפרכוס"),
+ L("Pulmonary O₂: long exposure → cough, chest pain","רעילות חמצן ריאתית: חשיפה ארוכה ← שיעול, כאב בחזה"),
+ L("CO₂: exertion, cold, bad reg → stop work, O₂","CO₂: מאמץ, קור, ווסת לקוי ← להפסיק מאמץ, חמצן"),
+ L("!CO: dirty fill, binds Hb → never breathe smelly gas","!CO: מילוי מזוהם, נקשר להמוגלובין ← לא לנשום גז עם ריח")],
+henry:[L("On-gas at depth, off-gas on ascent; not instant","ספיגה בעומק, שחרור בעלייה; לא מיידי"),
+ L("Super-saturation beyond tolerance → bubbles = DCS","על-רוויה מעבר לסבולת ← בועות = DCS"),
+ L("N₂ ~5× more soluble in fat","N₂ מסיס פי ~5 בשומן"),
+ L("Type I: bends, skin (cutis marmorata), lymphatic","סוג I: מפרקים, עור (cutis marmorata), לימפטי"),
+ L("!Type II: neuro, staggers, chokes → emergency","!סוג II: נוירולוגי, staggers, chokes ← חירום"),
+ L("DCI = DCS + AGE · PFO in 10–20%","DCI = DCS + AGE · PFO אצל 10–20%"),
+ L("Risk: deep/long, fast ascent, missed stops, repetitive, flying, dehydration, fat, cold, exertion, alcohol","סיכון: עמוק/ארוך, עלייה מהירה, דילוג עצירות, חוזרות, טיסה, התייבשות, שומן, קור, מאמץ, אלכוהול"),
+ L("O₂ early (even before symptoms) → neuro exam → chamber","חמצן מוקדם (גם לפני תסמינים) ← בדיקה נוירולוגית ← תא לחץ")],
+haldane:[L("Body = theoretical tissue compartments","הגוף = תאי רקמה תאורטיים"),
+ L("Half-time: halfway to equilibrium at a new pressure","זמן מחצית: חצי הדרך לשיווי משקל בלחץ חדש"),
+ L("Fast: quick, little tolerance · slow (fat, cartilage): repetitive & multi-day","מהירים: מהר, סבולת נמוכה · איטיים (שומן, סחוס): צלילות חוזרות ורב-יומיות"),
+ L("M-value: max excess N₂ tolerated on ascent","ערך M: עודף N₂ מרבי שנסבל בעלייה"),
+ L("Royal Navy 1907–1956; today's computers derive from it","הצי המלכותי 1907–1956; מחשבי היום נגזרים ממנו")],
+other:[L("!Near-drowning → hospital (secondary drowning)","!כמעט-טביעה ← בית חולים (טביעה משנית)"),
+ L("Dehydration = DCS risk; urine clear to light yellow","התייבשות = סיכון DCS; שתן שקוף עד צהוב בהיר"),
+ L("Mid-water disorientation → line, instruments, buddy","חוסר התמצאות ← חבל, מכשירים, בן זוג"),
+ L("Carotid sinus: tight hood → HR and BP drop","סינוס קרוטידי: ברדס הדוק ← ירידה בדופק ובלחץ דם"),
+ L("Shallow water blackout: breath-hold + hyperventilation","עילפון במים רדודים: עצירת נשימה + היפרוונטילציה"),
+ L("Stings: no fresh water, vinegar, scrape · spines: ~45°C, 30–90 min","עקיצות: לא מים מתוקים, חומץ, לגרד · קוצים: ~45°C, 30–90 דק'"),
+ L("IPE (pink froth) · SWAS (flu-like) · HPNS (deep helium)","IPE (קצף ורוד) · SWAS (דמוי שפעת) · HPNS (הליום עמוק)")],
+emerg:[L("12-check neuro exam; compare sides, repeat over time","בדיקה נוירולוגית ב-12 שלבים; להשוות צדדים, לחזור לאורך זמן"),
+ L("Kit: barrier mask, gloves, shears, bandages · site: O₂, AED","ערכה: מסכת החייאה, כפפות, מספריים, תחבושות · באתר: חמצן, AED"),
+ L("EAP: hospital, chamber, evacuation, call tree; confirm with DSO","EAP: בית חולים, תא לחץ, פינוי, שרשרת קריאה; לאשר מול DSO"),
+ L("Current CPR, first aid, O₂ certification required","חובה הסמכה בתוקף להחייאה, עזרה ראשונה ומתן חמצן")],
+cpr:[L("Drowning = respiratory arrest first, cardiac last","טביעה = קודם דום נשימה, דום לב בסוף"),
+ L("Safety → Consciousness → Airway → Breathing → Circulation","בטיחות ← הכרה ← נתיב אוויר ← נשימה ← מחזור דם"),
+ L("Breathing → NRB 10–15 L/min (60–80%+ O₂)","נושם ← NRB 10–15 ל'/דק' (60–80%+ חמצן)"),
+ L("!Not breathing → CPR 30:2 + AED ASAP","!לא נושם ← החייאה 30:2 + AED מוקדם"),
+ L("DCS/AGE: supine, not head-down; EMS + DAN hotline","DCS/AGE: על הגב, לא ראש למטה; שירותי חירום + מוקד DAN"),
+ L("OSHA Subpart T exemption: DCB majority, science only, observers, scientists","פטור OSHA Subpart T: רוב בוועדה, מדע בלבד, צופים, מדענים")]
+};
+const COLL=[[L("Unresponsive at/near surface, water aspirated","ללא תגובה ליד פני המים, שאיפת מים"),L("Drowning","טביעה"),L("O₂ if breathing; CPR if not; AED once out & dry","חמצן אם נושם; החייאה אם לא; AED אחרי ייבוש")],
+[L("Collapse during or right after ascent","קריסה בעלייה או מיד אחריה"),L("AGE","AGE"),L("O₂ / CPR + AED; supine; EAP","חמצן / החייאה + AED; על הגב; EAP")],
+[L("Pain, rash, neuro signs 15 min–24 h later","כאב, פריחה, סימנים נוירולוגיים אחרי 15 דק'–24 ש'"),L("DCS I / II","DCS I / II"),L("O₂, neuro exam, document, DAN","חמצן, בדיקה נוירולוגית, תיעוד, DAN")],
+[L("Collapse unrelated to the dive","קריסה לא קשורה לצלילה"),L("Cardiac arrest","דום לב"),L("BLS: CPR 30:2, AED","החייאה בסיסית 30:2, AED")]];
+const CORE=[L("Safety","בטיחות"),L("ABCs","ABC"),L("Activate EAP / EMS","הפעלת EAP / חירום"),L("100% O₂ (NRB)","100% חמצן (NRB)"),L("Supine, treat shock","על הגב, טיפול בהלם"),L("CPR + AED if needed","החייאה + AED לפי הצורך"),L("Neuro exam, repeat","בדיקה נוירולוגית, חזרה"),L("Chamber","תא לחץ")];
+
+function renderSheet(){
+  const t=T(), qv=(S.find||"").trim().toLowerCase();
+  const hit=s=>!qv||String(s).toLowerCase().includes(qv);
+  const hl=s=>{const e=esc(s);if(!qv)return e;const i=e.toLowerCase().indexOf(esc(qv).toLowerCase());return i<0?e:e.slice(0,i)+"<mark>"+e.slice(i,i+esc(qv).length)+"</mark>"+e.slice(i+esc(qv).length)};
+  const blocks=CH.map((c,i)=>{
+    const title=tx(c.t), lines=(SHEET[c.id]||[]).map(tx), nums=(c.nums||[]), fx=c.f||[];
+    const tHit=hit(title);
+    const ls=lines.filter(l=>tHit||hit(l)), ns=nums.filter(n=>tHit||hit(n[0]+" "+tx(n[1]))), fs=fx.filter(f=>tHit||hit(f));
+    if(qv&&!tHit&&!ls.length&&!ns.length&&!fs.length) return "";
+    return `<section class="blk" id="s-${c.id}"><h2><i class="ltr">${String(i+1).padStart(2,"0")}</i>${hl(title)}</h2>
+     ${fs.length?`<div class="fx">${fs.map(f=>`<code>${hl(f)}</code>`).join("")}</div>`:""}
+     <ul>${ls.map(l=>{const r=l.startsWith(R);return `<li class="${r?"r":""}">${hl(r?l.slice(1):l)}</li>`}).join("")}</ul>
+     ${ns.length?`<div class="nb">${ns.map(n=>`<span><b>${hl(n[0])}</b> ${hl(tx(n[1]))}</span>`).join("")}</div>`:""}</section>`}).join("");
+  const th=a=>`<tr>${a.map(x=>`<th>${x}</th>`).join("")}</tr>`;
+  const rows=(data,map,mono=[])=>data.filter(r=>!qv||hit(map(r).join(" "))).map(r=>`<tr>${map(r).map((v,k)=>`<td${mono.includes(k)?' class="mono"':""}>${hl(v)}</td>`).join("")}</tr>`).join("");
+  const tbl=(h,head,body)=>body?`<div class="sec"><h3>${h}</h3><div class="tbl"><table>${th(head)}${body}</table></div></div>`:"";
+  const tables=
+    tbl(t.lawacc,[t.law,t.explains],rows(LAW,r=>[tx(r[0]),tx(r[1])]))+
+    tbl(t.formula,[t.law,t.formula,S.lang==="he"?"קבוע":"Constant"],rows([["Boyle","בויל","P₁V₁ = P₂V₂","T"],["Charles","שארל","V₁/T₁ = V₂/T₂","P"],["Gay-Lussac","גיי-ליסאק","P₁/T₁ = P₂/T₂","V"],["Combined","משולב","P₁V₁/T₁ = P₂V₂/T₂","n"],["Ideal gas","גז אידיאלי","PV = nRT","R"],["Dalton","דלטון","P_gas = P_total × F_gas","—"],["Henry","הנרי","C = k_H × P_gas","T"],["Archimedes","ארכימדס","F_b = ρ × V × g","—"]],r=>[S.lang==="he"?r[1]:r[0],r[2],r[3]],[1,2]))+
+    tbl(t.coll,[t.pres,t.cause,t.resp],rows(COLL,r=>r.map(tx)))+
+    tbl(t.dcs,[t.type,t.cat,t.signs],rows(DCST,r=>r.map(tx)))+
+    tbl(t.o2tbl,[t.po2c,t.maxc,t.usec],rows(O2T,r=>[r[0],r[1]+" min",tx(r[2])],[0,1]))+
+    tbl(t.neuro,["#",t.chk,t.look],rows(NEURO.map((r,i)=>[String(i+1),...r]),r=>[r[0],tx(r[1]),tx(r[2])],[0]));
+  const coreHit=!qv||CORE.some(c=>hit(tx(c)));
+  const body=blocks+tables;
+  return {blocks,tables,coreHit,empty:!blocks&&!tables&&!coreHit};
+}
+function renderSheetView(){
+  const t=T();
+  $("#main").innerHTML=`<div class="view">
+   <div class="sh-head"><div><div class="eyebrow"><span>AAUS · ${CH.length} ${t.chapters}</span></div><h1>${t.sheetT}</h1><p class="lead" style="margin-top:6px">${t.sheetS}</p></div>
+    <label class="find"><input id="find" type="search" placeholder="${t.find}" value="${esc(S.find||"")}" autocomplete="off" aria-label="${t.find}">
+     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></label></div>
+   <nav class="jump">${CH.map((c,i)=>`<a href="#s-${c.id}" data-j="${c.id}">${String(i+1).padStart(2,"0")} ${esc(tx(c.t))}</a>`).join("")}</nav>
+   <div id="sheetBody"></div></div>`;
+  const paint=()=>{const r=renderSheet();
+    $("#sheetBody").innerHTML=(r.coreHit?`<div class="sec" style="margin-top:0;margin-bottom:22px"><h3>${t.core}</h3><div class="flow">${CORE.map(c=>`<span>${esc(tx(c))}</span>`).join("<em>→</em>")}</div></div>`:"")+
+      (r.blocks?`<div class="grid">${r.blocks}</div>`:"")+r.tables+(r.empty?`<p class="empty">${t.noHit}</p>`:"")};
+  paint();
+  $("#find").oninput=e=>{S.find=e.target.value;paint()};
+  document.querySelectorAll("[data-j]").forEach(a=>a.onclick=e=>{e.preventDefault();const el=document.getElementById("s-"+a.dataset.j);
+    if(!el){S.find="";$("#find").value="";paint()}document.getElementById("s-"+a.dataset.j)?.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"})});
+}
+
+/* =========================== CALCULATORS =========================== */
+const CU={
+ en:{calc:"Calculators",calcT:"Dive calculators",calcS:"The course formulas with your own numbers. Each result shows the working, so you can check it by hand.",
+  warn:"<b>Teaching tool only.</b> Never plan a real dive with it. Use your program's tables, your dive computer and your DSO's rules.",
+  sea:"Seawater",fresh:"Fresh water",water:"Water",depth:"Depth",
+  c1:"Free air in a cylinder",c1s:"How much surface-pressure air the tank holds",tank:"Cylinder size (water volume)",fill:"Fill pressure",res:"Reserve",atDepth:"Use at depth",
+  freeAir:"Free air (full)",usable:"Usable (above reserve)",atD:"Usable, as volume at depth",cuft:"Cubic feet (full)",
+  c2:"Gas volume at depth",c2s:"A flexible air space (balloon, BCD, lungs, neoprene) taken from the surface to depth",v0:"Volume at the surface",
+  vd:"Volume at depth",pct:"Of surface volume",lost:"Buoyancy lost",amb:"Ambient pressure",surf:"Surface",
+  c3:"Lift bag: air needed",c3s:"Free air to make an object neutral at depth",mass:"Object weight in air",ovol:"Object volume",ovolh:"0 if unknown",
+  neg:"Negative buoyancy",bag:"Bag volume at depth",air:"Free air to inject",tankUse:"Pressure used from your cylinder",floats:"The object already floats here, so no lift air is needed.",
+  bagNote:"On the way up the same air expands back toward its free-air volume. Vent as you ascend or the bag will run away to the surface.",
+  c4:"Dive time: air vs nitrox",c4s:"No-stop limit and gas time at depth, for air or nitrox up to 40%",gas:"Breathing gas",sac:"Surface air consumption (SAC)",
+  cons:"Conservatism",std:"Standard",cn:"Conservative",vc:"Very conservative",
+  ndl:"No-stop limit",gtime:"Gas time to reserve",maxbt:"Max bottom time",limit:"Limited by",byNdl:"no-stop limit",byGas:"gas supply",po2:"PO₂ at depth",
+  mod14:"MOD at PO₂ 1.4",mod16:"MOD at PO₂ 1.6",ead:"Equivalent air depth",min:"min",over16:"PO₂ is above 1.6 bar. This gas is not safe at this depth.",over14:"PO₂ is above 1.4 bar, beyond the usual working limit.",
+  cmp:"Same depth, other gases",mix:"Gas",
+  c5:"Surface interval between dives",c5s:"Minimum time on the surface before a second dive fits inside its no-stop limit",d1:"Dive 1",d2:"Dive 2",time:"Bottom time",planned:"Planned bottom time",
+  minSI:"Minimum surface interval",none:"No wait needed",never:"Not within 24 h",d1over:"Dive 1 already exceeds its no-stop limit. Decompression diving is outside this calculator.",
+  after:"Dive 2 no-stop limit after a surface interval of",si:"Interval",ndl2:"Dive 2 limit",fly:"Before flying (DAN guidance)",
+  fly1:"Single no-stop dive: at least 12 h",fly2:"Repetitive dives or several days: at least 18 h",fly3:"Decompression dives: substantially longer than 18 h",
+  c6:"Cylinder pressure over a dive",c6s:"How fast the gauge drops at each depth, and what's left after a multi-level profile",seg:"Level",dur:"Time",
+  start:"Start pressure",left:"Left at end",used:"Gas used",rate:"Drop rate",below:"Below reserve during level",perMin:"bar/min",after:"After",
+  c7:"Cylinder pressure vs temperature",c7s:"Gay-Lussac: a rigid cylinder's pressure follows absolute temperature",t1:"Temperature when filled",t2:"Temperature now",
+  rated:"Rated working pressure",pnow:"Pressure now",change:"Change",overRated:"Above rated working pressure. Keep cylinders out of sun and hot cars.",temp:"Temperature",
+  c8:"Underwater distortion",c8s:"Refraction through the mask: things look about 33% larger and 25% closer",mode8:"I know",real:"the real object",seen:"what I see",
+  size:"Size",dist:"Distance",appSize:"Apparent size",appDist:"Apparent distance",realSize:"Real size",realDist:"Real distance",
+  turbid:"In turbid water diffraction can reverse this, and objects may look farther away.",
+  model:"Model: Bühlmann ZH-L16C (16 Haldane compartments), instant descent and ascent, seawater. Table values differ a little."},
+ he:{calc:"חישובים",calcT:"מחשבוני צלילה",calcS:"הנוסחאות מהקורס עם המספרים שלך. כל תוצאה מציגה את דרך החישוב, כדי שתוכל לבדוק אותה ביד.",
+  warn:"<b>כלי לימוד בלבד.</b> אין לתכנן איתו צלילה אמיתית. יש להשתמש בטבלאות של התוכנית, במחשב הצלילה ובהנחיות קצין הבטיחות.",
+  sea:"מי ים",fresh:"מים מתוקים",water:"סוג מים",depth:"עומק",
+  c1:"אוויר חופשי במיכל",c1s:"כמה אוויר בלחץ פני הים יש במיכל",tank:"נפח המיכל (נפח מים)",fill:"לחץ מילוי",res:"רזרבה",atDepth:"שימוש בעומק",
+  freeAir:"אוויר חופשי (מלא)",usable:"זמין (מעל הרזרבה)",atD:"זמין, כנפח בעומק",cuft:"רגל מעוקבת (מלא)",
+  c2:"נפח גז בעומק",c2s:"חלל אוויר גמיש (בלון, מאזן, ריאות, ניאופרן) שיורד מפני המים לעומק",v0:"נפח על פני המים",
+  vd:"נפח בעומק",pct:"מהנפח על פני המים",lost:"ציפה שאבדה",amb:"לחץ סביבתי",surf:"פני המים",
+  c3:"מצנח הרמה: כמות אוויר",c3s:"כמה אוויר חופשי צריך כדי שעצם יהיה ניטרלי בעומק",mass:"משקל העצם באוויר",ovol:"נפח העצם",ovolh:"0 אם לא ידוע",
+  neg:"ציפה שלילית",bag:"נפח המצנח בעומק",air:"אוויר חופשי להזרקה",tankUse:"לחץ שיירד מהמיכל שלך",floats:"העצם כבר צף בעומק הזה, אין צורך באוויר.",
+  bagNote:"בעלייה אותו אוויר מתפשט חזרה לנפח האוויר החופשי. יש לשחרר אוויר בזמן העלייה, אחרת המצנח ינוסק לפני המים.",
+  c4:"זמן צלילה: אוויר מול ניטרוקס",c4s:"גבול ללא עצירות וזמן גז בעומק, לאוויר או ניטרוקס עד 40%",gas:"גז נשימה",sac:"צריכת אוויר על פני המים (SAC)",
+  cons:"שמרנות",std:"רגילה",cn:"שמרנית",vc:"שמרנית מאוד",
+  ndl:"גבול ללא עצירות",gtime:"זמן גז עד הרזרבה",maxbt:"זמן קרקעית מרבי",limit:"מוגבל על ידי",byNdl:"גבול ללא עצירות",byGas:"כמות הגז",po2:"PO₂ בעומק",
+  mod14:"MOD ב-PO₂ 1.4",mod16:"MOD ב-PO₂ 1.6",ead:"עומק אוויר שקול (EAD)",min:"דק'",over16:"ה-PO₂ מעל 1.6 bar. הגז הזה לא בטוח בעומק הזה.",over14:"ה-PO₂ מעל 1.4 bar, מעבר לגבול העבודה המקובל.",
+  cmp:"אותו עומק, גזים אחרים",mix:"גז",
+  c5:"מרווח שטח בין צלילות",c5s:"הזמן המינימלי על פני המים לפני שצלילה שנייה נכנסת בגבול ללא עצירות",d1:"צלילה 1",d2:"צלילה 2",time:"זמן קרקעית",planned:"זמן קרקעית מתוכנן",
+  minSI:"מרווח שטח מינימלי",none:"אין צורך להמתין",never:"לא בתוך 24 שעות",d1over:"צלילה 1 כבר חורגת מהגבול ללא עצירות. צלילת דקומפרסיה מחוץ לתחום המחשבון.",
+  after:"גבול ללא עצירות בצלילה 2 אחרי מרווח שטח של",si:"מרווח",ndl2:"גבול צלילה 2",fly:"לפני טיסה (הנחיות DAN)",
+  fly1:"צלילה בודדת ללא עצירות: לפחות 12 שעות",fly2:"צלילות חוזרות או כמה ימים: לפחות 18 שעות",fly3:"צלילות דקומפרסיה: הרבה יותר מ-18 שעות",
+  c6:"לחץ במיכל לאורך הצלילה",c6s:"כמה מהר המד יורד בכל עומק, וכמה נשאר אחרי פרופיל בכמה מפלסים",seg:"מפלס",dur:"זמן",
+  start:"לחץ התחלתי",left:"נשאר בסוף",used:"גז שנצרך",rate:"קצב ירידה",below:"מתחת לרזרבה במפלס",perMin:"bar/דק'",after:"אחרי",
+  c7:"לחץ במיכל לפי טמפרטורה",c7s:"גיי-ליסאק: הלחץ במיכל קשיח משתנה לפי הטמפרטורה המוחלטת",t1:"טמפרטורה בזמן המילוי",t2:"טמפרטורה עכשיו",
+  rated:"לחץ עבודה מדורג",pnow:"לחץ עכשיו",change:"שינוי",overRated:"מעל לחץ העבודה המדורג. אין להשאיר מיכלים בשמש או ברכב חם.",temp:"טמפרטורה",
+  c8:"עיוות ראייה מתחת למים",c8s:"שבירת האור במסכה: עצמים נראים גדולים ב-33% וקרובים ב-25%",mode8:"אני יודע",real:"את העצם האמיתי",seen:"מה שאני רואה",
+  size:"גודל",dist:"מרחק",appSize:"גודל נראה",appDist:"מרחק נראה",realSize:"גודל אמיתי",realDist:"מרחק אמיתי",
+  turbid:"במים עכורים העקיפה יכולה להפוך את האפקט, ועצמים עלולים להיראות רחוקים יותר.",
+  model:"מודל: Bühlmann ZH-L16C (16 תאי רקמה לפי הולדיין), ירידה ועלייה מיידיות, מי ים. ערכי הטבלאות שונים מעט."}
+};
+const CT=()=>CU[S.lang];
+const CDEF={tank:12,fill:200,res:50,cd:20,v0:10,vd:20,vw:"sea",lm:50,lv:10,ld:20,lw:"sea",lt:12,
+  gd:25,fo2:32,gt:12,gp:200,gr:50,sac:20,gf:"1",
+  d1:18,t1:40,f1:21,d2:18,t2:40,f2:21,pt:12,pp:200,pr:50,ps:20,sd1:25,st1:15,sd2:15,st2:15,sd3:5,st3:5,tp:200,tt1:25,tt2:50,trp:232,dm:"real",ds:30,dd:4};
+let C=null;
+const nf=(n,d=0)=>Number.isFinite(n)?n.toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d}):"—";
+const ataAt=(d,w="sea")=>1+d/(w==="fresh"?10.3:10);
+const rho=w=>w==="fresh"?1.0:1.03;
+const gasName=f=>+f<=21?(S.lang==="he"?"אוויר":"Air"):"EAN"+f;
+
+/* Bühlmann ZH-L16C, N2 */
+const ZH={ht:[5,8,12.5,18.5,27,38.3,54.3,77,109,146,187,239,305,390,498,635],
+ a:[1.1696,1.0,0.8618,0.7562,0.62,0.5043,0.441,0.4,0.375,0.35,0.3295,0.3065,0.2835,0.261,0.248,0.2327],
+ b:[0.5578,0.6514,0.7222,0.7825,0.8126,0.8434,0.8693,0.891,0.9092,0.9222,0.9319,0.9403,0.9477,0.9544,0.9602,0.9653]};
+const PS=1.013,WV=0.0627;
+const tInit=()=>ZH.ht.map(()=>(PS-WV)*0.79);
+const tStep=(T,amb,fn2,t)=>T.map((p,i)=>p+((amb-WV)*fn2-p)*(1-Math.pow(2,-t/ZH.ht[i])));
+const tOk=(T,gf)=>T.every((p,i)=>p<=PS+gf*(ZH.a[i]+PS/ZH.b[i]-PS));
+function ndlFrom(T,d,fo2,gf,max=240){let x=T;for(let m=0;m<max;m++){const n=tStep(x,PS+d/10,1-fo2,1);if(!tOk(n,gf))return m;x=n}return max}
+function afterDive(T,d,fo2,t){return tStep(T,PS+d/10,1-fo2,t)}
+
+function fld(k,label,unit,o={}){return `<label class="fld ${o.full?"full":""}"><span>${label}</span><span class="box"><input id="c-${k}" data-k="${k}" type="number" inputmode="decimal" min="${o.min??0}" max="${o.max??9999}" step="${o.step??1}" value="${C[k]}"><i>${unit}</i></span></label>`}
+function rng(k,label,o){return `<label class="fld ${o.full===false?"":"full"}"><span>${label}<b id="lb-${k}"></b></span><input id="c-${k}" data-k="${k}" type="range" min="${o.min}" max="${o.max}" step="${o.step||1}" value="${C[k]}"></label>`}
+function cps(k,label,opts,full=true){return `<div class="fld ${full?"full":""}"><span>${label}</span><div class="cps" data-g="${k}">${opts.map(([v,l])=>`<button type="button" data-v="${v}" aria-pressed="${String(C[k])===String(v)}">${l}</button>`).join("")}</div></div>`}
+const waterCps=k=>cps(k,CT().water,[["sea",CT().sea],["fresh",CT().fresh]]);
+const gfCps=()=>cps("gf",CT().cons,[["1",CT().std+" · GF 100"],["0.9",CT().cn+" · GF 90"],["0.8",CT().vc+" · GF 80"]]);
+const card=(n,id,title,sub,inner)=>`<section class="calc" id="calc-${id}"><header><span class="n">${n}</span><div><h2>${title}</h2><p>${sub}</p></div></header><div class="fields">${inner}</div><div class="out" id="o-${id}"></div></section>`;
+const fmtLabel={sd1:v=>v+" m",sd2:v=>v+" m",sd3:v=>v+" m",tt1:v=>v+" °C",tt2:v=>v+" °C",cd:v=>v+" m",vd:v=>v+" m",ld:v=>v+" m",gd:v=>v+" m",d1:v=>v+" m",d2:v=>v+" m",fo2:v=>gasName(v)+(+v>21?" ("+v+"% O₂)":" (21% O₂)"),f1:v=>gasName(v),f2:v=>gasName(v)};
+
+function renderCalc(){
+  if(!C)C=Object.assign({},CDEF,store.get("calc",{}));
+  const t=CT();
+  const tanks=[[10,"10 L"],[11.1,"AL80 · 11.1 L"],[12,"12 L"],[15,"15 L"],[18,"18 L"]];
+  $("#main").innerHTML=`<div class="view">
+   <div class="sh-head"><div><div class="eyebrow"><span>P₁V₁ = P₂V₂ · ρVg · PₜₒₜF</span></div><h1>${t.calcT}</h1><p class="lead" style="margin-top:6px">${t.calcS}</p></div></div>
+   <div class="warnbar"><span>⚠</span><span>${t.warn}</span></div>
+   <nav class="jump">${["c1","c2","c3","c4","c5","c6","c7","c8"].map((c,i)=>`<a href="#calc-${c}" data-cj="${c}">${i+1} · ${t[c]}</a>`).join("")}</nav>
+   <div class="cgrid">
+   ${card(1,"c1",t.c1,t.c1s,cps("tank",t.tank,tanks)+fld("tank",t.tank,"L",{step:.1})+fld("fill",t.fill,"bar",{step:10})+fld("res",t.res,"bar",{step:10})+rng("cd",t.atDepth,{min:0,max:40}))}
+   ${card(2,"c2",t.c2,t.c2s,fld("v0",t.v0,"L",{step:.5})+waterCps("vw")+rng("vd",t.depth,{min:0,max:40}))}
+   ${card(3,"c3",t.c3,t.c3s,fld("lm",t.mass,"kg",{step:1})+fld("lv",t.ovol+" ("+t.ovolh+")","L",{step:1})+waterCps("lw")+rng("ld",t.depth,{min:0,max:40})+fld("lt",t.tank,"L",{step:.1,full:true}))}
+   ${card(4,"c4",t.c4,t.c4s,rng("fo2",t.gas,{min:21,max:40})+rng("gd",t.depth,{min:6,max:40})+fld("gt",t.tank,"L",{step:.1})+fld("gp",t.fill,"bar",{step:10})+fld("gr",t.res,"bar",{step:10})+fld("sac",t.sac,"L/min",{step:1})+gfCps())}
+   ${card(5,"c5",t.c5,t.c5s,`<div class="fld full"><span>${t.d1}</span></div>`+rng("d1",t.depth,{min:6,max:40})+fld("t1",t.time,t.min,{step:1})+rng("f1",t.gas,{min:21,max:40,full:false})+
+      `<div class="fld full"><span>${t.d2}</span></div>`+rng("d2",t.depth,{min:6,max:40})+fld("t2",t.planned,t.min,{step:1})+rng("f2",t.gas,{min:21,max:40,full:false}))}
+   ${card(6,"c6",t.c6,t.c6s,fld("pt",t.tank,"L",{step:.1})+fld("pp",t.start,"bar",{step:10})+fld("ps",t.sac,"L/min",{step:1})+fld("pr",t.res,"bar",{step:10})+
+      [1,2,3].map(i=>`<div class="fld full"><span>${t.seg} ${i}</span></div>`+rng("sd"+i,t.depth,{min:0,max:40,full:false})+fld("st"+i,t.dur,t.min,{step:1})).join(""))}
+   ${card(7,"c7",t.c7,t.c7s,fld("tp",t.fill,"bar",{step:10})+fld("trp",t.rated,"bar",{step:1})+rng("tt1",t.t1,{min:-5,max:60})+rng("tt2",t.t2,{min:-5,max:70}))}
+   ${card(8,"c8",t.c8,t.c8s,cps("dm",t.mode8,[["real",t.real],["seen",t.seen]])+fld("ds",t.size,"cm",{step:1})+fld("dd",t.dist,"m",{step:.1}))}
+   </div><p class="note" style="margin-top:16px">${t.model}</p></div>`;
+  document.querySelectorAll("#main [data-k]").forEach(el=>el.addEventListener("input",()=>{const v=parseFloat(el.value);if(Number.isFinite(v)){C[el.dataset.k]=v;calcUpdate(el)}}));
+  document.querySelectorAll("#main [data-g] button").forEach(b=>b.onclick=()=>{const k=b.parentElement.dataset.g;const v=b.dataset.v;C[k]=isNaN(+v)?v:(k==="gf"?v:+v);calcUpdate()});
+  document.querySelectorAll("[data-cj]").forEach(a=>a.onclick=e=>{e.preventDefault();document.getElementById("calc-"+a.dataset.cj)?.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"})});
+  calcUpdate();
+}
+function calcUpdate(src){
+  store.set("calc",C);
+  document.querySelectorAll("#main [data-k]").forEach(el=>{if(el!==src&&document.activeElement!==el)el.value=C[el.dataset.k];const lb=document.getElementById("lb-"+el.dataset.k);if(lb)lb.textContent=(fmtLabel[el.dataset.k]||String)(C[el.dataset.k])});
+  document.querySelectorAll("#main [data-g]").forEach(g=>g.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",String(C[g.dataset.g])===b.dataset.v)));
+  const t=CT(), gf=+C.gf;
+  const tile=(v,l,cls="")=>`<div class="${cls}"><strong>${v}</strong><span>${l}</span></div>`;
+
+  /* 1 free air */
+  {const V=C.tank,P=C.fill,Rz=Math.min(C.res,P),A=ataAt(C.cd),fa=V*P,us=V*(P-Rz);
+   $("#o-c1").innerHTML=`<div class="big">${tile(nf(fa)+" L",t.freeAir,"hero")}${tile(nf(us)+" L",t.usable)}${tile(nf(us/A)+" L",t.atD+" ("+C.cd+" m)")}${tile(nf(fa/28.317,1)+" ft³",t.cuft)}</div>
+   <div class="work">Free air  = ${nf(V,1)} L × ${nf(P)} bar = ${nf(fa)} L
+Usable    = ${nf(V,1)} L × (${nf(P)} − ${nf(Rz)}) bar = ${nf(us)} L
+At ${C.cd} m   = ${nf(us)} L ÷ ${nf(A,1)} ATA = ${nf(us/A)} L</div>`}
+
+  /* 2 volume at depth */
+  {const A=ataAt(C.vd,C.vw),V0=C.v0,Vd=V0/A,lost=(V0-Vd)*rho(C.vw),r0=56,rd=r0*Math.sqrt(1/A);
+   const rows=[0,10,20,30,40].map(d=>{const a=ataAt(d,C.vw);return `<tr class="${d===C.vd?"me":""}"><td>${d} m</td><td>${nf(a,2)}</td><td>${nf(V0/a,2)} L</td><td>${nf(100/a)}%</td></tr>`}).join("");
+   $("#o-c2").innerHTML=`<div class="big">${tile(nf(Vd,2)+" L",t.vd,"hero")}${tile(nf(100/A)+"%",t.pct)}${tile(nf(A,2)+" ATA",t.amb)}${tile("−"+nf(lost,2)+" kg",t.lost)}</div>
+   <div class="viz"><div><i style="width:${r0*2}px;height:${r0*2}px"></i>${t.surf} · ${nf(V0,1)} L</div><div><i style="width:${rd*2}px;height:${rd*2}px"></i>${C.vd} m · ${nf(Vd,1)} L</div></div>
+   <div class="work">V₂ = V₁ × P₁ / P₂ = ${nf(V0,1)} × 1 / ${nf(A,2)} = ${nf(Vd,2)} L
+Lost lift = (${nf(V0,1)} − ${nf(Vd,2)}) L × ${rho(C.vw)} kg/L = ${nf(lost,2)} kg</div>
+   <table class="mini"><tr><th>${t.depth}</th><th>ATA</th><th>V</th><th>%</th></tr>${rows}</table>`}
+
+  /* 3 lift bag */
+  {const w=C.lw,r=rho(w),A=ataAt(C.ld,w),neg=C.lm-C.lv*r;
+   if(neg<=0){$("#o-c3").innerHTML=`<p class="note">${t.floats}</p><div class="work">Net = ${nf(C.lm,1)} kg − ${nf(C.lv,1)} L × ${r} = ${nf(neg,2)} kg</div>`}
+   else{const bag=neg/r,air=bag*A,drop=air/Math.max(C.lt,.1);
+   $("#o-c3").innerHTML=`<div class="big">${tile(nf(air,1)+" L",t.air,"hero")}${tile(nf(neg,2)+" kg",t.neg)}${tile(nf(bag,1)+" L",t.bag)}${tile(nf(drop)+" bar",t.tankUse+" ("+nf(C.lt,1)+" L)",drop>100?"bad":drop>50?"warn":"")}</div>
+   <div class="work">Negative = ${nf(C.lm,1)} kg − ${nf(C.lv,1)} L × ${r} kg/L = ${nf(neg,2)} kg
+Bag at depth = ${nf(neg,2)} ÷ ${r} = ${nf(bag,1)} L
+Free air = ${nf(bag,1)} L × ${nf(A,2)} ATA = ${nf(air,1)} L
+Cylinder = ${nf(air,1)} L ÷ ${nf(C.lt,1)} L = ${nf(drop)} bar</div><p class="note">${t.bagNote}</p>`}}
+
+  /* 4 dive time */
+  {const f=C.fo2/100,d=C.gd,A=ataAt(d),po2=f*A,mod14=(1.4/f-1)*10,mod16=(1.6/f-1)*10,ead=(d+10)*(1-f)/0.79-10;
+   const ndl=po2>1.6?0:ndlFrom(tInit(),d,f,gf),gas=C.gt*Math.max(C.gp-C.gr,0)/(C.sac*A),mx=Math.min(ndl,gas);
+   const nd=v=>v>=240?"240+":nf(v);
+   const mixes=[...new Set([21,32,36,C.fo2])].sort((a,b)=>a-b).map(o=>{const ff=o/100,pp=ff*A;const n=pp>1.6?null:ndlFrom(tInit(),d,ff,gf);
+     return `<tr class="${o===C.fo2?"me":""}"><td>${gasName(o)}</td><td>${nf(pp,2)}</td><td>${n==null?"✕":nd(n)+" "+t.min}</td><td>${nf((1.4/ff-1)*10,1)} m</td></tr>`}).join("");
+   $("#o-c4").innerHTML=`<div class="big">${tile(po2>1.6?"✕":nd(mx)+" "+t.min,t.maxbt+(po2>1.6?"":" · "+t.limit+" "+(gas<ndl?t.byGas:t.byNdl)),"hero")}${tile(po2>1.6?"✕":nd(ndl)+" "+t.min,t.ndl)}${tile(nf(gas)+" "+t.min,t.gtime)}
+     ${tile(nf(po2,2)+" bar",t.po2,po2>1.6?"bad":po2>1.4?"warn":"good")}${tile(nf(mod14,1)+" m",t.mod14)}${tile(nf(mod16,1)+" m",t.mod16)}${f>.21?tile(nf(Math.max(ead,0),1)+" m",t.ead):""}</div>
+   ${po2>1.6?`<p class="note bad">${t.over16}</p>`:po2>1.4?`<p class="note warn">${t.over14}</p>`:""}
+   <div class="work">PO₂   = ${nf(f,2)} × ${nf(A,1)} ATA = ${nf(po2,2)} bar
+MOD   = (1.4 ÷ ${nf(f,2)} − 1) × 10 = ${nf(mod14,1)} m
+EAD   = (${d} + 10) × (1 − ${nf(f,2)}) ÷ 0.79 − 10 = ${nf(ead,1)} m
+Gas   = ${nf(C.gt,1)} L × (${nf(C.gp)} − ${nf(C.gr)}) bar ÷ (${nf(C.sac)} L/min × ${nf(A,1)}) = ${nf(gas)} min</div>
+   <table class="mini"><tr><th>${t.mix}</th><th>PO₂</th><th>${t.ndl}</th><th>MOD 1.4</th></tr>${mixes}</table>`}
+
+  /* 5 surface interval */
+  {const f1=C.f1/100,f2=C.f2/100,n1=ndlFrom(tInit(),C.d1,f1,gf),T1=afterDive(tInit(),C.d1,f1,C.t1);
+   const ndlAfter=si=>ndlFrom(tStep(T1,PS,0.79,si),C.d2,f2,gf);
+   const hm=m=>`${Math.floor(m/60)}:${String(Math.round(m%60)).padStart(2,"0")}`;
+   let html="";
+   if(C.t1>n1){html=`<div class="big">${tile(nf(n1)+" "+t.min,t.ndl+" · "+t.d1,"bad")}</div><p class="note bad">${t.d1over}</p>`}
+   else{let si=null;if(ndlAfter(0)>=C.t2)si=0;else{for(let m=1;m<=1440;m++){if(ndlAfter(m)>=C.t2){si=m;break}}}
+     const n2fresh=ndlFrom(tInit(),C.d2,f2,gf);
+     const rows=[10,30,60,120,240,360].map(m=>{const n=ndlAfter(m);return `<tr><td>${hm(m)}</td><td>${n>=240?"240+":n} ${t.min}</td></tr>`}).join("");
+     html=`<div class="big">${tile(si===0?t.none:si==null?t.never:si<60?si+" "+t.min:hm(si)+" h",t.minSI,"hero")}${tile(nf(n1)+" "+t.min,t.ndl+" · "+t.d1+" ("+C.d1+" m)")}${tile(nf(n2fresh)+" "+t.min,t.ndl+" · "+t.d2+" ("+C.d2+" m)")}</div>
+     ${C.t2>n2fresh?`<p class="note bad">${t.d2} ${C.t2} ${t.min} > ${n2fresh} ${t.min} (${t.ndl}).</p>`:""}
+     <table class="mini"><tr><th>${t.si}</th><th>${t.ndl2} (${C.d2} m, ${gasName(C.f2)})</th></tr>${rows}</table>`}
+   html+=`<div class="sec" style="margin-top:16px"><h3>${t.fly}</h3><ul class="points" style="font-size:14.5px"><li>${t.fly1}</li><li>${t.fly2}</li><li>${t.fly3}</li></ul></div>`;
+   $("#o-c5").innerHTML=html}
+
+  /* 6 cylinder pressure over profile */
+  {let p=C.pp,html="",warnAt=null;const rowsD=[0,10,20,30,40].map(d=>`<tr><td>${d} m</td><td>${nf(ataAt(d),1)}</td><td>${nf(C.ps*ataAt(d),0)} L/min</td><td>${nf(C.ps*ataAt(d)/Math.max(C.pt,.1),1)}</td></tr>`).join("");
+   const work=[],segs=[1,2,3].map(i=>{const d=C["sd"+i],m=C["st"+i],A=ataAt(d),rate=C.ps*A/Math.max(C.pt,.1),drop=rate*m,before=p;p=p-drop;
+     if(warnAt==null&&p<C.pr-0.5&&m>0)warnAt=i;work.push(`L${i}: ${nf(C.ps)} × ${nf(A,1)} ATA ÷ ${nf(C.pt,1)} L = ${nf(rate,2)} bar/min × ${m} = −${nf(drop)} bar → ${nf(p)} bar`);
+     return `<tr class="${p<C.pr-0.5?"me":""}"><td>${i}</td><td>${d} m</td><td>${m} ${t.min}</td><td>${nf(rate,1)}</td><td>${nf(Math.max(p,0))} bar</td></tr>`}).join("");
+   const used=(C.pp-p)*C.pt;
+   html=`<div class="big">${tile(nf(Math.max(p,0))+" bar",t.left,p<C.pr-0.5?"bad":"hero")}${tile(nf(C.pp-p)+" bar",t.used)}${tile(nf(used)+" L",t.used+" · "+t.freeAir.split(" (")[0])}</div>
+   ${warnAt?`<p class="note bad">${t.below} ${warnAt} (${nf(C.pr)} bar).</p>`:""}
+   <table class="mini"><tr><th>${t.seg}</th><th>${t.depth}</th><th>${t.dur}</th><th>${t.perMin}</th><th>${t.after}</th></tr>${segs}</table>
+   <div class="work">${work.join("\n")}</div>
+   <table class="mini"><tr><th>${t.depth}</th><th>ATA</th><th>SAC × ATA</th><th>${t.perMin}</th></tr>${rowsD}</table>`;
+   $("#o-c6").innerHTML=html}
+
+  /* 7 pressure vs temperature */
+  {const K1=C.tt1+273.15,K2=C.tt2+273.15,pa=(C.tp+1)*K2/K1,pg=pa-1,dp=pg-C.tp;
+   const rows=[0,10,20,30,40,50,60].map(c=>{const g=(C.tp+1)*(c+273.15)/K1-1;return `<tr class="${g>C.trp?"me":""}"><td>${c} °C</td><td>${nf(g)} bar</td><td>${g>=C.tp?"+":""}${nf(g-C.tp)}</td></tr>`}).join("");
+   $("#o-c7").innerHTML=`<div class="big">${tile(nf(pg)+" bar",t.pnow,pg>C.trp?"bad":"hero")}${tile((dp>=0?"+":"")+nf(dp,1)+" bar",t.change)}${tile(nf(dp/Math.max(Math.abs(C.tt2-C.tt1),1e-9)*(C.tt2===C.tt1?0:1),2)+" bar/°C",t.rate)}</div>
+   ${pg>C.trp?`<p class="note bad">${t.overRated}</p>`:""}
+   <div class="work">P₂ = P₁ × T₂ / T₁   (absolute)
+   = (${nf(C.tp)} + 1) × (${C.tt2} + 273) / (${C.tt1} + 273)
+   = ${nf(C.tp+1)} × ${nf(K2,1)} / ${nf(K1,1)} = ${nf(pa,1)} bar abs = ${nf(pg,1)} bar gauge</div>
+   <table class="mini"><tr><th>${t.temp}</th><th>${t.pnow}</th><th>${t.change}</th></tr>${rows}</table>`}
+
+  /* 8 distortion */
+  {const real=C.dm==="real",S0=C.ds,D0=C.dd;
+   const sz=real?S0*4/3:S0*3/4, ds=real?D0*3/4:D0*4/3;
+   const rs=real?S0:sz, as=real?sz:S0, rd=real?D0:ds, ad=real?ds:D0, mx=Math.max(rs,as), w=v=>Math.max(14,Math.round(v/mx*96));
+   $("#o-c8").innerHTML=`<div class="big">${tile(nf(sz,1)+" cm",real?t.appSize:t.realSize,"hero")}${tile(nf(ds,2)+" m",real?t.appDist:t.realDist,"hero")}</div>
+   <div class="viz" style="align-items:flex-end"><div><span style="display:block;width:${w(rs)}px;height:${w(rs)}px;border:2px solid var(--muted);border-radius:8px"></span>${t.realSize} · ${nf(rs,1)} cm · ${nf(rd,2)} m</div>
+   <div><span style="display:block;width:${w(as)}px;height:${w(as)}px;background:var(--sea-soft);border:2px solid var(--sea);border-radius:8px"></span>${t.appSize} · ${nf(as,1)} cm · ${nf(ad,2)} m</div></div>
+   <div class="work">${real?`Seen size = ${nf(S0,1)} × 4/3 = ${nf(sz,1)} cm   (≈ +33%)
+Seen dist = ${nf(D0,2)} × 3/4 = ${nf(ds,2)} m    (≈ −25%)`:`Real size = ${nf(S0,1)} × 3/4 = ${nf(sz,1)} cm
+Real dist = ${nf(D0,2)} × 4/3 = ${nf(ds,2)} m`}</div><p class="note">${t.turbid}</p>`}
+}
+
 /* =========================== STATE =========================== */
 const store={get(k,d){try{const v=localStorage.getItem("dive."+k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem("dive."+k,JSON.stringify(v))}catch(e){}}};
 const S={lang:store.get("lang","he"),theme:store.get("theme",null),mode:"study",ch:store.get("ch",0),learned:new Set(store.get("learned",[])),
@@ -684,17 +1132,17 @@ function applyChrome(){
   if(S.theme) r.dataset.theme=S.theme; else r.removeAttribute("data-theme");
   const m=document.querySelector('meta[name="theme-color"]'); if(m) m.content=isDark()?"#071418":"#ECF2F2";
   $("#appName").textContent=T().name; $("#appSub").textContent=T().sub;
-  $("#mStudy").textContent=T().study; $("#mExam").textContent=T().exam;
-  $("#mStudy").setAttribute("aria-pressed",S.mode==="study"); $("#mExam").setAttribute("aria-pressed",S.mode==="exam");
+  const lab={study:T().study,sheet:T().sheet,calc:CU[S.lang].calc,exam:T().exam};
+  document.querySelectorAll("[data-m]").forEach(b=>{const sp=b.querySelector("span");(sp||b).textContent=lab[b.dataset.m];b.setAttribute("aria-pressed",S.mode===b.dataset.m)});
   $("#langBtn").textContent=S.lang==="he"?"EN":"עב"; $("#langBtn").setAttribute("aria-label",S.lang==="he"?"Switch to English":"החלף לעברית");
   $("#themeBtn").innerHTML=isDark()?ico.sun:ico.moon;
   document.title=T().name;
 }
-function render(){applyChrome();S.mode==="study"?renderStudy():renderExam();}
+function render(){applyChrome();S.mode==="study"?renderStudy():S.mode==="sheet"?renderSheetView():S.mode==="calc"?renderCalc():renderExam();}
 
 /* =========================== STUDY =========================== */
 function renderStudy(){
-  const t=T(), c=CH[S.ch], total=CH.length-1, done=[...S.learned].filter(id=>id!=="cheat").length;
+  const t=T(), c=CH[S.ch], total=CH.length, done=[...S.learned].filter(id=>id!=="cheat").length;
   const num=i=>String(i+1).padStart(2,"0");
   const rail=CH.map((x,i)=>`<li><button data-ch="${i}" class="${i===S.ch?"on":""} ${S.learned.has(x.id)?"done":""}" ${i===S.ch?'aria-current="page"':""}>
      <span class="dot">${S.learned.has(x.id)&&i!==S.ch?"✓":(x.cheat?"Σ":num(i))}</span><span class="lbl">${esc(tx(x.t))}<small>${esc(tx(x.tag))}</small></span></button></li>`).join("");
@@ -828,8 +1276,7 @@ function renderResults(){
 
 /* =========================== CHROME EVENTS =========================== */
 function setMode(m){S.mode=m;render();window.scrollTo({top:0})}
-$("#mStudy").onclick=()=>setMode("study");
-$("#mExam").onclick=()=>setMode("exam");
+document.querySelectorAll("[data-m]").forEach(b=>b.onclick=()=>{if(S.mode!==b.dataset.m)setMode(b.dataset.m)});
 $("#langBtn").onclick=()=>{S.lang=S.lang==="he"?"en":"he";store.set("lang",S.lang);render()};
 $("#themeBtn").onclick=()=>{S.theme=isDark()?"light":"dark";store.set("theme",S.theme);applyChrome()};
 matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change",()=>{if(!S.theme)applyChrome()});
