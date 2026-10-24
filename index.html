@@ -1,0 +1,846 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Dive Physics Study</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="theme-color" content="#EDF3F3">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans+Hebrew:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=Secular+One&display=swap">
+<style>
+/* Layout: a dive slate — sticky instrument bar, chapter rail as a depth ladder, one reading column; exam = one card at a time */
+:root{
+  --bg:#ECF2F2; --surface:#FFFFFF; --sunk:#E0EAEB; --ink:#0E2730; --muted:#506970; --line:#CFDDDF;
+  --sea:#0B6675; --sea-soft:#D3E8EB; --flag:#C8102E; --flag-soft:#F8E3E6;
+  --ok:#1C7A4B; --ok-soft:#DDF0E5; --bad:#B42318; --bad-soft:#FBE4E1; --warn:#9A6200;
+  --f-display:"Secular One","IBM Plex Sans Hebrew","IBM Plex Sans",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans","IBM Plex Sans Hebrew",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --r:14px; --ease:cubic-bezier(.22,1,.36,1);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#071418; --surface:#0E2027; --sunk:#0A1A20; --ink:#E3EDEE; --muted:#8CA3A9; --line:#1D3840;
+  --sea:#58BFCC; --sea-soft:#123843; --flag:#FF5D6C; --flag-soft:#3A1820;
+  --ok:#4CC38A; --ok-soft:#11352A; --bad:#FF7B6B; --bad-soft:#3D1A17; --warn:#E8B34A; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#071418; --surface:#0E2027; --sunk:#0A1A20; --ink:#E3EDEE; --muted:#8CA3A9; --line:#1D3840;
+  --sea:#58BFCC; --sea-soft:#123843; --flag:#FF5D6C; --flag-soft:#3A1820;
+  --ok:#4CC38A; --ok-soft:#11352A; --bad:#FF7B6B; --bad-soft:#3D1A17; --warn:#E8B34A; color-scheme:dark}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;
+  -webkit-tap-highlight-color:transparent;overscroll-behavior-y:none}
+[dir="rtl"] body{font-family:"IBM Plex Sans Hebrew","IBM Plex Sans",system-ui,Arial,sans-serif}
+button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation;-webkit-user-select:none;user-select:none}
+:focus-visible{outline:2px solid var(--sea);outline-offset:2px;border-radius:8px}
+h1,h2,h3{text-wrap:balance;margin:0}
+.ltr{direction:ltr;unicode-bidi:isolate;display:inline-block}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+
+/* ---------- top bar ---------- */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 86%,transparent);
+  backdrop-filter:blur(14px) saturate(1.3);-webkit-backdrop-filter:blur(14px) saturate(1.3);border-bottom:1px solid var(--line)}
+.bar-in{max-width:1180px;margin:0 auto;display:flex;align-items:center;gap:12px;padding-block:10px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.brand{display:flex;align-items:center;gap:10px;min-width:0;flex:1}
+.flag{width:30px;height:22px;border-radius:4px;flex:none;display:block}
+.brand b{font-family:var(--f-display);font-weight:400;font-size:19px;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand small{display:block;font-size:11.5px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+.seg{position:relative;display:grid;grid-template-columns:1fr 1fr;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:3px}
+.seg button{position:relative;z-index:1;border:0;background:none;padding:7px 16px;border-radius:999px;font-weight:600;font-size:14px;color:var(--muted);transition:color .2s}
+.seg button[aria-pressed="true"]{color:var(--ink)}
+.seg .thumb{position:absolute;top:3px;bottom:3px;inset-inline-start:3px;width:calc(50% - 3px);background:var(--surface);border-radius:999px;
+  box-shadow:0 1px 2px rgb(0 0 0/.08),0 2px 8px rgb(0 0 0/.06);transition:transform .35s var(--ease)}
+[data-mode="exam"] .seg .thumb{transform:translateX(100%)}
+[dir="rtl"][data-mode="exam"] .seg .thumb{transform:translateX(-100%)}
+.icons{display:flex;gap:6px}
+.ib{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center;font-weight:700;font-size:13px;
+  transition:transform .15s var(--ease),background .2s}
+.ib:active{transform:scale(.92)}
+.ib svg{width:18px;height:18px}
+@media (max-width:560px){.brand small{display:none}.brand b{font-size:17px}.seg button{padding:6px 12px}}
+@media (max-width:420px){.brand b{display:none}}
+
+/* ---------- shells ---------- */
+.wrap{max-width:1180px;margin:0 auto;padding-block:20px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.view{animation:rise .45s var(--ease)}
+@keyframes rise{from{opacity:.001;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* ---------- study ---------- */
+.study{display:grid;grid-template-columns:270px minmax(0,1fr);gap:36px;align-items:start}
+.rail{position:sticky;top:calc(env(safe-area-inset-top,0px) + 76px);max-height:calc(100dvh - 100px);overflow:auto;padding-bottom:8px}
+.rail h4{margin:0 0 8px;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.prog{display:flex;align-items:center;gap:10px;margin-bottom:16px;font-size:13px;color:var(--muted)}
+.prog .track{flex:1;height:6px;background:var(--sunk);border-radius:9px;overflow:hidden}
+.prog .track i{display:block;height:100%;background:var(--sea);border-radius:9px;transition:width .5s var(--ease)}
+.ladder{list-style:none;margin:0;padding:0;position:relative}
+.ladder::before{content:"";position:absolute;inset-inline-start:15px;top:14px;bottom:14px;width:2px;background:var(--line)}
+.ladder button{position:relative;display:flex;align-items:center;gap:12px;width:100%;text-align:start;border:0;background:none;padding:8px 10px 8px 0;border-radius:10px;font-size:14.5px;line-height:1.3}
+[dir="rtl"] .ladder button{padding:8px 0 8px 10px}
+.ladder button:hover{background:var(--sunk)}
+.ladder .dot{flex:none;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:var(--bg);border:2px solid var(--line);
+  font-family:var(--f-mono);font-size:11.5px;color:var(--muted);transition:all .25s var(--ease);font-variant-numeric:tabular-nums}
+.ladder .on .dot{border-color:var(--sea);background:var(--sea);color:var(--bg)}
+.ladder .done .dot{border-color:var(--ok);color:var(--ok)}
+.ladder .on.done .dot{background:var(--ok);border-color:var(--ok);color:var(--bg)}
+.ladder .on{font-weight:600}
+.ladder .lbl{min-width:0}
+.ladder .lbl small{display:block;color:var(--muted);font-size:12px;font-weight:400}
+.chips{display:none}
+
+.ch-head{display:flex;flex-direction:column;gap:8px;margin-bottom:22px}
+.eyebrow{font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--sea);font-weight:600;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.eyebrow .depth{font-family:var(--f-mono);letter-spacing:0;color:var(--muted);font-weight:500}
+.ch-head h1{font-family:var(--f-display);font-weight:400;font-size:clamp(30px,4.4vw,46px);line-height:1.08;letter-spacing:-.01em}
+.lead{font-size:18px;color:var(--muted);max-width:62ch;margin:0}
+.sec{margin-top:30px}
+.sec>h3{font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:12px}
+.points{margin:0;padding:0;list-style:none;display:grid;gap:10px;max-width:70ch}
+.points li{position:relative;padding-inline-start:22px}
+.points li::before{content:"";position:absolute;inset-inline-start:2px;top:.62em;width:8px;height:8px;border-radius:2px;background:var(--sea);transform:rotate(45deg)}
+.points b{font-weight:600}
+.formula{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.formula code{font-family:var(--f-mono);font-size:clamp(15px,2.2vw,19px);background:var(--sea-soft);color:var(--ink);padding:10px 16px;border-radius:10px;direction:ltr;font-weight:500}
+.quote{margin:16px 0 0;font-size:15.5px;color:var(--muted);font-style:italic;max-width:66ch}
+.nums{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.nums div{background:var(--surface);padding:14px 16px}
+.nums strong{display:block;font-family:var(--f-mono);font-size:21px;font-weight:600;color:var(--sea);direction:ltr;text-align:start;font-variant-numeric:tabular-nums}
+[dir="rtl"] .nums strong{text-align:right}
+.nums span{font-size:13px;color:var(--muted);line-height:1.35;display:block;margin-top:2px}
+.acc{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.acc article{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px}
+.acc header{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.tag{font-size:11px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;padding:3px 8px;border-radius:6px;background:var(--flag-soft);color:var(--flag);white-space:nowrap}
+.tag.t1{background:var(--sea-soft);color:var(--sea)}
+.acc h4{margin:0;font-size:16px;line-height:1.3}
+.acc ul{margin:0;padding-inline-start:18px;display:grid;gap:6px;font-size:14.5px}
+.aid{counter-reset:s;list-style:none;margin:0;padding:0;display:grid;gap:8px;max-width:70ch}
+.aid li{counter-increment:s;display:flex;gap:12px;align-items:flex-start;background:var(--ok-soft);border-radius:10px;padding:10px 14px}
+.aid li::before{content:counter(s);flex:none;width:24px;height:24px;border-radius:50%;background:var(--ok);color:var(--bg);font-weight:700;font-size:13px;display:grid;place-items:center;margin-top:1px}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+.tbl table{border-collapse:collapse;width:100%;min-width:520px;font-size:14.5px}
+.tbl th,.tbl td{padding:10px 14px;text-align:start;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl tr:last-child td{border-bottom:0}
+.tbl th{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;background:var(--sunk)}
+.tbl td:first-child{font-weight:600;white-space:nowrap}
+.tbl .mono{font-family:var(--f-mono);direction:ltr;unicode-bidi:isolate}
+
+/* depth gauge */
+.gauge{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:grid;grid-template-columns:120px minmax(0,1fr);gap:22px;align-items:center}
+.col{position:relative;height:220px;border-radius:10px;overflow:hidden;background:linear-gradient(to bottom,color-mix(in srgb,var(--sea) 18%,var(--surface)),color-mix(in srgb,var(--sea) 70%,#02121a))}
+.col .bal{position:absolute;left:50%;top:50%;width:84px;height:84px;margin:-42px 0 0 -42px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#fff 0 12%,color-mix(in srgb,var(--flag) 70%,#fff) 30%,var(--flag) 75%);
+  box-shadow:0 6px 20px rgb(0 0 0/.25);transition:transform .25s var(--ease)}
+.col .dl{position:absolute;inset-inline:0;bottom:8px;text-align:center;font-family:var(--f-mono);color:#fff;font-size:13px;text-shadow:0 1px 2px rgb(0 0 0/.5)}
+.gauge label{font-weight:600;font-size:14px;display:flex;justify-content:space-between;gap:10px}
+.gauge input[type=range]{width:100%;margin:10px 0 16px;accent-color:var(--sea);height:28px}
+.readout{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}
+.readout div{background:var(--sunk);border-radius:10px;padding:10px 12px}
+.readout strong{display:block;font-family:var(--f-mono);font-size:20px;direction:ltr;text-align:start;font-variant-numeric:tabular-nums}
+[dir="rtl"] .readout strong{text-align:right}
+.readout span{font-size:12.5px;color:var(--muted)}
+.readout .hot strong{color:var(--flag)}
+.gnote{font-size:13px;color:var(--muted);margin:12px 0 0}
+
+.ch-foot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:40px;padding-top:20px;border-top:1px solid var(--line)}
+.ch-foot .sp{flex:1}
+.btn{border:1px solid var(--line);background:var(--surface);padding:11px 18px;border-radius:999px;font-weight:600;font-size:15px;display:inline-flex;align-items:center;gap:8px;
+  transition:transform .15s var(--ease),background .2s,border-color .2s}
+.btn:active{transform:scale(.97)}
+.btn.pri{background:var(--sea);border-color:var(--sea);color:var(--bg)}
+.btn.ok{background:var(--ok-soft);border-color:transparent;color:var(--ok)}
+.btn[disabled]{opacity:.4;cursor:default}
+.btn svg{width:16px;height:16px}
+[dir="rtl"] .flip svg{transform:scaleX(-1)}
+
+@media (max-width:900px){
+  .study{grid-template-columns:minmax(0,1fr);gap:0}
+  .rail{display:none}
+  .chips{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x proximity;margin:-4px calc(-1 * max(16px,env(safe-area-inset-left,0px))) 18px;
+    padding:4px max(16px,env(safe-area-inset-left,0px));scrollbar-width:none;overscroll-behavior-x:contain}
+  .chips::-webkit-scrollbar{display:none}
+  .chips button{flex:none;scroll-snap-align:start;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 14px;font-size:14px;white-space:nowrap;display:flex;gap:7px;align-items:center}
+  .chips button i{font-style:normal;font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+  .chips button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+  .chips button.on i{color:inherit;opacity:.7}
+  .chips button.done:not(.on) i{color:var(--ok)}
+  .gauge{grid-template-columns:90px minmax(0,1fr);gap:14px}
+  .col{height:200px}
+}
+
+/* ---------- exam ---------- */
+.exam{max-width:760px;margin:0 auto}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:clamp(18px,4vw,32px)}
+.ex-title{font-family:var(--f-display);font-weight:400;font-size:clamp(28px,4vw,40px);line-height:1.1;margin-bottom:6px}
+.sub{color:var(--muted);margin:0 0 22px}
+.lbl2{font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600;margin:22px 0 10px;display:flex;justify-content:space-between;gap:10px}
+.lbl2 button{border:0;background:none;color:var(--sea);font-size:12px;letter-spacing:.04em;font-weight:600;text-transform:none;padding:0}
+.pick{display:flex;flex-wrap:wrap;gap:8px}
+.pick button{border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:8px 14px;font-size:14px;display:flex;align-items:center;gap:7px;transition:all .18s var(--ease)}
+.pick button i{font-style:normal;font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+.pick button[aria-pressed="true"]{background:var(--sea-soft);border-color:var(--sea);color:var(--ink)}
+.pick button[aria-pressed="true"] i{color:var(--sea)}
+.pick button:active{transform:scale(.96)}
+.start-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:28px}
+.start-row .meta{color:var(--muted);font-size:14px}
+.best{margin-top:16px;font-size:14px;color:var(--muted)}
+
+.qtop{display:flex;align-items:center;gap:12px;margin-bottom:18px;font-size:14px;color:var(--muted)}
+.qtop .track{flex:1;height:6px;background:var(--sunk);border-radius:9px;overflow:hidden}
+.qtop .track i{display:block;height:100%;background:var(--sea);transition:width .4s var(--ease)}
+.qtop .n{font-family:var(--f-mono);font-variant-numeric:tabular-nums;direction:ltr}
+.qtop .x{border:0;background:none;color:var(--muted);font-size:14px;padding:4px 6px}
+.qtopic{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--sea);font-weight:600}
+.qtext{font-size:clamp(20px,2.8vw,24px);line-height:1.35;font-weight:600;margin:6px 0 20px;text-wrap:pretty}
+.opts{display:grid;gap:10px}
+.opt{display:flex;gap:12px;align-items:flex-start;text-align:start;width:100%;border:1.5px solid var(--line);background:var(--bg);border-radius:14px;padding:13px 15px;font-size:16px;line-height:1.4;
+  transition:border-color .2s,background .2s,transform .15s var(--ease)}
+@media (hover:hover){.opt:not([disabled]):hover{border-color:var(--sea)}}
+.opt:not([disabled]):active{transform:scale(.985)}
+.opt .k{flex:none;width:26px;height:26px;border-radius:8px;display:grid;place-items:center;background:var(--surface);border:1px solid var(--line);font-family:var(--f-mono);font-size:13px;font-weight:600}
+.opt[disabled]{cursor:default}
+.opt.right{border-color:var(--ok);background:var(--ok-soft)}
+.opt.right .k{background:var(--ok);color:var(--bg);border-color:var(--ok)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft);animation:shake .35s}
+.opt.wrong .k{background:var(--bad);color:var(--bg);border-color:var(--bad)}
+.opt.dim{opacity:.55}
+@keyframes shake{20%{transform:translateX(-4px)}40%{transform:translateX(4px)}60%{transform:translateX(-2px)}80%{transform:translateX(2px)}}
+.fb{margin-top:16px;border-radius:14px;padding:14px 16px;font-size:15px;animation:rise .35s var(--ease)}
+.fb.good{background:var(--ok-soft)}
+.fb.bad{background:var(--bad-soft)}
+.fb b{display:block;margin-bottom:2px}
+.fb.good b{color:var(--ok)}.fb.bad b{color:var(--bad)}
+.qnav{display:flex;justify-content:flex-end;margin-top:18px}
+.kbd{font-size:12px;color:var(--muted);margin-top:14px;text-align:center}
+@media (hover:none){.kbd{display:none}}
+
+.res{display:grid;grid-template-columns:auto minmax(0,1fr);gap:24px;align-items:center}
+.ring{width:132px;height:132px;position:relative}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:10}
+.ring .bgc{stroke:var(--sunk)}
+.ring .fg{stroke:var(--sea);stroke-linecap:round;transition:stroke-dashoffset 1s var(--ease)}
+.ring div{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--f-mono);font-size:30px;font-weight:600;direction:ltr}
+.bars{display:grid;gap:10px;margin-top:6px}
+.bars div{display:grid;grid-template-columns:minmax(0,1fr) 110px 52px;gap:10px;align-items:center;font-size:14px}
+.bars .t{height:8px;background:var(--sunk);border-radius:9px;overflow:hidden}
+.bars .t i{display:block;height:100%;border-radius:9px}
+.bars .v{font-family:var(--f-mono);font-size:13px;text-align:end;direction:ltr;font-variant-numeric:tabular-nums}
+.missed{display:grid;gap:10px}
+.missed article{border:1px solid var(--line);border-radius:14px;padding:14px 16px;background:var(--bg)}
+.missed p{margin:4px 0 0;font-size:14.5px}
+.missed .q{font-weight:600;margin:0}
+.missed .a{color:var(--ok)}
+.missed .y{color:var(--bad)}
+.missed .e{color:var(--muted)}
+@media (max-width:560px){.res{grid-template-columns:1fr;justify-items:center;text-align:center}.bars div{grid-template-columns:minmax(0,1fr) 70px 46px;text-align:start}}
+
+.toast{position:fixed;inset-inline:0;bottom:calc(18px + env(safe-area-inset-bottom,0px));margin:auto;width:max-content;max-width:calc(100% - 32px);background:var(--ink);color:var(--bg);
+  padding:10px 18px;border-radius:999px;font-size:14px;font-weight:600;z-index:40;transition:transform .3s var(--ease),opacity .3s;transform:translateY(20px);opacity:0;pointer-events:none}
+.toast.show{transform:none;opacity:1}
+
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+
+<header class="bar">
+  <div class="bar-in">
+    <div class="brand">
+      <svg class="flag" viewBox="0 0 30 22" aria-hidden="true"><rect width="30" height="22" rx="3" fill="var(--flag)"/><path d="M0 2.5 2.5 0 30 19.5 27.5 22Z" fill="#fff"/></svg>
+      <div style="min-width:0"><b id="appName"></b><small id="appSub"></small></div>
+    </div>
+    <div class="seg" role="group" id="modeSeg">
+      <span class="thumb" aria-hidden="true"></span>
+      <button id="mStudy" aria-pressed="true"></button>
+      <button id="mExam" aria-pressed="false"></button>
+    </div>
+    <div class="icons">
+      <button class="ib" id="langBtn" aria-label="Language"></button>
+      <button class="ib" id="themeBtn" aria-label="Theme"></button>
+    </div>
+  </div>
+</header>
+<main class="wrap" id="main"></main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* =========================== UI STRINGS =========================== */
+const UI={
+ en:{name:"Dive Physics Study",sub:"AAUS scientific diver · physics, physiology & accidents",study:"Study",exam:"Exam",
+  chapters:"Chapters",learned:"learned",ch:"Chapter",keypoints:"Key points",formula:"Formula",nums:"Numbers to know",accidents:"Accidents & injuries",
+  aid:"First aid",prev:"Previous",next:"Next",mark:"Mark as learned",marked:"Learned",quizThis:"Quiz this chapter",
+  gauge:"Depth gauge",depth:"Depth",amb:"Ambient pressure",vol:"Relative gas volume",po2:"PO₂ on air",pn2:"PN₂ on air",
+  gnote:"Seawater, breathing air. PO₂ turns red above 1.4 bar, the common working maximum.",
+  examT:"Practice exam",examS:"Multiple-choice questions drawn from the lecture. You get the answer and an explanation right after each one.",
+  topics:"Topics",all:"Select all",none:"Clear",count:"Questions",allq:"All",start:"Start exam",avail:"questions available",
+  best:"Best score",q:"Question",quit:"End",correct:"Correct",incorrect:"Not quite",answerWas:"Correct answer",
+  nextQ:"Next question",finish:"See results",results:"Results",byTopic:"By topic",review:"Review your mistakes",
+  yours:"Your answer",retryWrong:"Retry mistakes",newExam:"New exam",back:"Back to study",perfect:"No mistakes. Well done.",
+  keys:"Keys 1–4 to answer · Enter for next",pickOne:"Pick at least one topic",cheat:"Cheat sheet",cheatSub:"Law → accident, and the figures examiners like",
+  lawacc:"Law → accident at a glance",law:"Law / topic",explains:"Accidents it explains",o2tbl:"Oxygen exposure limits (teaching values)",
+  po2c:"PO₂ (bar)",maxc:"Max single exposure",usec:"Typical use",neuro:"5-minute field neuro exam",chk:"Check",look:"What to look for",
+  coll:"Telling collapses apart",pres:"Presentation",cause:"Likely cause",resp:"Field response",dcs:"DCS types",type:"Type",cat:"Category",signs:"Key signs",
+  saved:"Saved",scoreMsg:["Keep diving into the material.","Getting there.","Solid.","Excellent."]},
+ he:{name:"פיזיקת צלילה – לימוד",sub:"צוללן מדעי AAUS · פיזיקה, פיזיולוגיה ותאונות",study:"לימוד",exam:"מבחן",
+  chapters:"פרקים",learned:"נלמדו",ch:"פרק",keypoints:"עיקרי הדברים",formula:"נוסחה",nums:"מספרים שחייבים לזכור",accidents:"תאונות ופציעות",
+  aid:"עזרה ראשונה",prev:"הקודם",next:"הבא",mark:"סמן כנלמד",marked:"נלמד",quizThis:"תרגל פרק זה",
+  gauge:"מד עומק",depth:"עומק",amb:"לחץ סביבתי",vol:"נפח גז יחסי",po2:"PO₂ באוויר",pn2:"PN₂ באוויר",
+  gnote:"מי ים, נשימת אוויר. PO₂ מסומן באדום מעל 1.4 bar – הגבול המקובל לעבודה.",
+  examT:"מבחן תרגול",examS:"שאלות אמריקאיות מתוך ההרצאה. אחרי כל שאלה מקבלים את התשובה והסבר.",
+  topics:"נושאים",all:"בחר הכול",none:"נקה",count:"מספר שאלות",allq:"הכול",start:"התחל מבחן",avail:"שאלות זמינות",
+  best:"ציון שיא",q:"שאלה",quit:"סיום",correct:"נכון",incorrect:"לא בדיוק",answerWas:"התשובה הנכונה",
+  nextQ:"לשאלה הבאה",finish:"לתוצאות",results:"תוצאות",byTopic:"לפי נושא",review:"חזרה על הטעויות",
+  yours:"התשובה שלך",retryWrong:"תרגל שוב את הטעויות",newExam:"מבחן חדש",back:"חזרה ללימוד",perfect:"אין טעויות. כל הכבוד.",
+  keys:"מקשים 1–4 לבחירה · Enter להמשך",pickOne:"בחר לפחות נושא אחד",cheat:"דף נוסחאות",cheatSub:"חוק ← תאונה, והמספרים שאוהבים לשאול עליהם",
+  lawacc:"חוק ← תאונה במבט אחד",law:"חוק / נושא",explains:"התאונות שהוא מסביר",o2tbl:"גבולות חשיפה לחמצן (ערכי לימוד)",
+  po2c:"PO₂ (bar)",maxc:"חשיפה בודדת מרבית",usec:"שימוש אופייני",neuro:"בדיקה נוירולוגית בשטח – 5 דקות",chk:"בדיקה",look:"מה מחפשים",
+  coll:"איך מבדילים בין קריסות",pres:"הופעה",cause:"סיבה סבירה",resp:"תגובה בשטח",dcs:"סוגי DCS",type:"סוג",cat:"קטגוריה",signs:"סימנים עיקריים",
+  saved:"נשמר",scoreMsg:["כדאי לחזור על החומר.","בדרך הנכונה.","טוב מאוד.","מצוין."]}
+};
+
+/* =========================== CHAPTERS =========================== */
+const L=(en,he)=>({en,he});
+const CH=[
+{id:"phys",d:"0–5 m",tag:L("Physiology","פיזיולוגיה"),t:L("Respiration & circulation","נשימה ומחזור הדם"),
+ lead:L("The two body systems that move oxygen in and carbon dioxide out. Everything else in diving builds on them.","שתי המערכות שמכניסות חמצן ומוציאות פחמן דו-חמצני. כל השאר בצלילה נשען עליהן."),
+ pts:[
+  L("<b>Why it matters:</b> AAUS divers plan their own dives. Knowing the why lets you spot problems early, and narcosis, cold and fatigue all degrade data quality.","<b>למה זה חשוב:</b> צוללן מדעי מתכנן את הצלילות בעצמו. הבנת הסיבות מאפשרת לזהות בעיה מוקדם, ונרקוזיס, קור ועייפות פוגעים גם באיכות הנתונים."),
+  L("<b>Pulmonary system:</b> gas exchange between air and blood. ~300 million <b>alveoli</b> form the exchange surface.","<b>מערכת הריאות:</b> חילוף גזים בין האוויר לדם. כ-300 מיליון <b>נאדיות (אלבאולות)</b> יוצרות את משטח החילוף."),
+  L("Exchange across the alveolus is <b>passive diffusion</b>, driven only by the partial-pressure gradient (Dalton & Henry).","המעבר דרך הנאדית הוא <b>דיפוזיה סבילה</b> המונעת רק ממפל הלחצים החלקיים (דלטון והנרי)."),
+  L("The breathing reflex is triggered mainly by <b>blood CO₂</b>, not O₂. CO₂ production rises with workload. <b>Hypoxic drive</b> is a secondary O₂ trigger, normally masked.","רפלקס הנשימה מופעל בעיקר על ידי <b>רמת ה-CO₂ בדם</b>, לא ה-O₂. ייצור CO₂ עולה עם המאמץ. <b>הדחף ההיפוקסי</b> הוא מנגנון משני מבוסס חמצן, בדרך כלל מוסתר."),
+  L("<b>Cardiovascular system:</b> O₂ rides on <b>hemoglobin</b>; CO₂ returns mostly as <b>bicarbonate</b>. Arteries leave the heart, veins return, <b>capillaries</b> exchange with tissue.","<b>מערכת הלב וכלי הדם:</b> O₂ נקשר ל<b>המוגלובין</b>; CO₂ חוזר בעיקר כ<b>ביקרבונט</b>. עורקים יוצאים מהלב, ורידים חוזרים, וב<b>נימים</b> מתבצע החילוף עם הרקמות."),
+  L("Two circuits: <b>pulmonary</b> (heart ↔ lungs) and <b>systemic</b> (heart ↔ body). Heart rate responds to workload and to stress.","שני מעגלים: <b>ריאתי</b> (לב ↔ ריאות) ו<b>סיסטמי</b> (לב ↔ הגוף). קצב הלב מגיב למאמץ וללחץ נפשי.")],
+ nums:[["10–18",L("breaths/min at rest","נשימות לדקה במנוחה")],["60–80",L("heartbeats/min, adult at rest","פעימות לדקה במנוחה")],["~300M",L("alveoli","נאדיות")],["4",L("heart chambers","חדרי לב")]]},
+
+{id:"water",d:"5 m",tag:L("Physics","פיזיקה"),t:L("Properties of water","תכונות המים"),
+ lead:L("Density, light, sound and heat all change the moment you descend.","צפיפות, אור, קול וחום משתנים כולם ברגע שיורדים מתחת למים."),
+ pts:[
+  L("Water is <b>~800× denser</b> than air. Drag is high, so streamlining saves air and energy.","המים <b>צפופים פי ~800</b> מהאוויר. ההתנגדות גבוהה, ולכן תנוחה זורמת חוסכת אוויר ואנרגיה."),
+  L("<b>Refraction</b> at the mask: objects look <b>~33% larger and ~25% closer</b>. Matters when estimating size or laying a transect.","<b>שבירת אור</b> במסכה: עצמים נראים <b>גדולים ב-33% וקרובים ב-25%</b>. חשוב בהערכת גודל ובפריסת טרנסקט."),
+  L("<b>Diffraction</b> off suspended particles in turbid water causes visual reversal.","<b>עקיפה</b> מחלקיקים מרחפים במים עכורים גורמת להיפוך ראייתי."),
+  L("<b>Color loss:</b> red and orange go first; by ~15–20 m scenes look blue-green. Use white balance or lights for ID work.","<b>אובדן צבע:</b> אדום וכתום נעלמים ראשונים; בעומק ~15–20 מ' הכול כחול-ירוק. לזיהוי מינים – איזון לבן או תאורה."),
+  L("<b>Sound</b> travels ~4× faster in water, but its direction is very hard to localize.","<b>קול</b> נע מהר פי ~4 במים, אבל קשה מאוד לזהות את הכיוון שלו."),
+  L("Water conducts heat <b>~25× faster</b> than air.","המים מוליכים חום <b>מהר פי ~25</b> מהאוויר.")],
+ acc:[
+  {t:L("Hypothermia","היפותרמיה"),i:[L("Uncontrollable shivering can start after a 1°C core drop","רעד בלתי נשלט יכול להתחיל כבר בירידה של 1°C בחום הליבה"),L("Impairs judgment and motor skills, intensifies narcosis, and raises DCS risk","פוגעת בשיקול דעת ובמוטוריקה, מגבירה נרקוזיס ומעלה סיכון ל-DCS")]},
+  {t:L("Hyperthermia","היפרתרמיה"),i:[L("More heat absorbed/produced than dissipated, e.g. full suit on a hot deck","הגוף קולט/מייצר יותר חום ממה שהוא מפנה, למשל חליפה מלאה על סיפון חם"),L("Signs: heavy sweating, headache, nausea, dizziness, fainting","סימנים: הזעה רבה, כאב ראש, בחילה, סחרחורת, עילפון")]}],
+ aid:[L("Stop the dive or activity","עצור את הצלילה או הפעילות"),L("Hypothermic → warm gradually; hyperthermic → cool and rehydrate","היפותרמיה ← חימום הדרגתי; היפרתרמיה ← קירור ושתייה"),L("Escalating symptoms → medical attention","החמרה בסימנים ← טיפול רפואי")],
+ nums:[["~800×",L("water density vs air","צפיפות מים לעומת אוויר")],["+33% / −25%",L("apparent size / distance","גודל / מרחק נראים")],["~4×",L("faster sound","מהירות קול")],["~25×",L("faster heat loss","איבוד חום מהיר יותר")],["15–20 m",L("mostly blue-green","בעיקר כחול-ירוק")]]},
+
+{id:"arch",d:"8 m",tag:L("Physics · buoyancy","פיזיקה · ציפה"),t:L("Archimedes' principle","עקרון ארכימדס"),
+ lead:L("Buoyancy is the skill you use every second of a working dive, and a common thread in accidents.","ציפה היא מיומנות שמשתמשים בה בכל שנייה בצלילת עבודה, והיא חוט מקשר בתאונות רבות."),
+ f:["F_b = ρ_fluid × V_displaced × g","Net = W_object − W_displaced"],
+ quote:L("An object immersed in a fluid experiences an upward force equal to the weight of the fluid it displaces.","גוף הטבול בנוזל מקבל כוח עילוי השווה למשקל הנוזל שהוא דוחה."),
+ pts:[
+  L("You control buoyancy by changing <b>weight</b> (lead) or <b>displaced volume</b> (BCD, lungs, suit compression).","שולטים בציפה על ידי שינוי <b>משקל</b> (משקולות) או <b>נפח נדחה</b> (מאזן, ריאות, דחיסת החליפה)."),
+  L("Three states: positive, negative and neutral. <b>Neutral is an exact point</b>; positive and negative come in degrees.","שלושה מצבים: חיובי, שלילי וניטרלי. <b>ניטרלי הוא נקודה מדויקת</b>; חיובי ושלילי באים בדרגות."),
+  L("Saltwater is denser, so the same object is <b>more buoyant in saltwater</b>. Neutral in the ocean → slightly negative (sinks) in fresh water.","מי ים צפופים יותר, ולכן אותו גוף <b>צף יותר במי ים</b>. ניטרלי בים ← שלילי מעט (שוקע) במים מתוקים."),
+  L("Worked example: a 20 kg crate displacing 25 L of seawater → 20 − (25 × 1.03) = <b>−5.75 kg</b>. <b>Check this one:</b> the water it displaces outweighs the crate, so physically it floats with 5.75 kg of lift. The slide calls the result \"slightly negative, it will sink\". Ask your instructor which reading the exam expects.","דוגמה: ארגז 20 ק״ג שדוחה 25 ל' מי ים ← 20 − (25 × 1.03) = <b>−5.75 ק״ג</b>. <b>שים לב:</b> המים הנדחים שוקלים יותר מהארגז, כך שפיזיקלית הוא צף עם עילוי של 5.75 ק״ג. בשקופית כתוב \"שלילי מעט, ישקע\". כדאי לברר עם המרצה איזו פרשנות מצופה במבחן.")],
+ acc:[
+  {t:L("Uncontrolled ascent","עלייה בלתי מבוקרת"),i:[L("Overweighting offset with BCD air → air expands on ascent (Boyle) → runaway positive buoyancy","עודף משקולות שמאוזן באוויר במאזן ← האוויר מתפשט בעלייה (בויל) ← ציפה חיובית שיוצאת משליטה"),L("Raises risk of lung over-expansion and DCS","מעלה סיכון לנזק ריאתי מהתפשטות ול-DCS")]},
+  {t:L("Overweighting / task loading","עודף משקל / עומס משימות"),i:[L("Heavy sample bags or camera rigs make hovering harder","שקי דגימות או מצלמות כבדות מקשים על ריחוף"),L("More air use; can push you below planned depth","צריכת אוויר גבוהה; עלול לדחוף מתחת לעומק המתוכנן")]},
+  {t:L("Entanglement & entrapment","הסתבכות ולכידה"),i:[L("Transect lines, kelp, monofilament can force negative or positive buoyancy","חבלי טרנסקט, אצות וחוטי דיג יכולים לכפות ציפה שלילית או חיובית"),L("A leading contributor to panic and out-of-air emergencies","גורם מרכזי לפאניקה ולמקרי חוסר אוויר")]}],
+ nums:[["1.03 kg",L("1 L seawater","ליטר מי ים")],["1.00 kg",L("1 L fresh water","ליטר מים מתוקים")],["64 lb",L("1 ft³ seawater","רגל מעוקבת מי ים")],["62.4 lb",L("1 ft³ fresh water","רגל מעוקבת מים מתוקים")]]},
+
+{id:"press",d:"10 m",tag:L("Physics · foundations","פיזיקה · יסודות"),t:L("Principles of pressure","עקרונות הלחץ"),
+ lead:L("Before the gas laws make sense, you need to be fluent in what pressure means underwater.","לפני שחוקי הגזים מובנים, צריך לשלוט במשמעות של לחץ מתחת למים."),
+ f:["1 bar = 100 kPa ≈ 1 atm = 14.7 psi","P_abs = 1 + depth(m)/10  [ATA]"],
+ pts:[
+  L("<b>Pressure</b> is force per unit area.","<b>לחץ</b> הוא כוח ליחידת שטח."),
+  L("<b>Ambient (absolute)</b> pressure = atmosphere + water column. Every <b>10 m of seawater adds 1 bar</b>.","<b>לחץ סביבתי (מוחלט)</b> = אטמוספרה + עמוד המים. כל <b>10 מ' מי ים מוסיפים 1 bar</b>."),
+  L("<b>Gauge pressure</b> ignores the atmosphere. It is what your SPG and depth gauge show.","<b>לחץ מד</b> מתעלם מהאטמוספרה. זה מה שמראים מד הלחץ (SPG) ומד העומק."),
+  L("The pressure–depth relationship is <b>linear</b>.","הקשר בין לחץ לעומק הוא <b>ליניארי</b>."),
+  L("Freshwater is less dense: 1 atm per <b>10.3 m / 34 ft</b> (seawater: 10 m / 33 ft).","מים מתוקים פחות צפופים: 1 atm לכל <b>10.3 מ' / 34 רגל</b> (במי ים: 10 מ' / 33 רגל)."),
+  L("Computers default to saltwater. An uncorrected freshwater dive reads <b>slightly deeper</b> (more conservative). Check the setting for lakes, rivers and estuaries.","מחשבי צלילה מוגדרים כברירת מחדל למי ים. צלילה במים מתוקים ללא תיקון תיראה <b>מעט עמוקה יותר</b> (שמרנית יותר). בדוק את ההגדרה באגמים, נהרות ושפכים.")],
+ nums:[["1 bar / 10 m",L("seawater","מי ים")],["1 atm / 10.3 m",L("fresh water","מים מתוקים")],["4 ATA",L("at 30 m","בעומק 30 מ'")],["14.7 psi",L("= 1 atm","= 1 atm")]]},
+
+{id:"boyle",d:"15 m",tag:L("Physics · pressure–volume","פיזיקה · לחץ–נפח"),t:L("Boyle's law & barotrauma","חוק בויל וברוטראומה"),gauge:true,
+ lead:L("The single law behind the largest family of diving accidents.","החוק האחד שמאחורי משפחת תאונות הצלילה הגדולה ביותר."),
+ f:["P₁V₁ = P₂V₂   (T constant)"],
+ quote:L("At constant temperature, the volume of a fixed mass of gas is inversely proportional to the pressure applied to it.","בטמפרטורה קבועה, נפח של מסת גז קבועה עומד ביחס הפוך ללחץ המופעל עליה."),
+ pts:[
+  L("Pressure up → volume down, <b>inversely</b>. Half the volume change happens in the <b>shallowest 10 m</b>, so equalizing and ascent control matter most near the surface.","לחץ עולה ← נפח יורד, <b>ביחס הפוך</b>. מחצית שינוי הנפח מתרחשת ב-<b>10 המטרים הרדודים</b>, ולכן השוואת לחצים ושליטה בעלייה הכי חשובות ליד פני המים."),
+  L("Ears and sinuses must be equalized on descent (<b>squeeze</b>) and ascent (<b>reverse block</b>). Lungs equalize by breathing: <b>never hold your breath on scuba</b>.","אוזניים וסינוסים חייבים השוואה בירידה (<b>מעיכה/squeeze</b>) ובעלייה (<b>חסימה הפוכה</b>). הריאות משתוות בנשימה: <b>לעולם לא לעצור נשימה עם סקובה</b>."),
+  L("Air use: a tank lasting 60 min at the surface lasts <b>~15 min at 30 m</b>. Gas density and breathing effort rise with depth.","צריכת אוויר: מיכל שמחזיק 60 דקות על פני המים מחזיק <b>~15 דקות ב-30 מ'</b>. צפיפות הגז ומאמץ הנשימה עולים עם העומק."),
+  L("Gas in BCD, drysuit and neoprene compresses on descent and expands on ascent. Every depth change needs a buoyancy adjustment.","הגז במאזן, בחליפה היבשה ובניאופרן נדחס בירידה ומתפשט בעלייה. כל שינוי עומק דורש תיקון ציפה."),
+  L("<b>Fish too:</b> swim bladders follow Boyle's law. Rapid ascent → everted stomach, bulging eyes, ruptured bladder. A <b>descending device</b> recompresses them.","<b>גם דגים:</b> שלפוחית השחייה מצייתת לחוק בויל. עלייה מהירה ← היפוך קיבה, עיניים בולטות, קרע בשלפוחית. <b>מתקן הורדה</b> מחזיר אותם ללחץ.")],
+ acc:[
+  {t:L("Ear squeeze / reverse block","מעיכת אוזן / חסימה הפוכה"),i:[L("Delayed equalization or congestion → pain, eardrum rupture, vertigo, infection","השוואה מאוחרת או גודש ← כאב, קרע בעור התוף, ורטיגו, זיהום"),L("Round/oval window rupture → hearing loss and vertigo","קרע בחלון העגול/הסגלגל ← פגיעה בשמיעה וורטיגו"),L("Alternobaric vertigo: sudden pressure difference → extreme dizziness, nausea","ורטיגו אלטרנוברי: הפרש לחצים פתאומי ← סחרחורת קשה, בחילה")]},
+  {t:L("Sinus, mask, tooth & GI","סינוסים, מסכה, שיניים ומעיים"),i:[L("Sinus: headache, facial pain, blood-tinged mucus","סינוסים: כאב ראש, כאב בפנים, ריר דמי"),L("Mask squeeze: facial bruising, blood-shot eyes","מעיכת מסכה: חבלות בפנים, עיניים אדומות (שטפי דם)"),L("Barodontalgia: air trapped under a filling → tooth pain","ברודונטלגיה: אוויר כלוא מתחת לסתימה ← כאב שיניים"),L("GI: gas expands on ascent → slow down and let it pass","מעיים: גז מתפשט בעלייה ← להאט ולתת לו לצאת")]},
+  {t:L("Pulmonary barotrauma","ברוטראומה ריאתית"),i:[L("Breath-hold ascent → alveoli rupture","עלייה בעצירת נשימה ← קרע בנאדיות"),L("Pneumothorax (lung collapse); tension pneumothorax strains the heart","חזה אוויר (קריסת ריאה); חזה אוויר בלחץ מעמיס על הלב"),L("Mediastinal & subcutaneous emphysema: air under sternum / at the neck","אמפיזמה מדיאסטינלית ותת-עורית: אוויר מתחת לעצם החזה / בבסיס הצוואר")]},
+  {t:L("Arterial gas embolism (AGE)","תסחיף גז עורקי (AGE)"),sev:1,i:[L("Gas enters the blood through ruptured alveoli and expands on ascent","גז נכנס לדם דרך נאדיות קרועות ומתפשט בעלייה"),L("Brain → sudden stroke-like signs; heart → cardiac arrest","מוח ← סימנים דמויי שבץ פתאומיים; לב ← דום לב"),L("Onset can be immediate, even underwater","הופעה יכולה להיות מיידית, אפילו מתחת למים")]}],
+ aid:[L("ABCs: airway, breathing, circulation","ABC: נתיב אוויר, נשימה, מחזור דם"),L("Activate the Emergency Action Plan / EMS","הפעל את תוכנית החירום (EAP) / שירותי חירום"),L("Give 100% oxygen","תן 100% חמצן"),L("Supine or recovery position; treat for shock","שכיבה על הגב או תנוחת התאוששות; טיפול בהלם"),L("CPR if needed; suspend diving and get a medical evaluation","החייאה במידת הצורך; הפסקת צלילות ובדיקה רפואית")],
+ nums:[["50%",L("volume at 10 m (2 ATA)","נפח ב-10 מ' (2 ATA)")],["25%",L("volume at 30 m (4 ATA)","נפח ב-30 מ' (4 ATA)")],["60 → 15 min",L("tank duration, surface → 30 m","זמן מיכל, פני המים ← 30 מ'")]]},
+
+{id:"temp",d:"18 m",tag:L("Physics · temperature","פיזיקה · טמפרטורה"),t:L("Charles's, Gay-Lussac's & combined laws","חוקי שארל, גיי-ליסאק והחוק המשולב"),
+ lead:L("Temperature joins pressure and volume. You see it most in the scuba cylinder.","הטמפרטורה מצטרפת ללחץ ולנפח. רואים את זה בעיקר במיכל הצלילה."),
+ f:["V₁/T₁ = V₂/T₂  (P const)","P₁/T₁ = P₂/T₂  (V const)","P₁V₁/T₁ = P₂V₂/T₂","PV = nRT"],
+ pts:[
+  L("<b>Charles:</b> at constant pressure, volume ∝ absolute temperature. <b>Gay-Lussac:</b> at constant volume, pressure ∝ absolute temperature.","<b>שארל:</b> בלחץ קבוע, הנפח ∝ לטמפרטורה המוחלטת. <b>גיי-ליסאק:</b> בנפח קבוע, הלחץ ∝ לטמפרטורה המוחלטת."),
+  L("Volume changes need a flexible container; pressure changes happen in rigid ones too, like your cylinder.","שינוי נפח דורש מיכל גמיש; שינוי לחץ קורה גם במיכל קשיח, כמו מיכל הצלילה."),
+  L("Heating a cylinder raises pressure; filling it heats it; draining it cools it.","חימום מיכל מעלה לחץ; מילוי מחמם אותו; ריקון מקרר אותו."),
+  L("Use <b>Kelvin or Rankine</b>. °C or °F give the wrong answer.","יש להשתמש ב<b>קלווין או רנקין</b>. °C או °F ייתנו תשובה שגויה."),
+  L("<b>Combined law</b> holds moles (n) constant. <b>Ideal gas law</b> adds n and R; real gases deviate at high pressure but it's a good approximation.","<b>החוק המשולב</b> מניח מספר מולים (n) קבוע. <b>חוק הגז האידיאלי</b> מוסיף את n ו-R; גזים אמיתיים סוטים בלחץ גבוה אך זה קירוב טוב.")],
+ acc:[
+  {t:L("Cylinder over-pressurization","לחץ יתר במיכל"),i:[L("Full tank in sun or a hot car → pressure above rated working pressure","מיכל מלא בשמש או ברכב חם ← לחץ מעל לחץ העבודה המדורג"),L("Burst-disc rupture or, rarely, cylinder failure","קרע בדיסק הביטחון או, לעיתים נדירות, כשל המיכל")]},
+  {t:L("Cold regulator free-flow","זרימה חופשית בווסת קר"),i:[L("Very cold first stage can ice and free-flow","שלב ראשון קר מאוד עלול לקפוא ולזרום חופשי"),L("Panic response → rapid ascent, buddy separation","תגובת פאניקה ← עלייה מהירה, היפרדות מבן הזוג")]},
+  {t:L("Gas-planning error","טעות בתכנון גז"),i:[L("Warm fill, cold depth → less usable gas than the SPG showed topside","מילוי חם ועומק קר ← פחות גז זמין ממה שהמד הראה למעלה")]}],
+ nums:[["K = °C + 273",L("absolute temperature","טמפרטורה מוחלטת")],["n",L("constant in combined law","קבוע בחוק המשולב")]]},
+
+{id:"dalton",d:"25 m",tag:L("Physics · partial pressure","פיזיקה · לחץ חלקי"),t:L("Dalton's law & gas toxicity","חוק דלטון ורעילות גזים"),gauge:true,
+ lead:L("Partial pressure explains nitrox, narcosis and every kind of gas toxicity.","הלחץ החלקי מסביר את הניטרוקס, הנרקוזיס וכל סוגי הרעילות של גזים."),
+ f:["P_total = P₁ + P₂ + …","P_gas = P_total × F_gas"],
+ quote:L("Total pressure of a mixture equals the sum of the pressures each gas would exert alone in the same volume.","הלחץ הכולל של תערובת שווה לסכום הלחצים שכל גז היה מפעיל לבדו באותו נפח."),
+ pts:[
+  L("Each gas keeps its <b>fraction</b> with depth, but its <b>partial pressure rises</b> with ambient pressure.","כל גז שומר על <b>השבר (אחוז)</b> שלו בעומק, אך <b>הלחץ החלקי שלו עולה</b> עם הלחץ הסביבתי."),
+  L("Air at 40 m (5 ATA): <b>PO₂ ≈ 1.05 bar</b> (like 100% O₂ at the surface), <b>PN₂ ≈ 3.95 bar</b>.","אוויר ב-40 מ' (5 ATA): <b>PO₂ ≈ 1.05 bar</b> (כמו 100% חמצן על פני המים), <b>PN₂ ≈ 3.95 bar</b>."),
+  L("Change the fraction (nitrox, trimix) and you change the gas's effect at a given depth.","שינוי השבר (ניטרוקס, טרימיקס) משנה את השפעת הגז בעומק נתון.")],
+ acc:[
+  {t:L("Nitrogen narcosis","נרקוזיס חנקני"),i:[L("Little effect above ~20 m, often noticeable near 30 m, worse with depth","השפעה קטנה מעל ~20 מ', מורגש לרוב סביב 30 מ', מחמיר עם העומק"),L("Euphoria or paranoia, poor coordination, impaired reasoning","אופוריה או פרנויה, קואורדינציה ירודה, פגיעה בחשיבה"),L("Worse with cold, dark, murky water, stress, task load","מחמיר בקור, חושך, מים עכורים, לחץ ועומס משימות"),L("Helium less narcotic; argon more (drysuit gas only); O₂ somewhat narcotic","הליום פחות נרקוטי; ארגון יותר (רק לניפוח חליפה יבשה); חמצן מעט נרקוטי"),L("<b>Fix:</b> ascend with your buddy. Effects resolve fully.","<b>טיפול:</b> לעלות עם בן הזוג לעומק רדוד. ההשפעות חולפות לגמרי.")]},
+  {t:L("CNS oxygen toxicity","רעילות חמצן למערכת העצבים"),sev:1,i:[L("High PO₂ → convulsions, regulator loss, drowning risk","PO₂ גבוה ← פרכוסים, אובדן ווסת, סכנת טביעה"),L("<b>ConVENTID:</b> Convulsions, Visual, Ears ringing, Nausea, Twitching, Irritability, Dizziness","<b>ConVENTID:</b> פרכוסים, הפרעות ראייה, צלצולים באוזניים, בחילה, עוויתות, עצבנות, סחרחורת"),L("Hold (don't force) the regulator; ascend once convulsions stop","להחזיק (לא לדחוף בכוח) את הווסת; לעלות כשהפרכוסים נפסקים")]},
+  {t:L("Pulmonary O₂ toxicity","רעילות חמצן ריאתית"),i:[L("Long exposure to elevated PO₂ dries surfactant","חשיפה ארוכה ל-PO₂ גבוה מייבשת את הסורפקטנט"),L("Chest discomfort, dry cough; mainly chamber and saturation diving","אי-נוחות בחזה, שיעול יבש; בעיקר בתא לחץ ובצלילת רוויה")]},
+  {t:L("CO₂ toxicity (hypercapnia)","רעילות CO₂ (היפרקפניה)"),i:[L("From workload, cold, poor fitness, bad regulator","ממאמץ, קור, כושר ירוד, ווסת לא תקין"),L("Fast heart rate, headache, confusion, breathlessness","דופק מהיר, כאב ראש, בלבול, קוצר נשימה"),L("Stop work, ABCs, oxygen","להפסיק מאמץ, ABC, חמצן")]},
+  {t:L("CO toxicity","הרעלת פחמן חד-חמצני"),sev:1,i:[L("A contaminant from exhaust or a poorly kept compressor","מזהם מגזי פליטה או ממדחס לא מתוחזק"),L("Binds hemoglobin far more readily than O₂","נקשר להמוגלובין הרבה יותר בקלות מחמצן"),L("Never breathe gas that smells or tastes; ABCs, O₂, sometimes hyperbaric","לעולם לא לנשום גז עם ריח או טעם; ABC, חמצן, לפעמים תא לחץ")]}],
+ nums:[["1.05 bar",L("PO₂ on air at 40 m","PO₂ באוויר ב-40 מ'")],["~30 m",L("narcosis noticeable","נרקוזיס מורגש")],["1.4 bar",L("working max PO₂ (150 min)","PO₂ מרבי לעבודה (150 דק')")],["1.6 bar",L("absolute ceiling (45 min)","תקרה מוחלטת (45 דק')")]]},
+
+{id:"henry",d:"30 m",tag:L("Physics · solubility","פיזיקה · מסיסות"),t:L("Henry's law & decompression illness","חוק הנרי ומחלת הדקומפרסיה"),
+ lead:L("Why nitrogen moves into and out of your tissues, and the direct cause of DCS.","למה חנקן נכנס לרקמות ויוצא מהן, והגורם הישיר ל-DCS."),
+ f:["C_dissolved = k_H × P_gas"],
+ quote:L("At constant temperature, the amount of gas dissolved in a liquid is proportional to that gas's partial pressure.","בטמפרטורה קבועה, כמות הגז המומס בנוזל יחסית ללחץ החלקי של אותו גז."),
+ pts:[
+  L("You <b>on-gas</b> nitrogen at depth and <b>off-gas</b> during and after ascent. It isn't instant.","<b>סופגים</b> חנקן בעומק ו<b>משחררים</b> אותו בעלייה ואחריה. התהליך אינו מיידי."),
+  L("On ascent, tissues become <b>super-saturated</b>. Exceed their tolerance and gas forms <b>bubbles</b>: that is DCS.","בעלייה הרקמות הופכות <b>על-רוויות</b>. חריגה מהסבולת ← הגז יוצר <b>בועות</b>: זו DCS."),
+  L("Nitrogen is <b>~5× more soluble in fat</b> than in blood or water.","חנקן <b>מסיס פי ~5 בשומן</b> מאשר בדם או במים."),
+  L("<b>Onset:</b> usually 15 min – 2 h after surfacing, sometimes 24 h+. Symptoms usually worsen and rarely resolve alone.","<b>הופעה:</b> בדרך כלל 15 דק' – שעתיים אחרי היציאה, לפעמים 24 שעות ויותר. התסמינים לרוב מחמירים ולעיתים נדירות חולפים לבד."),
+  L("<b>Risk factors:</b> deep/long dives, skipped stops, fast ascent, repetitive and multi-day diving, flying soon after; dehydration, fat, fitness, age, fatigue, prior DCS, PFO; cold water, heavy exertion, alcohol.","<b>גורמי סיכון:</b> צלילות עמוקות/ארוכות, דילוג על עצירות, עלייה מהירה, צלילות חוזרות ורב-יומיות, טיסה מוקדמת; התייבשות, שומן, כושר, גיל, עייפות, DCS בעבר, PFO; מים קרים, מאמץ, אלכוהול."),
+  L("<b>PFO</b>: open in 10–20% of people; lets venous bubbles bypass the lungs. Worth a medical conversation, not automatically disqualifying.","<b>PFO</b>: פתוח אצל 10–20% מהאנשים; מאפשר לבועות ורידיות לעקוף את הריאות. שווה שיחה עם רופא, לא פוסל אוטומטית.")],
+ acc:[
+  {t:L("Type I DCS (mild)","DCS סוג I (קל)"),i:[L("Musculoskeletal \"bends\": deep joint/limb pain","\"בנדס\" שרירי-שלדי: כאב עמוק במפרקים/גפיים"),L("Skin bends: itching, marbled rash (cutis marmorata), may precede Type II","\"בנדס\" עורי: גרד, פריחה משוישת (cutis marmorata), עלול לבשר על סוג II"),L("Lymphatic: swelling near lymph nodes","לימפטי: נפיחות ליד בלוטות לימפה")]},
+  {t:L("Type II DCS (serious)","DCS סוג II (חמור)"),sev:1,i:[L("Neurological: numbness, tingling, weakness, paralysis","נוירולוגי: נימול, עקצוץ, חולשה, שיתוק"),L("Vestibular \"staggers\": vertigo, tinnitus, hearing loss","וסטיבולרי \"staggers\": ורטיגו, טנטון, אובדן שמיעה"),L("Cardiopulmonary \"chokes\": dry cough, chest pain, breathlessness","לב-ריאה \"chokes\": שיעול יבש, כאב בחזה, קוצר נשימה")]},
+  {t:L("AGE as part of DCI","AGE כחלק מ-DCI"),sev:1,i:[L("DCI = DCS + AGE","DCI = DCS + AGE"),L("AGE more often from lung over-pressurization than from DCS","AGE נובע לרוב מלחץ יתר בריאות ולא מ-DCS"),L("Inner-ear DCS: same first aid as any DCI","DCS של האוזן הפנימית: אותה עזרה ראשונה כמו בכל DCI")]}],
+ aid:[L("ABCs, activate EAP / EMS","ABC, הפעלת תוכנית חירום / שירותי חירום"),L("100% oxygen: speeds off-gassing, shrinks bubbles. Start even before symptoms after a rapid ascent or missed stop","100% חמצן: מאיץ שחרור חנקן ומקטין בועות. להתחיל גם לפני תסמינים אחרי עלייה מהירה או דילוג על עצירה"),L("Lay supine / recovery, treat for shock, CPR if needed","השכבה על הגב / תנוחת התאוששות, טיפול בהלם, החייאה במידת הצורך"),L("5-minute neuro exam, repeat periodically","בדיקה נוירולוגית של 5 דקות, לחזור עליה מדי פעם"),L("Recompression in a hyperbaric chamber is the definitive treatment","טיפול בתא לחץ (רה-קומפרסיה) הוא הטיפול המוגדר")],
+ nums:[["15 min–2 h",L("typical DCS onset","הופעת DCS אופיינית")],["24 h+",L("possible delay","עיכוב אפשרי")],["~5×",L("N₂ solubility in fat","מסיסות N₂ בשומן")],["10–20%",L("people with PFO","אנשים עם PFO")]]},
+
+{id:"haldane",d:"33 m",tag:L("Decompression theory","תורת הדקומפרסיה"),t:L("Haldane's model","המודל של הולדיין"),
+ lead:L("How tables and computers turn Henry's law into a plannable, repeatable dive.","איך טבלאות ומחשבים הופכים את חוק הנרי לצלילה מתוכננת וחוזרת."),
+ pts:[
+  L("The body is modeled as theoretical <b>tissue compartments</b>. They don't map to real tissues but approximate the whole process.","הגוף ממודל כ<b>תאי רקמה</b> תאורטיים. הם לא מקבילים לרקמות אמיתיות אבל מקרבים את התהליך כולו."),
+  L("<b>Half-time:</b> time for a compartment to go halfway from its current N₂ level toward equilibrium at a new pressure.","<b>זמן מחצית:</b> הזמן שלוקח לתא לעבור חצי מהדרך מרמת החנקן הנוכחית לשיווי משקל בלחץ חדש."),
+  L("<b>Fast</b> compartments (blood-rich) equilibrate quickly but tolerate little super-saturation. <b>Slow</b> ones (fat, cartilage) drive repetitive and multi-day planning.","תאים <b>מהירים</b> (עשירים בדם) מתאזנים מהר אך סובלים מעט על-רוויה. תאים <b>איטיים</b> (שומן, סחוס) קובעים את התכנון של צלילות חוזרות ורב-יומיות."),
+  L("<b>M-value:</b> the maximum excess nitrogen a compartment can hold during ascent before bubbles form.","<b>ערך M:</b> עודף החנקן המרבי שתא יכול להחזיק בעלייה לפני היווצרות בועות."),
+  L("Haldane's tables were used by the Royal Navy from <b>1907 to 1956</b>. Modern refinements: more compartments, recalculated M-values, adjusted ascent rates, different on/off-gassing rates.","הטבלאות של הולדיין שימשו את הצי המלכותי <b>מ-1907 עד 1956</b>. שיפורים מודרניים: יותר תאים, ערכי M מחושבים מחדש, קצבי עלייה מעודכנים וקצבי ספיגה/שחרור שונים."),
+  L("Nearly every table and computer today derives from Haldane. Your program's manual sets the required algorithm and conservatism.","כמעט כל טבלה ומחשב צלילה כיום נגזרים מהולדיין. מדריך הבטיחות של התוכנית קובע את האלגוריתם ורמת השמרנות.")],
+ nums:[["1907–1956",L("Royal Navy tables","טבלאות הצי המלכותי")],["½",L("per half-time","לכל זמן מחצית")]]},
+
+{id:"other",d:"35 m",tag:L("Physiology · environment","פיזיולוגיה · סביבה"),t:L("Additional concerns","בעיות נוספות"),
+ lead:L("Not tied to one gas law, but just as important to recognize and prevent.","לא קשורות לחוק גז אחד, אבל חשוב באותה מידה לזהות ולמנוע."),
+ acc:[
+  {t:L("Drowning / near-drowning","טביעה / כמעט-טביעה"),sev:1,i:[L("Water in the airway blocks oxygen uptake","מים בנתיב האוויר חוסמים קליטת חמצן"),L("Near-drowning: fluid can build up over hours to days (secondary drowning). Always get medical care","כמעט-טביעה: נוזל יכול להצטבר במשך שעות עד ימים (טביעה משנית). תמיד לפנות לטיפול")]},
+  {t:L("Dehydration","התייבשות"),i:[L("A significant DCS risk factor","גורם סיכון משמעותי ל-DCS"),L("Dry tank air, sweating, cold diuresis, caffeine, alcohol","אוויר מיכל יבש, הזעה, השתנה בקור, קפאין, אלכוהול"),L("Urine should be clear to light yellow","השתן צריך להיות שקוף עד צהוב בהיר")]},
+  {t:L("Disorientation & seasickness","חוסר התמצאות ומחלת ים"),i:[L("Mid-water with no reference → dizziness, panic. Use a line, instruments, buddy","באמצע המים ללא נקודת ייחוס ← סחרחורת, פאניקה. להשתמש בחבל, במכשירים, בבן הזוג"),L("Seasickness: eye/inner-ear conflict. Ask a dive physician about medication","מחלת ים: סתירה בין העין לאוזן הפנימית. להתייעץ עם רופא צלילה לגבי תרופות")]},
+  {t:L("Carotid sinus reflex","רפלקס הסינוס הקרוטידי"),i:[L("Tight hood or neck seal fools pressure sensors","ברדס הדוק או אטם צוואר מטעים את חיישני הלחץ"),L("Drop in heart rate and blood pressure, even unconsciousness","ירידה בדופק ובלחץ הדם, ואף אובדן הכרה")]},
+  {t:L("Shallow water blackout","עילפון במים רדודים"),sev:1,i:[L("Falling pressure on ascent drops O₂ below consciousness threshold","ירידת הלחץ בעלייה מורידה את החמצן מתחת לסף ההכרה"),L("Mainly breath-hold diving after hyperventilation","בעיקר בצלילה חופשית אחרי היפרוונטילציה")]},
+  {t:L("Marine life & trauma","בעלי חיים ימיים וטראומה"),i:[L("Most injuries are defensive, from touching or handling","רוב הפגיעות הן תגובת הגנה למגע או טיפול"),L("Stings: <b>no fresh water</b>; vinegar/alcohol/baking soda, then scrape","עקיצות: <b>לא לשטוף במים מתוקים</b>; חומץ/אלכוהול/סודה לשתייה, ואז לגרד"),L("Punctures: remove spine, soak in ~45°C water for 30–90 min","דקירות: להוציא קוץ, לטבול במים ~45°C למשך 30–90 דק'")]},
+  {t:L("IPE, SWAS, HPNS","IPE, SWAS, HPNS"),i:[L("IPE: lung fluid with cold + exertion + tight suit; pink frothy sputum → emergency","IPE: נוזל בריאות בשילוב קור, מאמץ וחליפה הדוקה; כיח ורדרד מוקצף ← חירום"),L("SWAS: inhaled sea-spray → flu-like symptoms hours later","SWAS: שאיפת רסס מי ים ← תסמינים דמויי שפעת כעבור שעות"),L("HPNS: deep helium diving → tremors; not at scientific depths","HPNS: צלילת הליום עמוקה ← רעד; לא בעומקים מדעיים")]}],
+ nums:[["~45°C",L("hot-water soak","טבילה במים חמים")],["30–90 min",L("soak time","זמן טבילה")]]},
+
+{id:"emerg",d:L("Surface","פני המים"),tag:L("Emergencies","חירום"),t:L("Recognizing & responding","זיהוי ותגובה"),
+ lead:L("Turning everything above into field-ready readiness.","להפוך את כל מה שנלמד למוכנות בשטח."),
+ pts:[
+  L("<b>5-minute neuro exam:</b> orientation, eyes, forehead, face, ears, gag reflex, tongue, shoulders, arms/hands, chest, legs, heel-to-toe walk (skip on a moving boat).","<b>בדיקה נוירולוגית של 5 דקות:</b> התמצאות, עיניים, מצח, פנים, אוזניים, רפלקס הקאה, לשון, כתפיים, ידיים, חזה, רגליים, הליכת עקב-בוהן (לא על סירה נעה)."),
+  L("Look for deviations, <b>side-to-side differences</b> and <b>change over time</b>. Repeat if help is delayed.","מחפשים סטיות, <b>הבדלים בין הצדדים</b> ו<b>שינוי לאורך זמן</b>. לחזור אם העזרה מתעכבת."),
+  L("<b>Personal kit:</b> CPR barrier mask, gloves, shears, bandages. Each site: full kit, emergency O₂, AED where feasible.","<b>ערכה אישית:</b> מסכת החייאה, כפפות, מספריים, תחבושות. בכל אתר: ערכה מלאה, חמצן חירום, ודפיברילטור (AED) כשאפשר."),
+  L("<b>Emergency Action Plan:</b> nearest hospital, nearest chamber, evacuation route, who calls whom. Confirm with the DSO for each new site.","<b>תוכנית פעולה לחירום (EAP):</b> בית החולים הקרוב, תא הלחץ הקרוב, נתיב פינוי, מי מתקשר למי. לאשר מול קצין הבטיחות (DSO) בכל אתר חדש."),
+  L("Current CPR, First Aid and O₂-provider certification is a prerequisite for AAUS diving.","הסמכה בתוקף להחייאה, עזרה ראשונה ומתן חמצן היא תנאי מוקדם לצלילת AAUS.")],
+ nums:[["12",L("neuro exam checks","בדיקות נוירולוגיות")],["5 min",L("exam length","משך הבדיקה")]]},
+
+{id:"cpr",d:L("Deck","סיפון"),tag:L("CPR & rescue","החייאה וחילוץ"),t:L("CPR & rescue for diving","החייאה וחילוץ בצלילה"),
+ lead:L("Drowning is a respiratory arrest first. Oxygen debt comes first, cardiac arrest last.","טביעה היא קודם כל דום נשימה. חוסר החמצן בא ראשון, דום הלב אחרון."),
+ pts:[
+  L("Sequence: breath-hold/laryngospasm → hypoxia → unconsciousness → respiratory arrest → cardiac arrest. AGE and severe DCS are also oxygen problems first.","רצף: עצירת נשימה/עווית גרון ← היפוקסיה ← אובדן הכרה ← דום נשימה ← דום לב. גם AGE ו-DCS חמור הם קודם כל בעיית חמצן."),
+  L("<b>Breathing</b> casualty → 100% O₂ now. <b>Not breathing</b> → full CPR (compressions + ventilations), AED as soon as available.","נפגע <b>נושם</b> ← 100% חמצן מיד. <b>לא נושם</b> ← החייאה מלאה (עיסויים + הנשמות), AED ברגע שזמין."),
+  L("<b>Primary survey:</b> Safety → Consciousness → Airway → Breathing → Circulation.","<b>סקר ראשוני:</b> בטיחות ← הכרה ← נתיב אוויר ← נשימה ← מחזור דם."),
+  L("<b>Non-rebreather mask</b> at 10–15 L/min with the bag inflated: 60–80%+ O₂. Simple mask 40–60%, room air 21%. Easy to use, no diagnosis needed.","<b>מסכת NRB</b> ב-10–15 ל'/דק' עם שקית מלאה: 60–80%+ חמצן. מסכה פשוטה 40–60%, אוויר 21%. קל לשימוש, לא צריך אבחנה."),
+  L("Suspected DCS/AGE: <b>supine</b>, not head-down (Trendelenburg). Keep still, warm, hydrated if conscious. Call EMS and DAN's 24-h hotline.","חשד ל-DCS/AGE: <b>שכיבה על הגב</b>, לא ראש למטה (טרנדלנבורג). לשמור במנוחה, חם, ושתייה אם בהכרה. להתקשר לשירותי חירום ולמוקד DAN 24 שעות."),
+  L("<b>OSHA:</b> commercial diving falls under 29 CFR 1910 Subpart T. AAUS programs are exempt if: a Diving Control Board with a majority of active scientific divers; diving only to advance science, non-proprietary data; divers only observe/gather data; divers are scientists or in training. The exemption doesn't lower the safety bar.","<b>OSHA:</b> צלילה מסחרית מוסדרת ב-29 CFR 1910 Subpart T. תוכניות AAUS פטורות אם: ועדת צלילה עם רוב של צוללנים מדעיים פעילים; צלילה רק לקידום המדע ונתונים לא קנייניים; הצוללנים רק צופים/אוספים נתונים; הצוללנים הם מדענים או בהכשרה. הפטור לא מוריד את רף הבטיחות.")],
+ acc:[
+  {t:L("Unresponsive at surface, water aspirated","ללא תגובה על פני המים, שאיפת מים"),sev:1,i:[L("Drowning: respiratory-first arrest","טביעה: דום נשימה ראשוני"),L("O₂ if breathing; CPR if not; AED once out of water and dry","חמצן אם נושם; החייאה אם לא; AED אחרי הוצאה מהמים וייבוש")]},
+  {t:L("Collapse during or right after ascent","קריסה בעלייה או מיד אחריה"),sev:1,i:[L("AGE from lung over-expansion","AGE מהתפשטות יתר של הריאות"),L("O₂ / CPR + AED; supine, not head-down; activate EAP","חמצן / החייאה + AED; על הגב, לא ראש למטה; הפעלת EAP")]},
+  {t:L("Joint pain, rash or neuro signs 15 min–24 h after","כאב מפרקים, פריחה או סימנים נוירולוגיים 15 דק'–24 ש' אחרי"),i:[L("DCS Type I or II","DCS סוג I או II"),L("O₂, neuro exam, document, EAP / DAN","חמצן, בדיקה נוירולוגית, תיעוד, EAP / DAN")]},
+  {t:L("Collapse unrelated to the dive","קריסה שלא קשורה לצלילה"),i:[L("Primary cardiac arrest","דום לב ראשוני"),L("Standard BLS: CPR 30:2, AED ASAP","החייאה בסיסית: 30:2, AED מוקדם ככל האפשר")]}],
+ nums:[["30:2",L("compressions : breaths","עיסויים : הנשמות")],["10–15 L/min",L("NRB flow","זרימה במסכת NRB")],["60–80%+",L("O₂ via NRB","חמצן במסכת NRB")],["21%",L("room air","אוויר רגיל")]]},
+
+{id:"cheat",d:L("Log","יומן"),cheat:true,tag:L("Summary","סיכום"),t:L("Cheat sheet","דף נוסחאות"),
+ lead:L("Law → accident, plus the tables you'll want in your head.","חוק ← תאונה, והטבלאות שכדאי לזכור בעל פה.")}
+];
+
+/* =========================== QUESTIONS (first option = correct) =========================== */
+const Q=[];
+const q=(c,en,he)=>Q.push({c,en,he});
+q("phys",["What mainly triggers the breathing reflex?","Blood CO₂ level","Blood O₂ level","Heart rate","Lung volume","The reflex is driven primarily by blood CO₂. The O₂-based hypoxic drive is secondary and normally masked."],
+ ["מה מפעיל בעיקר את רפלקס הנשימה?","רמת ה-CO₂ בדם","רמת ה-O₂ בדם","קצב הלב","נפח הריאות","הרפלקס מונע בעיקר מרמת ה-CO₂ בדם. הדחף ההיפוקסי מבוסס החמצן הוא משני ובדרך כלל מוסתר."]);
+q("phys",["What drives gas movement across the alveolus?","Passive diffusion along the partial-pressure gradient","Active transport by alveolar cells","Hemoglobin pumping gas","Osmotic pressure","Movement across the alveolus is passive diffusion, driven purely by partial-pressure differences."],
+ ["מה מניע את מעבר הגזים דרך הנאדית?","דיפוזיה סבילה לפי מפל הלחצים החלקיים","הובלה פעילה על ידי תאי הנאדית","שאיבה על ידי המוגלובין","לחץ אוסמוטי","המעבר דרך הנאדית הוא דיפוזיה סבילה, המונעת רק מהפרשי לחצים חלקיים."]);
+q("phys",["How is most CO₂ carried back to the lungs?","As bicarbonate ion","Bound to hemoglobin only","As free bubbles","Bound to plasma albumin","CO₂ is carried mostly as bicarbonate ion from tissues to the lungs."],
+ ["איך רוב ה-CO₂ מובל חזרה לריאות?","כיון ביקרבונט","קשור רק להמוגלובין","כבועות חופשיות","קשור לאלבומין בפלזמה","רוב ה-CO₂ מובל כיון ביקרבונט מהרקמות לריאות."]);
+q("phys",["What is the typical resting respiratory rate of a healthy adult?","10–18 breaths/min","4–8 breaths/min","20–30 breaths/min","30–40 breaths/min","Resting rate is roughly 10–18 breaths per minute."],
+ ["מהו קצב הנשימה במנוחה אצל מבוגר בריא?","10–18 נשימות לדקה","4–8 נשימות לדקה","20–30 נשימות לדקה","30–40 נשימות לדקה","קצב הנשימה במנוחה הוא בערך 10–18 נשימות לדקה."]);
+q("phys",["Where does gas exchange with body tissue actually occur?","Capillaries","Arteries","Veins","Heart chambers","Capillaries are where gas exchange with tissue occurs."],
+ ["היכן מתבצע בפועל חילוף הגזים עם הרקמות?","בנימים","בעורקים","בוורידים","בחדרי הלב","חילוף הגזים עם הרקמות מתבצע בנימים."]);
+q("phys",["The pulmonary circulation connects:","Heart and lungs","Heart and body tissues","Lungs and brain","Arteries and veins directly","Pulmonary circulation is heart ↔ lungs; systemic is heart ↔ the rest of the body."],
+ ["מחזור הדם הריאתי מחבר בין:","הלב לריאות","הלב לרקמות הגוף","הריאות למוח","העורקים לוורידים ישירות","המחזור הריאתי הוא לב ↔ ריאות; הסיסטמי הוא לב ↔ שאר הגוף."]);
+
+q("water",["Underwater, an object appears:","About 33% larger and 25% closer","About 25% smaller and 33% farther","The same size but closer","Larger and farther","Refraction at the mask makes objects look ~33% larger and ~25% closer."],
+ ["מתחת למים, עצם נראה:","גדול בכ-33% וקרוב בכ-25%","קטן בכ-25% ורחוק בכ-33%","באותו גודל אך קרוב יותר","גדול ורחוק יותר","שבירת האור במסכה גורמת לעצמים להיראות גדולים ב-33% וקרובים ב-25%."]);
+q("water",["How much faster does water conduct heat than air?","About 25×","About 4×","About 800×","About 2×","Water conducts heat ~25× faster, so core heat is lost steadily without protection."],
+ ["פי כמה מים מוליכים חום מהר יותר מאוויר?","פי 25 בערך","פי 4 בערך","פי 800 בערך","פי 2 בערך","המים מוליכים חום מהר פי ~25, ולכן ללא הגנה מאבדים חום ליבה בהתמדה."]);
+q("water",["Which statement about sound underwater is correct?","It travels ~4× faster but its direction is hard to localize","It travels slower and is easy to localize","It crosses the air/water surface easily","It travels at the same speed as in air","Sound is ~4× faster in water but direction is very hard to localize, and it rarely crosses the surface well."],
+ ["איזו טענה על קול מתחת למים נכונה?","נע מהר פי ~4 אבל קשה לזהות את כיוונו","נע לאט יותר וקל לזהות את כיוונו","עובר בקלות בין אוויר למים","נע באותה מהירות כמו באוויר","הקול מהיר פי ~4 במים, אבל קשה מאוד לזהות כיוון, והוא כמעט לא חוצה את פני המים."]);
+q("water",["Which colors are absorbed first with depth?","Red and orange","Blue and green","Violet","All equally","Longest wavelengths (red, orange) go first; by 15–20 m most scenes look blue-green."],
+ ["אילו צבעים נבלעים ראשונים עם העומק?","אדום וכתום","כחול וירוק","סגול","כולם באותה מידה","אורכי הגל הארוכים (אדום, כתום) נעלמים ראשונים; ב-15–20 מ' הכול נראה כחול-ירוק."]);
+q("water",["Uncontrollable shivering can begin after a core temperature drop of:","About 1°C","About 5°C","About 10°C","Only below 30°C core","Shivering can start with as little as a 1°C / 2°F drop."],
+ ["רעד בלתי נשלט יכול להתחיל לאחר ירידה בחום הליבה של:","כ-1°C","כ-5°C","כ-10°C","רק מתחת ל-30°C","רעד יכול להתחיל כבר בירידה של 1°C / 2°F."]);
+q("water",["First aid for hyperthermia is to:","Cool the diver and rehydrate","Warm the diver gradually","Give 100% oxygen and recompress","Continue the dive slowly","Hyperthermic → cool and rehydrate; hypothermic → warm gradually."],
+ ["עזרה ראשונה בהיפרתרמיה היא:","לקרר את הצוללן ולתת לשתות","לחמם את הצוללן בהדרגה","לתת 100% חמצן ולהכניס לתא לחץ","להמשיך את הצלילה לאט","היפרתרמיה ← קירור ושתייה; היפותרמיה ← חימום הדרגתי."]);
+
+q("arch",["Archimedes' principle says the buoyant force equals:","The weight of fluid the object displaces","The object's own weight","The object's volume times its density","The water pressure at that depth","Buoyant force = weight of displaced fluid (ρ × V × g)."],
+ ["לפי עקרון ארכימדס, כוח העילוי שווה ל:","משקל הנוזל שהגוף דוחה","משקל הגוף עצמו","נפח הגוף כפול צפיפותו","לחץ המים באותו עומק","כוח העילוי = משקל הנוזל הנדחה (ρ × V × g)."]);
+q("arch",["An object neutrally buoyant in salt water is moved to fresh water. It will:","Sink slightly","Float","Stay neutral","Float only at depth","Fresh water is less dense, so it displaces less weight and the object sinks slightly."],
+ ["גוף בציפה ניטרלית במי ים מועבר למים מתוקים. הוא:","ישקע מעט","יצוף","יישאר ניטרלי","יצוף רק בעומק","מים מתוקים פחות צפופים, ולכן משקל המים הנדחה קטן והגוף שוקע מעט."]);
+q("arch",["Which buoyancy state is an exact point rather than a range?","Neutral","Positive","Negative","None of them","Neutral buoyancy is an exact point; positive and negative come in degrees."],
+ ["איזה מצב ציפה הוא נקודה מדויקת ולא טווח?","ניטרלי","חיובי","שלילי","אף אחד מהם","ציפה ניטרלית היא נקודה מדויקת; חיובית ושלילית באות בדרגות."]);
+q("arch",["What typically causes a runaway uncontrolled ascent?","Overweighting offset with BCD air that expands on ascent","Too little lead with an empty BCD","Breathing too slowly","Using a freshwater computer setting","Extra BCD air used to offset overweighting expands on ascent (Boyle), creating runaway positive buoyancy."],
+ ["מה גורם בדרך כלל לעלייה בלתי מבוקרת?","עודף משקולות שמאוזן באוויר במאזן שמתפשט בעלייה","מעט מדי משקולות עם מאזן ריק","נשימה איטית מדי","הגדרת מחשב למים מתוקים","אוויר במאזן שמאזן עודף משקולות מתפשט בעלייה (בויל) ויוצר ציפה חיובית שיוצאת משליטה."]);
+q("arch",["Approximately how much does 1 L of seawater weigh?","1.03 kg","1.00 kg","0.97 kg","1.30 kg","Seawater ≈ 1.03 kg/L; fresh water ≈ 1.00 kg/L."],
+ ["כמה שוקל בערך ליטר מי ים?","1.03 ק״ג","1.00 ק״ג","0.97 ק״ג","1.30 ק״ג","מי ים ≈ 1.03 ק״ג לליטר; מים מתוקים ≈ 1.00 ק״ג לליטר."]);
+q("arch",["You control your buoyancy by changing:","Weight or displaced volume","Only your breathing rate","Only the water temperature","Your depth gauge setting","You change weight (lead) or displaced volume (BCD, lung volume, suit compression)."],
+ ["שולטים בציפה על ידי שינוי:","המשקל או הנפח הנדחה","רק קצב הנשימה","רק טמפרטורת המים","הגדרת מד העומק","משנים משקל (משקולות) או נפח נדחה (מאזן, נפח ריאות, דחיסת חליפה)."]);
+
+q("press",["What is the absolute pressure at 30 m in seawater?","4 ATA","3 ATA","30 ATA","2 ATA","1 atm of atmosphere + 3 bar of water (1 bar per 10 m) = 4 ATA."],
+ ["מהו הלחץ המוחלט בעומק 30 מ' במי ים?","4 ATA","3 ATA","30 ATA","2 ATA","1 אטמוספרה + 3 bar של מים (1 bar לכל 10 מ') = 4 ATA."]);
+q("press",["What does gauge pressure measure?","Pressure from one source, ignoring atmospheric pressure","Atmosphere plus water column","Only atmospheric pressure","Partial pressure of oxygen","Gauge pressure ignores the atmosphere; it's what SPGs and depth gauges display."],
+ ["מה מודד לחץ מד?","לחץ ממקור אחד, בלי הלחץ האטמוספרי","אטמוספרה ועמוד המים","רק את הלחץ האטמוספרי","את הלחץ החלקי של החמצן","לחץ מד מתעלם מהאטמוספרה; זה מה שמראים מד הלחץ ומד העומק."]);
+q("press",["In fresh water, 1 atm of pressure is added every:","10.3 m (34 ft)","10 m (33 ft)","9.7 m (32 ft)","12 m (40 ft)","Fresh water is less dense: 1 bar per 10.3 m, vs 10 m in seawater."],
+ ["במים מתוקים, 1 atm מתווסף כל:","10.3 מ' (34 רגל)","10 מ' (33 רגל)","9.7 מ' (32 רגל)","12 מ' (40 רגל)","מים מתוקים פחות צפופים: 1 bar לכל 10.3 מ', לעומת 10 מ' במי ים."]);
+q("press",["A saltwater-set computer used in a lake will read depth as:","Slightly deeper than true (more conservative)","Slightly shallower than true","Exactly correct","Double the true depth","Uncorrected freshwater dives read slightly deeper, which is more conservative."],
+ ["מחשב המוגדר למי ים ומשמש באגם יציג עומק:","מעט עמוק מהאמיתי (שמרני יותר)","מעט רדוד מהאמיתי","מדויק לחלוטין","פי שניים מהאמיתי","צלילה במים מתוקים ללא תיקון נקראת מעט עמוקה יותר, וזה שמרני יותר."]);
+q("press",["How does ambient pressure change with depth?","Linearly","Exponentially","Inversely","It stays constant below 10 m","Pressure rises linearly with depth."],
+ ["איך הלחץ הסביבתי משתנה עם העומק?","באופן ליניארי","באופן אקספוננציאלי","ביחס הפוך","נשאר קבוע מתחת ל-10 מ'","הלחץ עולה באופן ליניארי עם העומק."]);
+
+q("boyle",["By Boyle's law, as pressure on a gas increases its volume:","Decreases, inversely proportional to pressure","Increases proportionally","Stays the same","Decreases linearly with depth","P₁V₁ = P₂V₂ at constant temperature: volume falls inversely with pressure."],
+ ["לפי חוק בויל, כשהלחץ על גז עולה, הנפח שלו:","יורד ביחס הפוך ללחץ","עולה באופן יחסי","נשאר זהה","יורד ליניארית עם העומק","P₁V₁ = P₂V₂ בטמפרטורה קבועה: הנפח יורד ביחס הפוך ללחץ."]);
+q("boyle",["Where does the largest relative gas-volume change occur?","In the shallowest 10 m","Between 30 and 40 m","Below 40 m","It's equal at every depth","Because the relationship is inverse, half the volume change happens between the surface and 10 m."],
+ ["היכן מתרחש שינוי הנפח היחסי הגדול ביותר?","ב-10 המטרים הרדודים","בין 30 ל-40 מ'","מתחת ל-40 מ'","שווה בכל עומק","בגלל היחס ההפוך, מחצית משינוי הנפח קורית בין פני המים ל-10 מ'."]);
+q("boyle",["A cylinder lasting 60 min at the surface will last about how long at 30 m?","15 min","30 min","20 min","45 min","At 4 ATA you use 4× the gas per breath: 60 ÷ 4 = 15 min."],
+ ["מיכל שמחזיק 60 דקות על פני המים יחזיק בערך כמה זמן ב-30 מ'?","15 דקות","30 דקות","20 דקות","45 דקות","ב-4 ATA צורכים פי 4 גז בכל נשימה: 60 ÷ 4 = 15 דקות."]);
+q("boyle",["A diver ascending while holding their breath risks:","Lung over-expansion injury and AGE","Nitrogen narcosis","CO toxicity","Hypothermia","Expanding gas with nowhere to vent ruptures alveoli → pneumothorax, emphysema, AGE."],
+ ["צוללן שעולה בעצירת נשימה מסתכן ב:","פגיעת התפשטות יתר בריאות ו-AGE","נרקוזיס חנקני","הרעלת CO","היפותרמיה","גז מתפשט בלי מוצא קורע נאדיות ← חזה אוויר, אמפיזמה, AGE."]);
+q("boyle",["Rupture of the round or oval window mainly causes:","Hearing impairment and vertigo","Facial bruising","Tooth pain","Chest pain","Leakage between inner and middle ear causes hearing loss and vertigo."],
+ ["קרע בחלון העגול או הסגלגל גורם בעיקר ל:","פגיעה בשמיעה וורטיגו","חבלות בפנים","כאב שיניים","כאב בחזה","דליפה בין האוזן הפנימית לתיכונה גורמת לאובדן שמיעה וורטיגו."]);
+q("boyle",["Barodontalgia is:","Tooth squeeze from air trapped under a filling or crown","Sinus pain from congestion","Ear pain on descent","Stomach pain from swallowed air","Air trapped below a poor filling or in an abscess can't vent on ascent → tooth pain."],
+ ["ברודונטלגיה היא:","מעיכת שן מאוויר כלוא מתחת לסתימה או כתר","כאב סינוסים מגודש","כאב אוזניים בירידה","כאב בטן מאוויר שנבלע","אוויר כלוא מתחת לסתימה פגומה או במורסה לא יכול לצאת בעלייה ← כאב שיניים."]);
+q("boyle",["Facial bruising and blood-shot eyes after a dive suggest:","Mask squeeze","Sinus barotrauma","CNS oxygen toxicity","Skin bends","An unequalized mask on descent causes facial bruising and petechial hemorrhage in the eyes."],
+ ["חבלות בפנים ועיניים אדומות אחרי צלילה מרמזות על:","מעיכת מסכה","ברוטראומה של הסינוסים","רעילות חמצן למערכת העצבים","\"בנדס\" עורי","מסכה שלא הושוותה בירידה גורמת לחבלות בפנים ושטפי דם נקודתיים בעיניים."]);
+q("boyle",["Which is NOT a form of pulmonary barotrauma?","Barodontalgia","Pneumothorax","Mediastinal emphysema","Arterial gas embolism","Barodontalgia is a tooth squeeze. The others all come from lung over-expansion."],
+ ["מה מהבאים אינו ברוטראומה ריאתית?","ברודונטלגיה","חזה אוויר","אמפיזמה מדיאסטינלית","תסחיף גז עורקי","ברודונטלגיה היא מעיכת שן. כל השאר נובעים מהתפשטות יתר של הריאות."]);
+q("boyle",["For a marine biologist, what helps a fish with barotrauma from rapid ascent?","A descending device that recompresses it","Keeping it in a surface tank","Releasing it at the surface","Feeding it immediately","The swim bladder follows Boyle's law; recompressing the fish reverses much of the injury."],
+ ["מה עוזר לדג עם ברוטראומה מעלייה מהירה?","מתקן הורדה שמחזיר אותו ללחץ","השארתו במיכל על פני המים","שחרורו על פני המים","האכלתו מיד","שלפוחית השחייה מצייתת לחוק בויל; החזרת הדג ללחץ הופכת חלק גדול מהנזק."]);
+
+q("temp",["A full cylinder left in a hot car will:","Rise in pressure","Drop in pressure","Increase in volume","Lose gas through the valve","In a rigid cylinder volume is fixed, so pressure rises with temperature (Gay-Lussac)."],
+ ["מיכל מלא שנשאר ברכב חם:","הלחץ בו יעלה","הלחץ בו ירד","הנפח שלו יגדל","יאבד גז דרך הברז","במיכל קשיח הנפח קבוע, ולכן הלחץ עולה עם הטמפרטורה (גיי-ליסאק)."]);
+q("temp",["Gas-law calculations must use temperature in:","Kelvin or Rankine","Celsius","Fahrenheit","Any scale","Only absolute scales give correct ratios."],
+ ["בחישובי חוקי גזים יש להשתמש בטמפרטורה ב:","קלווין או רנקין","צלזיוס","פרנהייט","כל סקאלה","רק סקאלות מוחלטות נותנות יחסים נכונים."]);
+q("temp",["Charles's law relates volume and temperature when what is held constant?","Pressure","Volume","Temperature","Number of molecules only","Charles: V₁/T₁ = V₂/T₂ at constant pressure."],
+ ["חוק שארל מקשר בין נפח לטמפרטורה כאשר מה קבוע?","הלחץ","הנפח","הטמפרטורה","רק מספר המולקולות","שארל: V₁/T₁ = V₂/T₂ בלחץ קבוע."]);
+q("temp",["Which accident is linked to a very cold first stage?","Regulator icing and free-flow","Cylinder over-pressurization","Ear squeeze","Narcosis","A very cold first stage can ice internally and free-flow, causing rapid gas loss."],
+ ["איזו תאונה קשורה לשלב ראשון קר מאוד?","קפיאת הווסת וזרימה חופשית","לחץ יתר במיכל","מעיכת אוזן","נרקוזיס","שלב ראשון קר מאוד עלול לקפוא מבפנים ולזרום חופשי, ולגרום לאובדן גז מהיר."]);
+q("temp",["The combined gas law holds which quantity constant?","Number of moles (n)","Pressure","Temperature","Volume","P₁V₁/T₁ = P₂V₂/T₂ with n constant."],
+ ["החוק המשולב מניח שאיזה גודל קבוע?","מספר המולים (n)","הלחץ","הטמפרטורה","הנפח","P₁V₁/T₁ = P₂V₂/T₂ כאשר n קבוע."]);
+q("temp",["Filling a scuba cylinder makes it:","Heat up","Cool down","Expand in volume","Stay at the same temperature","Filling raises temperature; draining lowers it."],
+ ["מילוי מיכל צלילה גורם לו:","להתחמם","להתקרר","להתרחב בנפח","להישאר באותה טמפרטורה","מילוי מעלה טמפרטורה; ריקון מוריד אותה."]);
+
+q("dalton",["Breathing air at 40 m, the PO₂ is about:","1.05 bar","0.21 bar","1.6 bar","4.0 bar","At 5 ATA: 0.21 × 5 = 1.05 bar."],
+ ["בנשימת אוויר ב-40 מ', ה-PO₂ הוא בערך:","1.05 bar","0.21 bar","1.6 bar","4.0 bar","ב-5 ATA: 0.21 × 5 = 1.05 bar."]);
+q("dalton",["The partial pressure of a gas equals:","Total pressure × fraction of the gas","Total pressure ÷ fraction","Fraction × temperature","Total pressure − 1 atm","P_gas = P_total × F_gas."],
+ ["הלחץ החלקי של גז שווה ל:","הלחץ הכולל × השבר של הגז","הלחץ הכולל ÷ השבר","השבר × הטמפרטורה","הלחץ הכולל − 1 atm","P_gas = P_total × F_gas."]);
+q("dalton",["Nitrogen narcosis typically becomes noticeable around:","30 m","10 m","5 m","60 m","Little effect above ~20 m, often noticeable near 30 m."],
+ ["נרקוזיס חנקני מורגש בדרך כלל סביב:","30 מ'","10 מ'","5 מ'","60 מ'","השפעה קטנה מעל ~20 מ', מורגש לרוב סביב 30 מ'."]);
+q("dalton",["Best first response to a buddy showing narcosis:","Ascend together to a shallower depth","Give them 100% oxygen at depth","Make an emergency ascent to the surface","Continue the task and monitor","Ascending resolves narcosis fully with no lingering effect."],
+ ["התגובה הראשונה הטובה ביותר לבן זוג עם נרקוזיס:","לעלות יחד לעומק רדוד יותר","לתת לו 100% חמצן בעומק","עלייה חירום לפני המים","להמשיך במשימה ולעקוב","עלייה לעומק רדוד מעלימה את הנרקוזיס לגמרי, ללא השפעה מתמשכת."]);
+q("dalton",["The mnemonic ConVENTID describes warning signs of:","CNS oxygen toxicity","Decompression sickness","CO poisoning","Hypothermia","Convulsions, Visual, Ears, Nausea, Twitching, Irritability, Dizziness: CNS O₂ toxicity."],
+ ["ראשי התיבות ConVENTID מתארים סימני אזהרה של:","רעילות חמצן למערכת העצבים","מחלת דקומפרסיה","הרעלת CO","היפותרמיה","פרכוסים, ראייה, אוזניים, בחילה, עוויתות, עצבנות, סחרחורת: רעילות חמצן ל-CNS."]);
+q("dalton",["What is a common working-diver maximum PO₂?","1.4 bar","1.6 bar","1.0 bar","2.0 bar","1.4 bar (150 min) is a common planning max; 1.6 is the absolute ceiling."],
+ ["מהו PO₂ מרבי מקובל לצוללן עבודה?","1.4 bar","1.6 bar","1.0 bar","2.0 bar","1.4 bar (150 דק') הוא מקסימום תכנון מקובל; 1.6 היא התקרה המוחלטת."]);
+q("dalton",["Why is carbon monoxide so dangerous?","It binds hemoglobin far more readily than oxygen","It causes narcosis","It forms bubbles in tissue","It raises the breathing reflex","CO blocks oxygen transport by binding hemoglobin."],
+ ["למה פחמן חד-חמצני מסוכן כל כך?","נקשר להמוגלובין הרבה יותר בקלות מחמצן","גורם לנרקוזיס","יוצר בועות ברקמות","מגביר את רפלקס הנשימה","CO חוסם הובלת חמצן כי הוא נקשר להמוגלובין."]);
+q("dalton",["Argon is used in diving:","For drysuit inflation only, never for breathing","As a breathing gas for deep dives","To reduce narcosis","In nitrox mixes","Argon is more narcotic than nitrogen; it's used only to inflate drysuits."],
+ ["ארגון משמש בצלילה:","רק לניפוח חליפה יבשה, לעולם לא לנשימה","כגז נשימה לצלילות עמוקות","להפחתת נרקוזיס","בתערובות ניטרוקס","ארגון נרקוטי יותר מחנקן; משתמשים בו רק לניפוח חליפה יבשה."]);
+q("dalton",["During a CNS O₂ convulsion underwater, the rescuer should:","Hold the regulator in place without forcing it, ascend once convulsions subside","Force the regulator into the mouth","Ascend immediately during the convulsion","Remove the diver's mask","Control the diver, hold (don't force) the regulator, ascend once convulsions stop."],
+ ["בזמן פרכוס מרעילות חמצן מתחת למים, המחלץ צריך:","להחזיק את הווסת במקום בלי לכפות, ולעלות כשהפרכוסים שוככים","לדחוף את הווסת לפה בכוח","לעלות מיד בזמן הפרכוס","להוריד לצוללן את המסכה","לשלוט בצוללן, להחזיק (לא לכפות) את הווסת, ולעלות כשהפרכוסים נפסקים."]);
+
+q("henry",["Henry's law states that dissolved gas is proportional to:","The gas's partial pressure","The liquid's temperature only","The volume of the liquid","The depth squared","C = k_H × P_gas at constant temperature."],
+ ["לפי חוק הנרי, כמות הגז המומס יחסית ל:","הלחץ החלקי של הגז","רק לטמפרטורת הנוזל","לנפח הנוזל","לריבוע העומק","C = k_H × P_gas בטמפרטורה קבועה."]);
+q("henry",["DCS occurs when:","Tissue super-saturation tolerance is exceeded and bubbles form","Oxygen partial pressure is too high","Air spaces fail to equalize","CO binds hemoglobin","Too much N₂ or too fast an ascent → gas leaves solution as bubbles."],
+ ["DCS מתרחשת כאשר:","חורגים מסבולת העל-רוויה ברקמות ונוצרות בועות","הלחץ החלקי של החמצן גבוה מדי","חללי אוויר לא מושווים","CO נקשר להמוגלובין","יותר מדי חנקן או עלייה מהירה מדי ← הגז יוצא מהתמיסה כבועות."]);
+q("henry",["Nitrogen is about how much more soluble in fat than in blood?","5×","2×","25×","Equally soluble","~5× more soluble in fat, which is why body composition is a DCS risk factor."],
+ ["פי כמה חנקן מסיס יותר בשומן מאשר בדם?","פי 5","פי 2","פי 25","באותה מידה","פי ~5 בשומן, ולכן הרכב הגוף הוא גורם סיכון ל-DCS."]);
+q("henry",["Typical onset of DCS symptoms is:","15 min to 2 h after surfacing","Only during descent","Immediately at depth","Always 48 h later","Usually 15 min–2 h, occasionally delayed beyond 24 h."],
+ ["הופעה אופיינית של תסמיני DCS היא:","15 דקות עד שעתיים אחרי היציאה","רק בזמן הירידה","מיד בעומק","תמיד אחרי 48 שעות","בדרך כלל 15 דק'–שעתיים, לעיתים מתעכב מעבר ל-24 שעות."]);
+q("henry",["\"The chokes\" is which type of DCS?","Type II cardiopulmonary","Type I musculoskeletal","Type I lymphatic","Type I cutaneous","Dry cough, chest pain, shortness of breath: Type II, potentially life-threatening."],
+ ["\"The chokes\" הוא איזה סוג DCS?","סוג II לב-ריאה","סוג I שרירי-שלדי","סוג I לימפטי","סוג I עורי","שיעול יבש, כאב בחזה, קוצר נשימה: סוג II, עלול לסכן חיים."]);
+q("henry",["A mottled, marbled skin rash after diving (cutis marmorata) is:","Type I skin bends, possibly an early sign of Type II","Always harmless sunburn","A sign of CO poisoning","Type II neurological DCS","It's classified as Type I but can be an early warning of Type II."],
+ ["פריחה משוישת בעור אחרי צלילה (cutis marmorata) היא:","\"בנדס\" עורי סוג I, ייתכן סימן מוקדם לסוג II","תמיד כוויית שמש לא מזיקה","סימן להרעלת CO","DCS נוירולוגי סוג II","מסווגת כסוג I אך עלולה לבשר על סוג II."]);
+q("henry",["A PFO is estimated to be open in what share of people?","10–20%","1–2%","40–50%","Almost everyone","Estimated 10–20%; it may let venous bubbles bypass the lungs."],
+ ["PFO פתוח אצל כמה אחוז מהאנשים בהערכה?","10–20%","1–2%","40–50%","כמעט כולם","בהערכה 10–20%; הוא עלול לאפשר לבועות ורידיות לעקוף את הריאות."]);
+q("henry",["What is the standard medical treatment for DCS and AGE?","Recompression in a hyperbaric chamber","Head-down positioning","Re-entering the water to depth","Warm fluids only","Hyperbaric recompression is the definitive treatment. Know the nearest chamber."],
+ ["מהו הטיפול הרפואי המקובל ל-DCS ול-AGE?","רה-קומפרסיה בתא לחץ","השכבה עם הראש למטה","חזרה למים לעומק","רק נוזלים חמים","טיפול בתא לחץ הוא הטיפול המוגדר. צריך לדעת היכן תא הלחץ הקרוב."]);
+q("henry",["After a rapid ascent with no symptoms yet, you should:","Start 100% oxygen now","Wait to see if symptoms appear","Do another dive to recompress","Give fluids only","Early O₂ after a distinct risk may prevent or reduce DCI."],
+ ["אחרי עלייה מהירה, עדיין ללא תסמינים, צריך:","להתחיל 100% חמצן עכשיו","לחכות ולראות אם יופיעו תסמינים","לבצע צלילה נוספת כדי לדחוס","לתת רק נוזלים","חמצן מוקדם אחרי סיכון ברור עשוי למנוע או להקל DCI."]);
+q("henry",["Why is cold water a DCS risk factor?","It reduces peripheral circulation and slows off-gassing","It increases nitrogen in the air","It raises PO₂","It causes faster on-gassing only at the surface","Cold reduces peripheral blood flow, slowing nitrogen elimination."],
+ ["למה מים קרים הם גורם סיכון ל-DCS?","מפחיתים את זרימת הדם ההיקפית ומאטים שחרור חנקן","מעלים את כמות החנקן באוויר","מעלים את ה-PO₂","גורמים לספיגה מהירה רק על פני המים","הקור מפחית זרימת דם היקפית ומאט את פינוי החנקן."]);
+
+q("haldane",["In Haldane's model, a half-time is:","The time to go halfway toward equilibrium at a new pressure","Half the dive's bottom time","The time to off-gas completely","Half the no-stop limit","Each compartment's half-time is the time to move halfway toward equilibrium."],
+ ["במודל של הולדיין, זמן מחצית הוא:","הזמן לעבור חצי מהדרך לשיווי משקל בלחץ חדש","חצי מזמן הקרקעית","הזמן לשחרור מלא","חצי מגבול ללא עצירות","זמן המחצית של תא הוא הזמן לעבור חצי מהדרך לשיווי משקל."]);
+q("haldane",["An M-value is:","The maximum excess nitrogen a compartment tolerates during ascent","The maximum depth for a gas","The minimum surface interval","The rate of ascent","M-values set the super-saturation limit before bubbles must form."],
+ ["ערך M הוא:","עודף החנקן המרבי שתא סובל בזמן עלייה","העומק המרבי לגז","מרווח השטח המינימלי","קצב העלייה","ערכי M קובעים את גבול העל-רוויה לפני שנוצרות בועות."]);
+q("haldane",["Haldane's tables were adopted by the Royal Navy from:","1907 to 1956","1850 to 1900","1960 to 1990","1940 to 1945","Royal Navy use ran from 1907 to 1956."],
+ ["הטבלאות של הולדיין שימשו את הצי המלכותי בשנים:","1907 עד 1956","1850 עד 1900","1960 עד 1990","1940 עד 1945","הצי המלכותי השתמש בהן מ-1907 עד 1956."]);
+q("haldane",["Slow compartments (e.g. fat, cartilage) matter most for:","Repetitive and multi-day dive planning","The first minute of descent","Ear equalization","Buoyancy control","Slow compartments off-gas gradually, so they drive repetitive and multi-day planning."],
+ ["תאים איטיים (כמו שומן וסחוס) חשובים במיוחד עבור:","תכנון צלילות חוזרות ורב-יומיות","הדקה הראשונה של הירידה","השוואת לחץ באוזניים","שליטה בציפה","תאים איטיים משחררים חנקן בהדרגה, ולכן הם קובעים תכנון של צלילות חוזרות ורב-יומיות."]);
+
+q("other",["For a simple jellyfish-type sting, you should:","Avoid fresh water; neutralize with vinegar, then scrape off remnants","Rinse with lots of fresh water","Apply ice and rub hard","Soak in hot water for 2 hours","Fresh water reactivates stinging cells. Neutralize, then scrape."],
+ ["בעקיצה פשוטה (כמו מדוזה) צריך:","להימנע ממים מתוקים; לנטרל בחומץ ואז לגרד שאריות","לשטוף בהרבה מים מתוקים","לשים קרח ולשפשף חזק","לטבול במים חמים שעתיים","מים מתוקים מפעילים מחדש את תאי העקיצה. מנטרלים ואז מגרדים."]);
+q("other",["For a marine-spine puncture wound, soak in hot water of about:","45°C for 30–90 min","20°C for 5 min","60°C for 2 h","Ice water for 30 min","Remove the spine and soak in ~45°C water for 30–90 min."],
+ ["בפצע דקירה מקוץ של בעל חיים ימי, לטבול במים חמים בערך:","45°C למשך 30–90 דק'","20°C למשך 5 דק'","60°C למשך שעתיים","מי קרח 30 דק'","להוציא את הקוץ ולטבול במים ~45°C למשך 30–90 דקות."]);
+q("other",["The carotid sinus reflex can be triggered by:","A tight hood or neck seal","Breathing too fast","Cold hands","Ascending slowly","External neck pressure fools blood-pressure sensors → drop in heart rate and BP."],
+ ["רפלקס הסינוס הקרוטידי יכול להיות מופעל על ידי:","ברדס הדוק או אטם צוואר","נשימה מהירה מדי","ידיים קרות","עלייה איטית","לחץ חיצוני על הצוואר מטעה את חיישני לחץ הדם ← ירידה בדופק ובלחץ."]);
+q("other",["Shallow water blackout is mainly associated with:","Breath-hold diving after hyperventilation","Deep nitrox diving","Cold-water scuba","Fast scuba descents","It's principally a free-diving risk linked to excessive pre-dive hyperventilation."],
+ ["עילפון במים רדודים קשור בעיקר ל:","צלילה חופשית אחרי היפרוונטילציה","צלילת ניטרוקס עמוקה","צלילת סקובה במים קרים","ירידה מהירה בסקובה","זהו בעיקר סיכון של צלילה חופשית הקשור להיפרוונטילציה מופרזת לפני הצלילה."]);
+q("other",["A near-drowning survivor who feels fine should:","Get prompt medical attention anyway","Return to diving the next day","Rest at home without evaluation","Only drink fluids","Fluid can build up over hours to days (secondary drowning)."],
+ ["ניצול כמעט-טביעה שמרגיש בסדר צריך:","לקבל טיפול רפואי מהיר בכל זאת","לחזור לצלול למחרת","לנוח בבית בלי בדיקה","רק לשתות","נוזל יכול להצטבר במשך שעות עד ימים (טביעה משנית)."]);
+q("other",["Adequate hydration is indicated by urine that is:","Clear to light yellow","Dark yellow","Orange","Colour doesn't matter","Urine should stay clear to light yellow."],
+ ["שתייה מספקת מתבטאת בשתן:","שקוף עד צהוב בהיר","צהוב כהה","כתום","הצבע לא משנה","השתן צריך להישאר שקוף עד צהוב בהיר."]);
+q("other",["Pink, frothy sputum after a strenuous cold-water dive in a tight suit suggests:","Immersion pulmonary edema (IPE)","Salt water aspiration syndrome","HPNS","Mask squeeze","IPE: fluid in the lungs from cold, exertion and a tight suit. Treat as an emergency."],
+ ["כיח ורדרד ומוקצף אחרי צלילה מאומצת במים קרים בחליפה הדוקה מרמז על:","בצקת ריאות מטבילה (IPE)","תסמונת שאיפת מי ים","HPNS","מעיכת מסכה","IPE: נוזל בריאות מקור, מאמץ וחליפה הדוקה. לטפל כמקרה חירום."]);
+
+q("emerg",["When should the 5-minute neuro exam be done?","As soon as DCI is suspected, then repeated periodically","Only once at the hospital","Only if the diver is unconscious","24 hours after the dive","Perform it early and repeat to track change over time."],
+ ["מתי מבצעים את הבדיקה הנוירולוגית של 5 דקות?","מיד כשחושדים ב-DCI, ואז חוזרים עליה מדי פעם","רק פעם אחת בבית החולים","רק אם הצוללן מחוסר הכרה","24 שעות אחרי הצלילה","מבצעים מוקדם וחוזרים כדי לעקוב אחר שינויים."]);
+q("emerg",["Which neuro-exam step is skipped on a moving boat?","Heel-to-toe walk","Orientation","Eye tracking","Grip strength","Balance testing isn't meaningful on a moving deck."],
+ ["איזה שלב בבדיקה הנוירולוגית מדלגים עליו בסירה נעה?","הליכת עקב-בוהן","התמצאות","מעקב עיניים","כוח לחיצה","בדיקת שיווי משקל אינה משמעותית על סיפון נע."]);
+q("emerg",["What should an Emergency Action Plan include?","Nearest medical facility, chamber, evacuation route, who calls whom","Only the dive buddy's phone number","The dive computer brand","Only the boat captain's name","The EAP covers medical facility, chamber, evacuation and call tree."],
+ ["מה צריך לכלול תוכנית פעולה לחירום (EAP)?","מתקן רפואי קרוב, תא לחץ, נתיב פינוי, מי מתקשר למי","רק את מספר הטלפון של בן הזוג","את דגם מחשב הצלילה","רק את שם רב החובל","ה-EAP כולל מתקן רפואי, תא לחץ, פינוי ושרשרת התקשרות."]);
+q("emerg",["In the neuro exam, what matters most?","Deviations, side-to-side differences and change over time","Only the pulse rate","Only whether the diver feels pain","The diver's own diagnosis","Look for deviations from the norm, side differences and changes."],
+ ["בבדיקה הנוירולוגית, מה הכי חשוב?","סטיות, הבדלים בין צדדים ושינוי לאורך זמן","רק הדופק","רק אם הצוללן חש כאב","האבחנה של הצוללן עצמו","מחפשים סטיות מהנורמה, הבדלים בין הצדדים ושינויים."]);
+
+q("cpr",["Drowning is primarily a:","Respiratory arrest, with cardiac arrest coming last","Primary cardiac arrest","Neurological event","Decompression event","Oxygen debt comes first; cardiac arrest is the end of the sequence."],
+ ["טביעה היא בעיקרה:","דום נשימה, כשדום הלב מגיע בסוף","דום לב ראשוני","אירוע נוירולוגי","אירוע דקומפרסיה","חוסר החמצן בא ראשון; דום הלב הוא סוף הרצף."]);
+q("cpr",["The correct order of the primary survey is:","Safety, Consciousness, Airway, Breathing, Circulation","Airway, Breathing, Circulation, Safety","Circulation, Airway, Breathing","Breathing, Safety, Consciousness","Safety first, then C-A-B-C."],
+ ["הסדר הנכון של הסקר הראשוני:","בטיחות, הכרה, נתיב אוויר, נשימה, מחזור דם","נתיב אוויר, נשימה, מחזור דם, בטיחות","מחזור דם, נתיב אוויר, נשימה","נשימה, בטיחות, הכרה","קודם בטיחות, ואז C-A-B-C."]);
+q("cpr",["A non-rebreather mask at 10–15 L/min delivers about:","60–80%+ oxygen","21% oxygen","40–60% oxygen","100% exactly","NRB with an inflated reservoir: 60–80%+, the highest FiO₂ a field rescuer can give."],
+ ["מסכת NRB ב-10–15 ל'/דק' מספקת בערך:","60–80%+ חמצן","21% חמצן","40–60% חמצן","בדיוק 100%","NRB עם שקית מלאה: 60–80%+, הריכוז הגבוה ביותר שמחלץ בשטח יכול לתת."]);
+q("cpr",["How should a suspected DCS/AGE patient be positioned?","Supine (or most comfortable for breathing), not head-down","Head-down (Trendelenburg)","Sitting upright always","Face-down","Current DAN/UHMS guidance advises against head-down positioning."],
+ ["באיזו תנוחה להשכיב נפגע עם חשד ל-DCS/AGE?","על הגב (או הנוחה ביותר לנשימה), לא ראש למטה","ראש למטה (טרנדלנבורג)","תמיד בישיבה זקופה","על הבטן","ההנחיות הנוכחיות של DAN/UHMS ממליצות שלא להשכיב עם הראש למטה."]);
+q("cpr",["A diver collapses within a minute of a fast, uncontrolled ascent. Most likely cause:","Arterial gas embolism","Type I DCS","Nitrogen narcosis","Hypothermia","Sudden collapse during or right after ascent points to AGE from lung over-expansion."],
+ ["צוללן קורס תוך דקה אחרי עלייה מהירה ובלתי מבוקרת. הסיבה הסבירה:","תסחיף גז עורקי","DCS סוג I","נרקוזיס חנקני","היפותרמיה","קריסה פתאומית בזמן העלייה או מיד אחריה מצביעה על AGE מהתפשטות יתר בריאות."]);
+q("cpr",["Standard BLS compression-to-ventilation ratio:","30:2","15:1","5:1","10:2","Standard AHA BLS uses 30:2."],
+ ["יחס עיסויים להנשמות בהחייאה בסיסית:","30:2","15:1","5:1","10:2","החייאה בסיסית לפי AHA משתמשת ביחס 30:2."]);
+q("cpr",["A diver is not breathing at all. You should:","Begin full CPR immediately and attach an AED when available","Give oxygen via NRB and wait","Perform the neuro exam first","Place them head-down","No breathing → full CPR (compressions and ventilations), AED as soon as possible."],
+ ["צוללן לא נושם בכלל. צריך:","להתחיל החייאה מלאה מיד ולחבר AED כשזמין","לתת חמצן במסכת NRB ולחכות","לבצע קודם בדיקה נוירולוגית","להשכיב עם הראש למטה","לא נושם ← החייאה מלאה (עיסויים והנשמות), AED מוקדם ככל האפשר."]);
+q("cpr",["Which is NOT a condition for the OSHA scientific-diving exemption?","Divers may perform salvage or construction tasks","A Diving Control Board with a majority of active scientific divers","Data must be non-proprietary","Divers are scientists or scientists-in-training","Divers must act only as observers and data-gatherers, with no commercial tasks."],
+ ["מה מהבאים אינו תנאי לפטור OSHA לצלילה מדעית?","הצוללנים רשאים לבצע עבודות חילוץ או בנייה","ועדת צלילה עם רוב של צוללנים מדעיים פעילים","הנתונים חייבים להיות לא קנייניים","הצוללנים הם מדענים או בהכשרה","הצוללנים חייבים לשמש רק כצופים ואוספי נתונים, ללא משימות מסחריות."]);
+q("cpr",["What does the OSHA exemption change for AAUS programs?","Which federal regulation applies, not the safety bar","It removes all CPR requirements","It allows diving without oxygen on site","It removes the need for an EAP","AAUS standards still require training, emergency O₂, an EAP and DCB oversight."],
+ ["מה משנה פטור OSHA עבור תוכניות AAUS?","איזו תקנה פדרלית חלה, לא את רף הבטיחות","מבטל את כל דרישות ההחייאה","מאפשר צלילה בלי חמצן באתר","מבטל את הצורך ב-EAP","תקני AAUS עדיין דורשים הכשרה, חמצן חירום, EAP ופיקוח ועדת צלילה."]);
+
+/* =========================== CHEAT SHEET DATA =========================== */
+const LAW=[[L("Archimedes' principle","עקרון ארכימדס"),L("Buoyancy loss, uncontrolled ascent/descent, entanglement","אובדן ציפה, עלייה/ירידה בלתי מבוקרת, הסתבכות")],
+[L("Boyle's law","חוק בויל"),L("Ear, sinus, mask, tooth, GI barotrauma; pneumothorax, emphysema, AGE","ברוטראומה של אוזן, סינוסים, מסכה, שן, מעיים; חזה אוויר, אמפיזמה, AGE")],
+[L("Charles / Gay-Lussac / combined","שארל / גיי-ליסאק / משולב"),L("Cylinder over-pressurization, regulator icing / free-flow","לחץ יתר במיכל, קפיאת ווסת / זרימה חופשית")],
+[L("Dalton's law","חוק דלטון"),L("Narcosis; CNS & pulmonary O₂ toxicity; CO₂ & CO toxicity","נרקוזיס; רעילות חמצן ל-CNS ולריאות; רעילות CO₂ ו-CO")],
+[L("Henry's law","חוק הנרי"),L("DCS Type I & II, AGE, PFO-linked DCI, inner-ear DCS","DCS סוג I ו-II, AGE, DCI הקשור ל-PFO, DCS של האוזן הפנימית")],
+[L("Haldane's model","המודל של הולדיין"),L("Basis of tables and computers that prevent DCS","הבסיס לטבלאות ולמחשבים שמונעים DCS")],
+[L("Water & physiology","מים ופיזיולוגיה"),L("Hypo/hyperthermia, dehydration, disorientation, drowning, marine life, trauma","היפו/היפרתרמיה, התייבשות, חוסר התמצאות, טביעה, בעלי חיים ימיים, טראומה")]];
+const O2T=[["1.6","45",L("Absolute ceiling; contingency deco gas","תקרה מוחלטת; גז דקו לחירום")],["1.5","120",L("Rarely planned","מתוכנן לעיתים רחוקות")],["1.4","150",L("Common working max","מקסימום עבודה מקובל")],["1.3","180",L("Conservative working limit","גבול עבודה שמרני")],["1.2","210",L("Extended range","טווח מורחב")],["1.0","300",L("Long duration","משך ארוך")],["0.6","720",L("Toxic-dose threshold; hypoxia floor","סף מינון רעיל; רצפת היפוקסיה")]];
+const DCST=[[L("Type I","סוג I"),L("Musculoskeletal (bends)","שרירי-שלדי (bends)"),L("Deep joint/limb pain","כאב עמוק במפרקים/גפיים")],[L("Type I","סוג I"),L("Cutaneous (skin bends)","עורי"),L("Itching, marbled rash","גרד, פריחה משוישת")],[L("Type I","סוג I"),L("Lymphatic","לימפטי"),L("Swelling near lymph nodes","נפיחות ליד בלוטות לימפה")],[L("Type II","סוג II"),L("Neurological","נוירולוגי"),L("Numbness, weakness, paralysis","נימול, חולשה, שיתוק")],[L("Type II","סוג II"),L("Vestibular (staggers)","וסטיבולרי (staggers)"),L("Vertigo, tinnitus, hearing loss","ורטיגו, טנטון, אובדן שמיעה")],[L("Type II","סוג II"),L("Cardiopulmonary (chokes)","לב-ריאה (chokes)"),L("Dry cough, chest pain, breathlessness","שיעול יבש, כאב בחזה, קוצר נשימה")]];
+const NEURO=[[L("Orientation","התמצאות"),L("Name, age, place, date, time","שם, גיל, מקום, תאריך, שעה")],[L("Eyes","עיניים"),L("Track a finger; pupils; vision","מעקב אחרי אצבע; אישונים; ראייה")],[L("Forehead","מצח"),L("Sensation; raise eyebrows evenly","תחושה; הרמת גבות סימטרית")],[L("Face","פנים"),L("Whistle, smile, clench teeth","שריקה, חיוך, הידוק שיניים")],[L("Ears","אוזניים"),L("Hearing each side; ringing","שמיעה בכל צד; צלצולים")],[L("Gag reflex","רפלקס הקאה"),L("Swallow; watch the neck","בליעה; מעקב אחרי הצוואר")],[L("Tongue","לשון"),L("Drooping or drift","צניחה או סטייה לצד")],[L("Shoulders","כתפיים"),L("Raise against resistance","הרמה נגד התנגדות")],[L("Arms & hands","ידיים"),L("Sensation; squeeze strength","תחושה; כוח לחיצה")],[L("Chest","חזה"),L("Sensation; breathing pattern","תחושה; דפוס נשימה")],[L("Legs","רגליים"),L("Move against resistance","תנועה נגד התנגדות")],[L("Heel-to-toe","עקב-בוהן"),L("Balance (skip on a moving boat)","שיווי משקל (לא בסירה נעה)")]];
+
+/* =========================== STATE =========================== */
+const store={get(k,d){try{const v=localStorage.getItem("dive."+k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem("dive."+k,JSON.stringify(v))}catch(e){}}};
+const S={lang:store.get("lang","he"),theme:store.get("theme",null),mode:"study",ch:store.get("ch",0),learned:new Set(store.get("learned",[])),
+ sel:new Set(CH.filter(c=>!c.cheat).map(c=>c.id)),count:20,exam:null,best:store.get("best",null)};
+const $=s=>document.querySelector(s);
+const T=()=>UI[S.lang];
+const tx=o=>o==null?"":(typeof o==="string"?o:o[S.lang]);
+const esc=s=>String(s).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+const chOf=id=>CH.find(c=>c.id===id);
+const toast=m=>{const el=$("#toast");el.textContent=m;el.classList.add("show");clearTimeout(toast._t);toast._t=setTimeout(()=>el.classList.remove("show"),1600)};
+const ico={sun:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>',
+ moon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>',
+ arrow:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
+ back:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>',
+ check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg>'};
+
+function isDark(){return S.theme?S.theme==="dark":matchMedia("(prefers-color-scheme: dark)").matches}
+function applyChrome(){
+  const r=document.documentElement;
+  r.lang=S.lang; r.dir=S.lang==="he"?"rtl":"ltr"; r.dataset.mode=S.mode;
+  if(S.theme) r.dataset.theme=S.theme; else r.removeAttribute("data-theme");
+  const m=document.querySelector('meta[name="theme-color"]'); if(m) m.content=isDark()?"#071418":"#ECF2F2";
+  $("#appName").textContent=T().name; $("#appSub").textContent=T().sub;
+  $("#mStudy").textContent=T().study; $("#mExam").textContent=T().exam;
+  $("#mStudy").setAttribute("aria-pressed",S.mode==="study"); $("#mExam").setAttribute("aria-pressed",S.mode==="exam");
+  $("#langBtn").textContent=S.lang==="he"?"EN":"עב"; $("#langBtn").setAttribute("aria-label",S.lang==="he"?"Switch to English":"החלף לעברית");
+  $("#themeBtn").innerHTML=isDark()?ico.sun:ico.moon;
+  document.title=T().name;
+}
+function render(){applyChrome();S.mode==="study"?renderStudy():renderExam();}
+
+/* =========================== STUDY =========================== */
+function renderStudy(){
+  const t=T(), c=CH[S.ch], total=CH.length-1, done=[...S.learned].filter(id=>id!=="cheat").length;
+  const num=i=>String(i+1).padStart(2,"0");
+  const rail=CH.map((x,i)=>`<li><button data-ch="${i}" class="${i===S.ch?"on":""} ${S.learned.has(x.id)?"done":""}" ${i===S.ch?'aria-current="page"':""}>
+     <span class="dot">${S.learned.has(x.id)&&i!==S.ch?"✓":(x.cheat?"Σ":num(i))}</span><span class="lbl">${esc(tx(x.t))}<small>${esc(tx(x.tag))}</small></span></button></li>`).join("");
+  const chips=CH.map((x,i)=>`<button data-ch="${i}" class="${i===S.ch?"on":""} ${S.learned.has(x.id)?"done":""}"><i>${S.learned.has(x.id)?"✓":(x.cheat?"Σ":num(i))}</i>${esc(tx(x.t))}</button>`).join("");
+  $("#main").innerHTML=`<div class="view study">
+   <aside class="rail"><h4>${t.chapters}</h4>
+    <div class="prog"><div class="track"><i style="width:${done/total*100}%"></i></div><span class="ltr">${done}/${total}</span> ${t.learned}</div>
+    <ol class="ladder">${rail}</ol></aside>
+   <section style="min-width:0">
+    <nav class="chips" id="chips">${chips}</nav>
+    <article id="chBody">${c.cheat?cheatHTML():chapterHTML(c)}</article>
+    <div class="ch-foot">
+      <button class="btn flip" data-nav="-1" ${S.ch===0?"disabled":""}>${ico.back}${t.prev}</button>
+      ${c.cheat?"":`<button class="btn ${S.learned.has(c.id)?"ok":""}" id="markBtn">${S.learned.has(c.id)?ico.check+t.marked:t.mark}</button>
+      <button class="btn" id="quizCh">${t.quizThis}</button>`}
+      <span class="sp"></span>
+      <button class="btn pri flip" data-nav="1" ${S.ch===CH.length-1?"disabled":""}>${t.next}${ico.arrow}</button>
+    </div>
+   </section></div>`;
+  const on=$("#chips .on"); if(on) on.scrollIntoView({block:"nearest",inline:"center"});
+  document.querySelectorAll("[data-ch]").forEach(b=>b.onclick=()=>goCh(+b.dataset.ch));
+  document.querySelectorAll("[data-nav]").forEach(b=>b.onclick=()=>goCh(S.ch+ +b.dataset.nav));
+  const mb=$("#markBtn"); if(mb) mb.onclick=()=>{S.learned.has(c.id)?S.learned.delete(c.id):(S.learned.add(c.id),toast(t.saved));store.set("learned",[...S.learned]);renderStudy()};
+  const qb=$("#quizCh"); if(qb) qb.onclick=()=>{S.sel=new Set([c.id]);S.count=999;setMode("exam");startExam()};
+  if(c.gauge) initGauge();
+}
+function goCh(i){if(i<0||i>=CH.length)return;S.ch=i;store.set("ch",i);renderStudy();window.scrollTo({top:0,behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"})}
+function chapterHTML(c){
+  const t=T(), idx=CH.indexOf(c)+1;
+  let h=`<div class="ch-head"><div class="eyebrow"><span>${t.ch} ${idx} · ${esc(tx(c.tag))}</span><span class="depth">▼ ${tx(c.d)}</span></div>
+   <h1>${esc(tx(c.t))}</h1><p class="lead">${esc(tx(c.lead))}</p>
+   ${c.f?`<div class="formula">${c.f.map(f=>`<code>${esc(f)}</code>`).join("")}</div>`:""}
+   ${c.quote?`<p class="quote">“${esc(tx(c.quote))}”</p>`:""}</div>`;
+  if(c.pts) h+=`<div class="sec"><h3>${t.keypoints}</h3><ul class="points">${c.pts.map(p=>`<li>${tx(p)}</li>`).join("")}</ul></div>`;
+  if(c.gauge) h+=`<div class="sec"><h3>${t.gauge}</h3>${gaugeHTML()}</div>`;
+  if(c.nums) h+=`<div class="sec"><h3>${t.nums}</h3><div class="nums">${c.nums.map(n=>`<div><strong>${esc(n[0])}</strong><span>${esc(tx(n[1]))}</span></div>`).join("")}</div></div>`;
+  if(c.acc) h+=`<div class="sec"><h3>${t.accidents}</h3><div class="acc">${c.acc.map(a=>`<article><header><span class="tag ${a.sev?"":"t1"}">${a.sev?(S.lang==="he"?"חמור":"Serious"):(S.lang==="he"?"תאונה":"Injury")}</span><h4>${esc(tx(a.t))}</h4></header><ul>${a.i.map(x=>`<li>${tx(x)}</li>`).join("")}</ul></article>`).join("")}</div></div>`;
+  if(c.aid) h+=`<div class="sec"><h3>${t.aid}</h3><ol class="aid">${c.aid.map(x=>`<li><span>${esc(tx(x))}</span></li>`).join("")}</ol></div>`;
+  return h;
+}
+function gaugeHTML(){const t=T();return `<div class="gauge"><div class="col"><div class="bal" id="bal"></div><div class="dl" id="gDl">0 m</div></div>
+ <div style="min-width:0"><label for="gd"><span>${t.depth}</span><span class="ltr" id="gDv">0 m</span></label>
+ <input type="range" id="gd" min="0" max="40" step="1" value="${S.gd??20}">
+ <div class="readout"><div><strong id="gA"></strong><span>${t.amb}</span></div><div><strong id="gV"></strong><span>${t.vol}</span></div>
+ <div id="gPo"><strong id="gO"></strong><span>${t.po2}</span></div><div><strong id="gN"></strong><span>${t.pn2}</span></div></div>
+ <p class="gnote">${t.gnote}</p></div></div>`}
+function initGauge(){const r=$("#gd");const up=()=>{const d=+r.value;S.gd=d;const p=1+d/10,v=1/p,o=.21*p;
+  $("#gDv").textContent=d+" m";$("#gDl").textContent=d+" m";$("#gA").textContent=p.toFixed(1)+" ATA";$("#gV").textContent=Math.round(v*100)+"%";
+  $("#gO").textContent=o.toFixed(2)+" bar";$("#gN").textContent=(.79*p).toFixed(2)+" bar";$("#gPo").classList.toggle("hot",o>1.4);
+  $("#bal").style.transform=`translateY(${d*1.6-32}px) scale(${Math.cbrt(v)})`};r.oninput=up;up()}
+function cheatHTML(){
+  const t=T(), th=a=>`<tr>${a.map(x=>`<th>${x}</th>`).join("")}</tr>`;
+  return `<div class="ch-head"><div class="eyebrow"><span>${esc(tx(CH.at(-1).tag))}</span></div><h1>${t.cheat}</h1><p class="lead">${t.cheatSub}</p></div>
+  <div class="sec"><h3>${t.lawacc}</h3><div class="tbl"><table>${th([t.law,t.explains])}${LAW.map(r=>`<tr><td>${esc(tx(r[0]))}</td><td>${esc(tx(r[1]))}</td></tr>`).join("")}</table></div></div>
+  <div class="sec"><h3>${t.formula}</h3><div class="tbl"><table>${th([t.law,t.formula,S.lang==="he"?"קבוע":"Constant"])}
+   ${[["Boyle","בויל","P₁V₁ = P₂V₂","T"],["Charles","שארל","V₁/T₁ = V₂/T₂","P"],["Gay-Lussac","גיי-ליסאק","P₁/T₁ = P₂/T₂","V"],["Combined","משולב","P₁V₁/T₁ = P₂V₂/T₂","n"],["Ideal gas","גז אידיאלי","PV = nRT","R"],["Dalton","דלטון","P_gas = P_total × F_gas","—"],["Henry","הנרי","C = k_H × P_gas","T"],["Archimedes","ארכימדס","F_b = ρ × V × g","—"]]
+    .map(r=>`<tr><td>${S.lang==="he"?r[1]:r[0]}</td><td class="mono">${r[2]}</td><td class="mono">${r[3]}</td></tr>`).join("")}</table></div></div>
+  <div class="sec"><h3>${t.dcs}</h3><div class="tbl"><table>${th([t.type,t.cat,t.signs])}${DCST.map(r=>`<tr><td>${esc(tx(r[0]))}</td><td>${esc(tx(r[1]))}</td><td>${esc(tx(r[2]))}</td></tr>`).join("")}</table></div></div>
+  <div class="sec"><h3>${t.o2tbl}</h3><div class="tbl"><table>${th([t.po2c,t.maxc,t.usec])}${O2T.map(r=>`<tr><td class="mono">${r[0]}</td><td class="mono">${r[1]} min</td><td>${esc(tx(r[2]))}</td></tr>`).join("")}</table></div></div>
+  <div class="sec"><h3>${t.neuro}</h3><div class="tbl"><table>${th(["#",t.chk,t.look])}${NEURO.map((r,i)=>`<tr><td class="mono">${i+1}</td><td>${esc(tx(r[0]))}</td><td>${esc(tx(r[1]))}</td></tr>`).join("")}</table></div></div>`;
+}
+
+/* =========================== EXAM =========================== */
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a}
+function pool(){return Q.filter(x=>S.sel.has(x.c))}
+function startExam(list){
+  const src=list||shuffle(pool()).slice(0,S.count>=999?undefined:S.count);
+  if(!src.length){toast(T().pickOne);return}
+  S.exam={qs:src.map(x=>({...x,order:shuffle([0,1,2,3])})),i:0,ans:[]};
+  renderExam();
+}
+function renderExam(){S.exam?(S.exam.i>=S.exam.qs.length?renderResults():renderQuestion()):renderSetup()}
+function renderSetup(){
+  const t=T(), chs=CH.filter(c=>!c.cheat), n=pool().length;
+  $("#main").innerHTML=`<div class="view exam"><div class="panel">
+   <h1 class="ex-title">${t.examT}</h1><p class="sub">${t.examS}</p>
+   <div class="lbl2"><span>${t.topics}</span><span><button id="selAll">${t.all}</button> · <button id="selNone">${t.none}</button></span></div>
+   <div class="pick" id="topics">${chs.map(c=>`<button data-id="${c.id}" aria-pressed="${S.sel.has(c.id)}"><i class="ltr">${Q.filter(x=>x.c===c.id).length}</i>${esc(tx(c.t))}</button>`).join("")}</div>
+   <div class="lbl2"><span>${t.count}</span></div>
+   <div class="pick" id="counts">${[10,20,30,999].map(v=>`<button data-v="${v}" aria-pressed="${S.count===v}">${v===999?t.allq:v}</button>`).join("")}</div>
+   <div class="start-row"><button class="btn pri flip" id="go" ${n?"":"disabled"}>${t.start}${ico.arrow}</button>
+    <span class="meta"><span class="ltr">${Math.min(n,S.count)}</span> / <span class="ltr">${n}</span> ${t.avail}</span></div>
+   ${S.best!=null?`<p class="best">${t.best}: <span class="ltr">${S.best}%</span></p>`:""}
+  </div></div>`;
+  document.querySelectorAll("#topics button").forEach(b=>b.onclick=()=>{const id=b.dataset.id;S.sel.has(id)?S.sel.delete(id):S.sel.add(id);renderSetup()});
+  document.querySelectorAll("#counts button").forEach(b=>b.onclick=()=>{S.count=+b.dataset.v;renderSetup()});
+  $("#selAll").onclick=()=>{chs.forEach(c=>S.sel.add(c.id));renderSetup()};
+  $("#selNone").onclick=()=>{S.sel.clear();renderSetup()};
+  $("#go").onclick=()=>startExam();
+}
+function renderQuestion(){
+  const t=T(), E=S.exam, x=E.qs[E.i], d=x[S.lang], a=E.ans[E.i], letters=S.lang==="he"?["א","ב","ג","ד"]:["A","B","C","D"];
+  const opts=x.order.map((o,k)=>{let cls="";if(a!=null){if(o===0)cls="right";else if(o===a)cls="wrong";else cls="dim"}
+    return `<button class="opt ${cls}" data-o="${o}" ${a!=null?"disabled":""}><span class="k">${letters[k]}</span><span>${esc(d[o+1])}</span></button>`}).join("");
+  const last=E.i===E.qs.length-1;
+  $("#main").innerHTML=`<div class="view exam" ${a==null?"":'style="animation:none"'}><div class="panel">
+   <div class="qtop"><span class="n">${E.i+1}/${E.qs.length}</span><div class="track"><i style="width:${(E.i+(a!=null?1:0))/E.qs.length*100}%"></i></div><button class="x" id="quit">${t.quit}</button></div>
+   <div class="qtopic">${esc(tx(chOf(x.c).t))}</div>
+   <h2 class="qtext">${esc(d[0])}</h2>
+   <div class="opts">${opts}</div>
+   ${a!=null?`<div class="fb ${a===0?"good":"bad"}"><b>${a===0?t.correct:t.incorrect}</b>${a===0?"":`<span>${t.answerWas}: ${esc(d[1])}. </span>`}${esc(d[5])}</div>
+   <div class="qnav"><button class="btn pri flip" id="nx">${last?t.finish:t.nextQ}${ico.arrow}</button></div>`:""}
+   <p class="kbd">${t.keys}</p></div></div>`;
+  document.querySelectorAll(".opt").forEach(b=>b.onclick=()=>answer(+b.dataset.o));
+  $("#quit").onclick=()=>{E.qs=E.qs.slice(0,E.ans.length);if(!E.ans.length){S.exam=null}renderExam()};
+  const nx=$("#nx"); if(nx){nx.onclick=next;nx.focus({preventScroll:true})}
+}
+function answer(o){const E=S.exam;if(E.ans[E.i]!=null)return;E.ans[E.i]=o;if(navigator.vibrate&&o!==0)try{navigator.vibrate(30)}catch(e){};renderQuestion()}
+function next(){S.exam.i++;renderExam();window.scrollTo({top:0})}
+function renderResults(){
+  const t=T(), E=S.exam, n=E.qs.length, ok=E.ans.filter(a=>a===0).length, pct=n?Math.round(ok/n*100):0;
+  if(n>=5&&(S.best==null||pct>S.best)){S.best=pct;store.set("best",pct)}
+  const by={};E.qs.forEach((x,i)=>{(by[x.c]??={n:0,ok:0}).n++;if(E.ans[i]===0)by[x.c].ok++});
+  const miss=E.qs.map((x,i)=>({x,a:E.ans[i]})).filter(m=>m.a!==0);
+  const C=2*Math.PI*56, msg=t.scoreMsg[pct>=90?3:pct>=75?2:pct>=55?1:0];
+  $("#main").innerHTML=`<div class="view exam"><div class="panel">
+   <h1 class="ex-title">${t.results}</h1>
+   <div class="res" style="margin-top:14px"><div class="ring"><svg viewBox="0 0 132 132"><circle class="bgc" cx="66" cy="66" r="56"/><circle class="fg" id="rg" cx="66" cy="66" r="56" stroke-dasharray="${C}" stroke-dashoffset="${C}"/></svg><div>${pct}%</div></div>
+    <div style="min-width:0;width:100%"><p style="margin:0 0 4px;font-size:18px;font-weight:600">${msg}</p><p class="sub" style="margin:0 0 14px"><span class="ltr">${ok}/${n}</span></p>
+    <div class="bars">${Object.entries(by).map(([c,v])=>{const p=v.ok/v.n*100;return `<div><span>${esc(tx(chOf(c).t))}</span><span class="t"><i style="width:${p}%;background:${p>=75?"var(--ok)":p>=50?"var(--warn)":"var(--bad)"}"></i></span><span class="v">${v.ok}/${v.n}</span></div>`}).join("")}</div></div></div>
+   <div class="start-row">${miss.length?`<button class="btn pri" id="rw">${t.retryWrong}</button>`:""}<button class="btn" id="ne">${t.newExam}</button><button class="btn" id="bk">${t.back}</button></div>
+   <div class="lbl2" style="margin-top:30px"><span>${t.review}</span></div>
+   ${miss.length?`<div class="missed">${miss.map(m=>{const d=m.x[S.lang];return `<article><p class="q">${esc(d[0])}</p>
+     ${m.a!=null?`<p class="y">✕ ${t.yours}: ${esc(d[m.a+1])}</p>`:""}<p class="a">✓ ${esc(d[1])}</p><p class="e">${esc(d[5])}</p></article>`}).join("")}</div>`:`<p class="sub">${t.perfect}</p>`}
+  </div></div>`;
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{const r=$("#rg");if(r)r.style.strokeDashoffset=C*(1-pct/100)}));
+  const rw=$("#rw"); if(rw) rw.onclick=()=>startExam(shuffle(miss.map(m=>m.x)));
+  $("#ne").onclick=()=>{S.exam=null;renderSetup()};
+  $("#bk").onclick=()=>{S.exam=null;setMode("study")};
+}
+
+/* =========================== CHROME EVENTS =========================== */
+function setMode(m){S.mode=m;render();window.scrollTo({top:0})}
+$("#mStudy").onclick=()=>setMode("study");
+$("#mExam").onclick=()=>setMode("exam");
+$("#langBtn").onclick=()=>{S.lang=S.lang==="he"?"en":"he";store.set("lang",S.lang);render()};
+$("#themeBtn").onclick=()=>{S.theme=isDark()?"light":"dark";store.set("theme",S.theme);applyChrome()};
+matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change",()=>{if(!S.theme)applyChrome()});
+document.addEventListener("keydown",e=>{
+  if(S.mode!=="exam"||!S.exam||S.exam.i>=S.exam.qs.length||e.metaKey||e.ctrlKey||e.altKey)return;
+  const E=S.exam,x=E.qs[E.i];
+  if(E.ans[E.i]==null&&/^[1-4]$/.test(e.key)){answer(x.order[+e.key-1]);e.preventDefault()}
+  else if(E.ans[E.i]!=null&&e.key==="Enter"&&document.activeElement?.id!=="nx"){next();e.preventDefault()}
+});
+if(S.ch>=CH.length)S.ch=0;
+render();
+</script>
+
+</body></html>
