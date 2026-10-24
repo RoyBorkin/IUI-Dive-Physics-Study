@@ -1,4 +1,10 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Bilingual study, cheat-sheet, calculators and practice exam for AAUS scientific diver training: diving physics, physiology and accidents.">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 <title>Dive Physics Study</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="theme-color" content="#EEF2F8">
@@ -121,6 +127,31 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .tag.t1{background:var(--sea-soft);color:var(--sea)}
 .acc h4{margin:0;font-size:16px;line-height:1.3}
 .acc ul{margin:0;padding-inline-start:18px;display:grid;gap:6px;font-size:14.5px}
+.fa{margin-top:12px;background:var(--ok-soft);border-radius:10px;padding:9px 12px;font-size:14px;line-height:1.45}
+.fa b{display:block;font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--ok);margin-bottom:2px}
+.thgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px;align-items:start}
+.th{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;min-width:0}
+.th h4{margin:0 0 10px;font-size:17px;display:flex;align-items:center;gap:8px}
+.th h4::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--sea)}
+.th-hyper h4::before{background:var(--flag)}.th-dehyd h4::before{background:var(--warn)}
+.th .points{font-size:14.5px;gap:6px}
+.th h5{margin:12px 0 6px;font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.th>ul:not(.points){margin:0;padding-inline-start:18px;display:grid;gap:4px;font-size:14px}
+.th .fa ol{margin:4px 0 0;padding-inline-start:18px;display:grid;gap:4px}
+.heat{display:grid;grid-template-columns:160px minmax(0,1fr);gap:22px;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.bodymap{width:100%;max-width:160px;height:auto}
+.chipsrow{display:flex;flex-wrap:wrap;gap:6px}
+.hz{font-size:13px;font-weight:600;padding:4px 10px;border-radius:999px;background:var(--flag-soft);color:var(--flag)}
+.hz.cold{background:var(--sea-soft);color:var(--sea)}
+@media (max-width:560px){.heat{grid-template-columns:1fr;justify-items:center}.heat>div{justify-self:stretch}}
+.laws{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:14px}
+.law{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.law.big{border-color:var(--sea);box-shadow:0 0 0 1px var(--sea) inset}
+.law h4{margin:0;font-size:17px}
+.law code{font-family:var(--f-mono);font-size:14.5px;background:var(--sea-soft);padding:6px 10px;border-radius:8px;direction:ltr;align-self:flex-start;max-width:100%;overflow-x:auto;white-space:nowrap}
+.law p{margin:0;font-size:15px}
+.law .ld{font-size:13.5px;color:var(--muted)}
+.law .ld b{color:var(--ink)}
 .aid{counter-reset:s;list-style:none;margin:0;padding:0;display:grid;gap:8px;max-width:70ch}
 .aid li{counter-increment:s;display:flex;gap:12px;align-items:flex-start;background:var(--ok-soft);border-radius:10px;padding:10px 14px}
 .aid li::before{content:counter(s);flex:none;width:24px;height:24px;border-radius:50%;background:var(--ok);color:var(--bg);font-weight:700;font-size:13px;display:grid;place-items:center;margin-top:1px}
@@ -345,6 +376,11 @@ mark{background:color-mix(in srgb,var(--flag) 22%,transparent);color:inherit;bor
 .mini th{font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:600}
 .mini td{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
 .mini tr.me td{color:var(--sea);font-weight:600}
+.spec{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-top:4px}
+.spec div{display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;font-size:12.5px;min-width:0}
+.spec i{display:block;width:100%;aspect-ratio:1;max-width:64px;border-radius:12px;transition:opacity .3s}
+.spec span{font-family:var(--f-mono);font-size:12px;color:var(--muted)}.spec small{color:var(--muted);font-size:11px}
+.scene{margin-top:12px;height:80px;border-radius:12px;display:flex;align-items:flex-end;justify-content:flex-end;padding:8px 12px;color:#fff;font-family:var(--f-mono);font-size:13px;background-blend-mode:normal}
 .viz{display:flex;align-items:flex-end;justify-content:center;gap:28px;margin-top:12px;height:120px}
 .viz div{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:12px;color:var(--muted)}
 .viz i{display:block;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff 0 10%,color-mix(in srgb,var(--sea) 55%,#fff) 35%,var(--sea) 80%);transition:width .3s var(--ease),height .3s var(--ease)}
@@ -356,6 +392,8 @@ mark{background:color-mix(in srgb,var(--flag) 22%,transparent);color:inherit;bor
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
 
+</head>
+<body>
 <header class="bar">
   <div class="bar-in">
     <div class="brand">
@@ -429,6 +467,9 @@ const CH=[
   L("Two circuits: <b>pulmonary</b> (heart ↔ lungs) and <b>systemic</b> (heart ↔ body). Heart rate responds to workload and to stress.","שני מעגלים: <b>ריאתי</b> (לב ↔ ריאות) ו<b>סיסטמי</b> (לב ↔ הגוף). קצב הלב מגיב למאמץ וללחץ נפשי.")],
  nums:[["10–18",L("breaths/min at rest","נשימות לדקה במנוחה")],["60–80",L("heartbeats/min, adult at rest","פעימות לדקה במנוחה")],["~300M",L("alveoli","נאדיות")],["4",L("heart chambers","חדרי לב")]]},
 
+{id:"laws",d:"Σ",laws:true,tag:L("Physics · the laws","פיזיקה · החוקים"),t:L("The laws in one sentence","החוקים במשפט אחד"),
+ lead:L("Boyle, Dalton and Henry first: they explain most diving accidents. Then the rest of the laws the course uses.","קודם בויל, דלטון והנרי: הם מסבירים את רוב תאונות הצלילה. אחריהם שאר החוקים שבחומר.")},
+
 {id:"water",d:"5 m",tag:L("Physics","פיזיקה"),t:L("Properties of water","תכונות המים"),
  lead:L("Density, light, sound and heat all change the moment you descend.","צפיפות, אור, קול וחום משתנים כולם ברגע שיורדים מתחת למים."),
  pts:[
@@ -439,8 +480,8 @@ const CH=[
   L("<b>Sound</b> travels ~4× faster in water, but its direction is very hard to localize.","<b>קול</b> נע מהר פי ~4 במים, אבל קשה מאוד לזהות את הכיוון שלו."),
   L("Water conducts heat <b>~25× faster</b> than air.","המים מוליכים חום <b>מהר פי ~25</b> מהאוויר.")],
  acc:[
-  {t:L("Hypothermia","היפותרמיה"),i:[L("Uncontrollable shivering can start after a 1°C core drop","רעד בלתי נשלט יכול להתחיל כבר בירידה של 1°C בחום הליבה"),L("Impairs judgment and motor skills, intensifies narcosis, and raises DCS risk","פוגעת בשיקול דעת ובמוטוריקה, מגבירה נרקוזיס ומעלה סיכון ל-DCS")]},
-  {t:L("Hyperthermia","היפרתרמיה"),i:[L("More heat absorbed/produced than dissipated, e.g. full suit on a hot deck","הגוף קולט/מייצר יותר חום ממה שהוא מפנה, למשל חליפה מלאה על סיפון חם"),L("Signs: heavy sweating, headache, nausea, dizziness, fainting","סימנים: הזעה רבה, כאב ראש, בחילה, סחרחורת, עילפון")]}],
+  {fa:L("Stop the dive. Warm gradually. If symptoms escalate, get medical attention.","להפסיק את הצלילה. לחמם בהדרגה. אם התסמינים מחמירים – לפנות לטיפול רפואי."),t:L("Hypothermia","היפותרמיה"),i:[L("Uncontrollable shivering can start after a 1°C core drop","רעד בלתי נשלט יכול להתחיל כבר בירידה של 1°C בחום הליבה"),L("Impairs judgment and motor skills, intensifies narcosis, and raises DCS risk","פוגעת בשיקול דעת ובמוטוריקה, מגבירה נרקוזיס ומעלה סיכון ל-DCS")]},
+  {fa:L("Stop the activity. Cool down and rehydrate. If symptoms escalate, get medical attention.","להפסיק את הפעילות. לקרר ולתת לשתות. אם התסמינים מחמירים – לפנות לטיפול רפואי."),t:L("Hyperthermia","היפרתרמיה"),i:[L("More heat absorbed/produced than dissipated, e.g. full suit on a hot deck","הגוף קולט/מייצר יותר חום ממה שהוא מפנה, למשל חליפה מלאה על סיפון חם"),L("Signs: heavy sweating, headache, nausea, dizziness, fainting","סימנים: הזעה רבה, כאב ראש, בחילה, סחרחורת, עילפון")]}],
  aid:[L("Stop the dive or activity","עצור את הצלילה או הפעילות"),L("Hypothermic → warm gradually; hyperthermic → cool and rehydrate","היפותרמיה ← חימום הדרגתי; היפרתרמיה ← קירור ושתייה"),L("Escalating symptoms → medical attention","החמרה בסימנים ← טיפול רפואי")],
  nums:[["~800×",L("water density vs air","צפיפות מים לעומת אוויר")],["+33% / −25%",L("apparent size / distance","גודל / מרחק נראים")],["~4×",L("faster sound","מהירות קול")],["~25×",L("faster heat loss","איבוד חום מהיר יותר")],["15–20 m",L("mostly blue-green","בעיקר כחול-ירוק")]]},
 
@@ -454,9 +495,9 @@ const CH=[
   L("Saltwater is denser, so the same object is <b>more buoyant in saltwater</b>. Neutral in the ocean → slightly negative (sinks) in fresh water.","מי ים צפופים יותר, ולכן אותו גוף <b>צף יותר במי ים</b>. ניטרלי בים ← שלילי מעט (שוקע) במים מתוקים."),
   L("Worked example: a 20 kg crate displacing 25 L of seawater → 20 − (25 × 1.03) = <b>−5.75 kg</b>. <b>Check this one:</b> the water it displaces outweighs the crate, so physically it floats with 5.75 kg of lift. The slide calls the result \"slightly negative, it will sink\". Ask your instructor which reading the exam expects.","דוגמה: ארגז 20 ק״ג שדוחה 25 ל' מי ים ← 20 − (25 × 1.03) = <b>−5.75 ק״ג</b>. <b>שים לב:</b> המים הנדחים שוקלים יותר מהארגז, כך שפיזיקלית הוא צף עם עילוי של 5.75 ק״ג. בשקופית כתוב \"שלילי מעט, ישקע\". כדאי לברר עם המרצה איזו פרשנות מצופה במבחן.")],
  acc:[
-  {t:L("Uncontrolled ascent","עלייה בלתי מבוקרת"),i:[L("Overweighting offset with BCD air → air expands on ascent (Boyle) → runaway positive buoyancy","עודף משקולות שמאוזן באוויר במאזן ← האוויר מתפשט בעלייה (בויל) ← ציפה חיובית שיוצאת משליטה"),L("Raises risk of lung over-expansion and DCS","מעלה סיכון לנזק ריאתי מהתפשטות ול-DCS")]},
-  {t:L("Overweighting / task loading","עודף משקל / עומס משימות"),i:[L("Heavy sample bags or camera rigs make hovering harder","שקי דגימות או מצלמות כבדות מקשים על ריחוף"),L("More air use; can push you below planned depth","צריכת אוויר גבוהה; עלול לדחוף מתחת לעומק המתוכנן")]},
-  {t:L("Entanglement & entrapment","הסתבכות ולכידה"),i:[L("Transect lines, kelp, monofilament can force negative or positive buoyancy","חבלי טרנסקט, אצות וחוטי דיג יכולים לכפות ציפה שלילית או חיובית"),L("A leading contributor to panic and out-of-air emergencies","גורם מרכזי לפאניקה ולמקרי חוסר אוויר")]}],
+  {fa:L("Treat as possible lung over-expansion or DCS: ABCs, activate EAP, 100% O₂, watch for AGE/DCS signs.","לטפל כחשד לפגיעת ריאות או DCS: ABC, הפעלת EAP, 100% חמצן, מעקב אחר סימני AGE/DCS."),t:L("Uncontrolled ascent","עלייה בלתי מבוקרת"),i:[L("Overweighting offset with BCD air → air expands on ascent (Boyle) → runaway positive buoyancy","עודף משקולות שמאוזן באוויר במאזן ← האוויר מתפשט בעלייה (בויל) ← ציפה חיובית שיוצאת משליטה"),L("Raises risk of lung over-expansion and DCS","מעלה סיכון לנזק ריאתי מהתפשטות ול-DCS")]},
+  {fa:L("Re-establish control: stop, add BCD air carefully or drop the sample bag. Prevent by weighting correctly before the dive.","להחזיר שליטה: לעצור, להוסיף אוויר במאזן בזהירות או לשחרר את שק הדגימות. מניעה: משקולות נכונות לפני הצלילה."),t:L("Overweighting / task loading","עודף משקל / עומס משימות"),i:[L("Heavy sample bags or camera rigs make hovering harder","שקי דגימות או מצלמות כבדות מקשים על ריחוף"),L("More air use; can push you below planned depth","צריכת אוויר גבוהה; עלול לדחוף מתחת לעומק המתוכנן")]},
+  {fa:L("Stop, stay calm, signal your buddy and cut free with shears from your kit. Out of air → buddy's alternate air source.","לעצור, להירגע, לאותת לבן הזוג ולחתוך עם המספריים מהערכה. חוסר אוויר ← מקור האוויר החלופי של בן הזוג."),t:L("Entanglement & entrapment","הסתבכות ולכידה"),i:[L("Transect lines, kelp, monofilament can force negative or positive buoyancy","חבלי טרנסקט, אצות וחוטי דיג יכולים לכפות ציפה שלילית או חיובית"),L("A leading contributor to panic and out-of-air emergencies","גורם מרכזי לפאניקה ולמקרי חוסר אוויר")]}],
  nums:[["1.03 kg",L("1 L seawater","ליטר מי ים")],["1.00 kg",L("1 L fresh water","ליטר מים מתוקים")],["64 lb",L("1 ft³ seawater","רגל מעוקבת מי ים")],["62.4 lb",L("1 ft³ fresh water","רגל מעוקבת מים מתוקים")]]},
 
 {id:"press",d:"10 m",tag:L("Physics · foundations","פיזיקה · יסודות"),t:L("Principles of pressure","עקרונות הלחץ"),
@@ -482,10 +523,10 @@ const CH=[
   L("Gas in BCD, drysuit and neoprene compresses on descent and expands on ascent. Every depth change needs a buoyancy adjustment.","הגז במאזן, בחליפה היבשה ובניאופרן נדחס בירידה ומתפשט בעלייה. כל שינוי עומק דורש תיקון ציפה."),
   L("<b>Fish too:</b> swim bladders follow Boyle's law. Rapid ascent → everted stomach, bulging eyes, ruptured bladder. A <b>descending device</b> recompresses them.","<b>גם דגים:</b> שלפוחית השחייה מצייתת לחוק בויל. עלייה מהירה ← היפוך קיבה, עיניים בולטות, קרע בשלפוחית. <b>מתקן הורדה</b> מחזיר אותם ללחץ.")],
  acc:[
-  {t:L("Ear squeeze / reverse block","מעיכת אוזן / חסימה הפוכה"),i:[L("Delayed equalization or congestion → pain, eardrum rupture, vertigo, infection","השוואה מאוחרת או גודש ← כאב, קרע בעור התוף, ורטיגו, זיהום"),L("Round/oval window rupture → hearing loss and vertigo","קרע בחלון העגול/הסגלגל ← פגיעה בשמיעה וורטיגו"),L("Alternobaric vertigo: sudden pressure difference → extreme dizziness, nausea","ורטיגו אלטרנוברי: הפרש לחצים פתאומי ← סחרחורת קשה, בחילה")]},
-  {t:L("Sinus, mask, tooth & GI","סינוסים, מסכה, שיניים ומעיים"),i:[L("Sinus: headache, facial pain, blood-tinged mucus","סינוסים: כאב ראש, כאב בפנים, ריר דמי"),L("Mask squeeze: facial bruising, blood-shot eyes","מעיכת מסכה: חבלות בפנים, עיניים אדומות (שטפי דם)"),L("Barodontalgia: air trapped under a filling → tooth pain","ברודונטלגיה: אוויר כלוא מתחת לסתימה ← כאב שיניים"),L("GI: gas expands on ascent → slow down and let it pass","מעיים: גז מתפשט בעלייה ← להאט ולתת לו לצאת")]},
-  {t:L("Pulmonary barotrauma","ברוטראומה ריאתית"),i:[L("Breath-hold ascent → alveoli rupture","עלייה בעצירת נשימה ← קרע בנאדיות"),L("Pneumothorax (lung collapse); tension pneumothorax strains the heart","חזה אוויר (קריסת ריאה); חזה אוויר בלחץ מעמיס על הלב"),L("Mediastinal & subcutaneous emphysema: air under sternum / at the neck","אמפיזמה מדיאסטינלית ותת-עורית: אוויר מתחת לעצם החזה / בבסיס הצוואר")]},
-  {t:L("Arterial gas embolism (AGE)","תסחיף גז עורקי (AGE)"),sev:1,i:[L("Gas enters the blood through ruptured alveoli and expands on ascent","גז נכנס לדם דרך נאדיות קרועות ומתפשט בעלייה"),L("Brain → sudden stroke-like signs; heart → cardiac arrest","מוח ← סימנים דמויי שבץ פתאומיים; לב ← דום לב"),L("Onset can be immediate, even underwater","הופעה יכולה להיות מיידית, אפילו מתחת למים")]}],
+  {fa:L("Stop descending (or ascending), ease off and retry gently. Suspend diving and get a medical evaluation if pain, hearing loss or vertigo remain.","לעצור את הירידה (או העלייה), להתרחק מעט ולנסות שוב בעדינות. להפסיק לצלול ולהיבדק אצל רופא אם נשאר כאב, ירידה בשמיעה או ורטיגו."),t:L("Ear squeeze / reverse block","מעיכת אוזן / חסימה הפוכה"),i:[L("Delayed equalization or congestion → pain, eardrum rupture, vertigo, infection","השוואה מאוחרת או גודש ← כאב, קרע בעור התוף, ורטיגו, זיהום"),L("Round/oval window rupture → hearing loss and vertigo","קרע בחלון העגול/הסגלגל ← פגיעה בשמיעה וורטיגו"),L("Alternobaric vertigo: sudden pressure difference → extreme dizziness, nausea","ורטיגו אלטרנוברי: הפרש לחצים פתאומי ← סחרחורת קשה, בחילה")]},
+  {fa:L("Mask: exhale through the nose on descent. GI: slow or stop the ascent and let gas pass. Sinus/tooth: suspend diving and see a doctor or dentist.","מסכה: לנשוף מהאף בירידה. מעיים: להאט או לעצור את העלייה ולתת לגז לצאת. סינוסים/שן: להפסיק לצלול ולפנות לרופא או לרופא שיניים."),t:L("Sinus, mask, tooth & GI","סינוסים, מסכה, שיניים ומעיים"),i:[L("Sinus: headache, facial pain, blood-tinged mucus","סינוסים: כאב ראש, כאב בפנים, ריר דמי"),L("Mask squeeze: facial bruising, blood-shot eyes","מעיכת מסכה: חבלות בפנים, עיניים אדומות (שטפי דם)"),L("Barodontalgia: air trapped under a filling → tooth pain","ברודונטלגיה: אוויר כלוא מתחת לסתימה ← כאב שיניים"),L("GI: gas expands on ascent → slow down and let it pass","מעיים: גז מתפשט בעלייה ← להאט ולתת לו לצאת")]},
+  {fa:L("ABCs → activate EAP/EMS → 100% O₂ → supine or recovery position, treat for shock → CPR if needed. Suspend diving, medical evaluation.","ABC ← הפעלת EAP/חירום ← 100% חמצן ← שכיבה על הגב או תנוחת התאוששות, טיפול בהלם ← החייאה לפי הצורך. הפסקת צלילות ובדיקה רפואית."),t:L("Pulmonary barotrauma","ברוטראומה ריאתית"),i:[L("Breath-hold ascent → alveoli rupture","עלייה בעצירת נשימה ← קרע בנאדיות"),L("Pneumothorax (lung collapse); tension pneumothorax strains the heart","חזה אוויר (קריסת ריאה); חזה אוויר בלחץ מעמיס על הלב"),L("Mediastinal & subcutaneous emphysema: air under sternum / at the neck","אמפיזמה מדיאסטינלית ותת-עורית: אוויר מתחת לעצם החזה / בבסיס הצוואר")]},
+  {fa:L("ABCs → EAP/EMS → 100% O₂ via NRB → supine, not head-down → CPR + AED if not breathing → hyperbaric chamber.","ABC ← EAP/חירום ← 100% חמצן במסכת NRB ← על הגב, לא ראש למטה ← החייאה + AED אם לא נושם ← תא לחץ."),t:L("Arterial gas embolism (AGE)","תסחיף גז עורקי (AGE)"),sev:1,i:[L("Gas enters the blood through ruptured alveoli and expands on ascent","גז נכנס לדם דרך נאדיות קרועות ומתפשט בעלייה"),L("Brain → sudden stroke-like signs; heart → cardiac arrest","מוח ← סימנים דמויי שבץ פתאומיים; לב ← דום לב"),L("Onset can be immediate, even underwater","הופעה יכולה להיות מיידית, אפילו מתחת למים")]}],
  aid:[L("ABCs: airway, breathing, circulation","ABC: נתיב אוויר, נשימה, מחזור דם"),L("Activate the Emergency Action Plan / EMS","הפעל את תוכנית החירום (EAP) / שירותי חירום"),L("Give 100% oxygen","תן 100% חמצן"),L("Supine or recovery position; treat for shock","שכיבה על הגב או תנוחת התאוששות; טיפול בהלם"),L("CPR if needed; suspend diving and get a medical evaluation","החייאה במידת הצורך; הפסקת צלילות ובדיקה רפואית")],
  nums:[["50%",L("volume at 10 m (2 ATA)","נפח ב-10 מ' (2 ATA)")],["25%",L("volume at 30 m (4 ATA)","נפח ב-30 מ' (4 ATA)")],["60 → 15 min",L("tank duration, surface → 30 m","זמן מיכל, פני המים ← 30 מ'")]]},
 
@@ -499,9 +540,9 @@ const CH=[
   L("Use <b>Kelvin or Rankine</b>. °C or °F give the wrong answer.","יש להשתמש ב<b>קלווין או רנקין</b>. °C או °F ייתנו תשובה שגויה."),
   L("<b>Combined law</b> holds moles (n) constant. <b>Ideal gas law</b> adds n and R; real gases deviate at high pressure but it's a good approximation.","<b>החוק המשולב</b> מניח מספר מולים (n) קבוע. <b>חוק הגז האידיאלי</b> מוסיף את n ו-R; גזים אמיתיים סוטים בלחץ גבוה אך זה קירוב טוב.")],
  acc:[
-  {t:L("Cylinder over-pressurization","לחץ יתר במיכל"),i:[L("Full tank in sun or a hot car → pressure above rated working pressure","מיכל מלא בשמש או ברכב חם ← לחץ מעל לחץ העבודה המדורג"),L("Burst-disc rupture or, rarely, cylinder failure","קרע בדיסק הביטחון או, לעיתים נדירות, כשל המיכל")]},
-  {t:L("Cold regulator free-flow","זרימה חופשית בווסת קר"),i:[L("Very cold first stage can ice and free-flow","שלב ראשון קר מאוד עלול לקפוא ולזרום חופשי"),L("Panic response → rapid ascent, buddy separation","תגובת פאניקה ← עלייה מהירה, היפרדות מבן הזוג")]},
-  {t:L("Gas-planning error","טעות בתכנון גז"),i:[L("Warm fill, cold depth → less usable gas than the SPG showed topside","מילוי חם ועומק קר ← פחות גז זמין ממה שהמד הראה למעלה")]}],
+  {fa:L("Prevention: keep full cylinders out of direct sun and hot cars. A hot cylinder: move it to shade and let it cool.","מניעה: לא להשאיר מיכלים מלאים בשמש או ברכב חם. מיכל חם: להעביר לצל ולתת לו להתקרר."),t:L("Cylinder over-pressurization","לחץ יתר במיכל"),i:[L("Full tank in sun or a hot car → pressure above rated working pressure","מיכל מלא בשמש או ברכב חם ← לחץ מעל לחץ העבודה המדורג"),L("Burst-disc rupture or, rarely, cylinder failure","קרע בדיסק הביטחון או, לעיתים נדירות, כשל המיכל")]},
+  {fa:L("Stay calm and avoid a rapid ascent. Breathe from the free-flow or switch to your buddy's source, then make a controlled ascent together.","להישאר רגוע ולא לעלות מהר. לנשום מהווסת הזורם או לעבור למקור של בן הזוג, ואז עלייה מבוקרת יחד."),t:L("Cold regulator free-flow","זרימה חופשית בווסת קר"),i:[L("Very cold first stage can ice and free-flow","שלב ראשון קר מאוד עלול לקפוא ולזרום חופשי"),L("Panic response → rapid ascent, buddy separation","תגובת פאניקה ← עלייה מהירה, היפרדות מבן הזוג")]},
+  {fa:L("Plan for the warm-fill / cold-water drop, turn the dive earlier and keep your reserve.","לתכנן את הירידה בלחץ בין מילוי חם למים קרים, להתחיל לחזור מוקדם יותר ולשמור על הרזרבה."),t:L("Gas-planning error","טעות בתכנון גז"),i:[L("Warm fill, cold depth → less usable gas than the SPG showed topside","מילוי חם ועומק קר ← פחות גז זמין ממה שהמד הראה למעלה")]}],
  nums:[["K = °C + 273",L("absolute temperature","טמפרטורה מוחלטת")],["n",L("constant in combined law","קבוע בחוק המשולב")]]},
 
 {id:"dalton",d:"25 m",tag:L("Physics · partial pressure","פיזיקה · לחץ חלקי"),t:L("Dalton's law & gas toxicity","חוק דלטון ורעילות גזים"),gauge:true,
@@ -513,11 +554,11 @@ const CH=[
   L("Air at 40 m (5 ATA): <b>PO₂ ≈ 1.05 bar</b> (like 100% O₂ at the surface), <b>PN₂ ≈ 3.95 bar</b>.","אוויר ב-40 מ' (5 ATA): <b>PO₂ ≈ 1.05 bar</b> (כמו 100% חמצן על פני המים), <b>PN₂ ≈ 3.95 bar</b>."),
   L("Change the fraction (nitrox, trimix) and you change the gas's effect at a given depth.","שינוי השבר (ניטרוקס, טרימיקס) משנה את השפעת הגז בעומק נתון.")],
  acc:[
-  {t:L("Nitrogen narcosis","נרקוזיס חנקני"),i:[L("Little effect above ~20 m, often noticeable near 30 m, worse with depth","השפעה קטנה מעל ~20 מ', מורגש לרוב סביב 30 מ', מחמיר עם העומק"),L("Euphoria or paranoia, poor coordination, impaired reasoning","אופוריה או פרנויה, קואורדינציה ירודה, פגיעה בחשיבה"),L("Worse with cold, dark, murky water, stress, task load","מחמיר בקור, חושך, מים עכורים, לחץ ועומס משימות"),L("Helium less narcotic; argon more (drysuit gas only); O₂ somewhat narcotic","הליום פחות נרקוטי; ארגון יותר (רק לניפוח חליפה יבשה); חמצן מעט נרקוטי"),L("<b>Fix:</b> ascend with your buddy. Effects resolve fully.","<b>טיפול:</b> לעלות עם בן הזוג לעומק רדוד. ההשפעות חולפות לגמרי.")]},
-  {t:L("CNS oxygen toxicity","רעילות חמצן למערכת העצבים"),sev:1,i:[L("High PO₂ → convulsions, regulator loss, drowning risk","PO₂ גבוה ← פרכוסים, אובדן ווסת, סכנת טביעה"),L("<b>ConVENTID:</b> Convulsions, Visual, Ears ringing, Nausea, Twitching, Irritability, Dizziness","<b>ConVENTID:</b> פרכוסים, הפרעות ראייה, צלצולים באוזניים, בחילה, עוויתות, עצבנות, סחרחורת"),L("Hold (don't force) the regulator; ascend once convulsions stop","להחזיק (לא לדחוף בכוח) את הווסת; לעלות כשהפרכוסים נפסקים")]},
-  {t:L("Pulmonary O₂ toxicity","רעילות חמצן ריאתית"),i:[L("Long exposure to elevated PO₂ dries surfactant","חשיפה ארוכה ל-PO₂ גבוה מייבשת את הסורפקטנט"),L("Chest discomfort, dry cough; mainly chamber and saturation diving","אי-נוחות בחזה, שיעול יבש; בעיקר בתא לחץ ובצלילת רוויה")]},
-  {t:L("CO₂ toxicity (hypercapnia)","רעילות CO₂ (היפרקפניה)"),i:[L("From workload, cold, poor fitness, bad regulator","ממאמץ, קור, כושר ירוד, ווסת לא תקין"),L("Fast heart rate, headache, confusion, breathlessness","דופק מהיר, כאב ראש, בלבול, קוצר נשימה"),L("Stop work, ABCs, oxygen","להפסיק מאמץ, ABC, חמצן")]},
-  {t:L("CO toxicity","הרעלת פחמן חד-חמצני"),sev:1,i:[L("A contaminant from exhaust or a poorly kept compressor","מזהם מגזי פליטה או ממדחס לא מתוחזק"),L("Binds hemoglobin far more readily than O₂","נקשר להמוגלובין הרבה יותר בקלות מחמצן"),L("Never breathe gas that smells or tastes; ABCs, O₂, sometimes hyperbaric","לעולם לא לנשום גז עם ריח או טעם; ABC, חמצן, לפעמים תא לחץ")]}],
+  {fa:L("Ascend with your buddy to a shallower depth. Effects resolve fully, with no lingering impairment.","לעלות עם בן הזוג לעומק רדוד יותר. ההשפעות חולפות לגמרי, ללא נזק מתמשך."),t:L("Nitrogen narcosis","נרקוזיס חנקני"),i:[L("Little effect above ~20 m, often noticeable near 30 m, worse with depth","השפעה קטנה מעל ~20 מ', מורגש לרוב סביב 30 מ', מחמיר עם העומק"),L("Euphoria or paranoia, poor coordination, impaired reasoning","אופוריה או פרנויה, קואורדינציה ירודה, פגיעה בחשיבה"),L("Worse with cold, dark, murky water, stress, task load","מחמיר בקור, חושך, מים עכורים, לחץ ועומס משימות"),L("Helium less narcotic; argon more (drysuit gas only); O₂ somewhat narcotic","הליום פחות נרקוטי; ארגון יותר (רק לניפוח חליפה יבשה); חמצן מעט נרקוטי")]},
+  {fa:L("Control the diver; hold (don't force) the regulator in place; ascend once convulsions subside; always get a medical evaluation.","לשלוט בצוללן; להחזיק את הווסת במקום בלי לכפות; לעלות כשהפרכוסים שוככים; תמיד בדיקה רפואית אחר כך."),t:L("CNS oxygen toxicity","רעילות חמצן למערכת העצבים"),sev:1,i:[L("High PO₂ → convulsions, regulator loss, drowning risk","PO₂ גבוה ← פרכוסים, אובדן ווסת, סכנת טביעה"),L("<b>ConVENTID:</b> Convulsions, Visual, Ears ringing, Nausea, Twitching, Irritability, Dizziness","<b>ConVENTID:</b> פרכוסים, הפרעות ראייה, צלצולים באוזניים, בחילה, עוויתות, עצבנות, סחרחורת"),L("Hold (don't force) the regulator; ascend once convulsions stop","להחזיק (לא לדחוף בכוח) את הווסת; לעלות כשהפרכוסים נפסקים")]},
+  {fa:L("End the high-PO₂ exposure and get a medical evaluation.","להפסיק את החשיפה ל-PO₂ גבוה ולפנות לבדיקה רפואית."),t:L("Pulmonary O₂ toxicity","רעילות חמצן ריאתית"),i:[L("Long exposure to elevated PO₂ dries surfactant","חשיפה ארוכה ל-PO₂ גבוה מייבשת את הסורפקטנט"),L("Chest discomfort, dry cough; mainly chamber and saturation diving","אי-נוחות בחזה, שיעול יבש; בעיקר בתא לחץ ובצלילת רוויה")]},
+  {fa:L("Stop the workload, monitor and ensure the ABCs, give oxygen. Milder symptoms often ease once work stops.","להפסיק את המאמץ, לוודא ABC, לתת חמצן. תסמינים קלים חולפים לרוב כשמפסיקים את המאמץ."),t:L("CO₂ toxicity (hypercapnia)","רעילות CO₂ (היפרקפניה)"),i:[L("From workload, cold, poor fitness, bad regulator","ממאמץ, קור, כושר ירוד, ווסת לא תקין"),L("Fast heart rate, headache, confusion, breathlessness","דופק מהיר, כאב ראש, בלבול, קוצר נשימה"),L("Stop work, ABCs, oxygen","להפסיק מאמץ, ABC, חמצן")]},
+  {fa:L("ABCs, 100% oxygen, medical evaluation (sometimes hyperbaric treatment).","ABC, 100% חמצן, בדיקה רפואית (לפעמים טיפול בתא לחץ)."),t:L("CO toxicity","הרעלת פחמן חד-חמצני"),sev:1,i:[L("A contaminant from exhaust or a poorly kept compressor","מזהם מגזי פליטה או ממדחס לא מתוחזק"),L("Binds hemoglobin far more readily than O₂","נקשר להמוגלובין הרבה יותר בקלות מחמצן"),L("Never breathe gas that smells or tastes; ABCs, O₂, sometimes hyperbaric","לעולם לא לנשום גז עם ריח או טעם; ABC, חמצן, לפעמים תא לחץ")]}],
  nums:[["1.05 bar",L("PO₂ on air at 40 m","PO₂ באוויר ב-40 מ'")],["~30 m",L("narcosis noticeable","נרקוזיס מורגש")],["1.4 bar",L("working max PO₂ (150 min)","PO₂ מרבי לעבודה (150 דק')")],["1.6 bar",L("absolute ceiling (45 min)","תקרה מוחלטת (45 דק')")]]},
 
 {id:"henry",d:"30 m",tag:L("Physics · solubility","פיזיקה · מסיסות"),t:L("Henry's law & decompression illness","חוק הנרי ומחלת הדקומפרסיה"),
@@ -532,9 +573,9 @@ const CH=[
   L("<b>Risk factors:</b> deep/long dives, skipped stops, fast ascent, repetitive and multi-day diving, flying soon after; dehydration, fat, fitness, age, fatigue, prior DCS, PFO; cold water, heavy exertion, alcohol.","<b>גורמי סיכון:</b> צלילות עמוקות/ארוכות, דילוג על עצירות, עלייה מהירה, צלילות חוזרות ורב-יומיות, טיסה מוקדמת; התייבשות, שומן, כושר, גיל, עייפות, DCS בעבר, PFO; מים קרים, מאמץ, אלכוהול."),
   L("<b>PFO</b>: open in 10–20% of people; lets venous bubbles bypass the lungs. Worth a medical conversation, not automatically disqualifying.","<b>PFO</b>: פתוח אצל 10–20% מהאנשים; מאפשר לבועות ורידיות לעקוף את הריאות. שווה שיחה עם רופא, לא פוסל אוטומטית.")],
  acc:[
-  {t:L("Type I DCS (mild)","DCS סוג I (קל)"),i:[L("Musculoskeletal \"bends\": deep joint/limb pain","\"בנדס\" שרירי-שלדי: כאב עמוק במפרקים/גפיים"),L("Skin bends: itching, marbled rash (cutis marmorata), may precede Type II","\"בנדס\" עורי: גרד, פריחה משוישת (cutis marmorata), עלול לבשר על סוג II"),L("Lymphatic: swelling near lymph nodes","לימפטי: נפיחות ליד בלוטות לימפה")]},
-  {t:L("Type II DCS (serious)","DCS סוג II (חמור)"),sev:1,i:[L("Neurological: numbness, tingling, weakness, paralysis","נוירולוגי: נימול, עקצוץ, חולשה, שיתוק"),L("Vestibular \"staggers\": vertigo, tinnitus, hearing loss","וסטיבולרי \"staggers\": ורטיגו, טנטון, אובדן שמיעה"),L("Cardiopulmonary \"chokes\": dry cough, chest pain, breathlessness","לב-ריאה \"chokes\": שיעול יבש, כאב בחזה, קוצר נשימה")]},
-  {t:L("AGE as part of DCI","AGE כחלק מ-DCI"),sev:1,i:[L("DCI = DCS + AGE","DCI = DCS + AGE"),L("AGE more often from lung over-pressurization than from DCS","AGE נובע לרוב מלחץ יתר בריאות ולא מ-DCS"),L("Inner-ear DCS: same first aid as any DCI","DCS של האוזן הפנימית: אותה עזרה ראשונה כמו בכל DCI")]}],
+  {fa:L("100% O₂ → lay down, keep still → 5-min neuro exam (skin bends can precede Type II) → EAP/DAN → chamber.","100% חמצן ← השכבה ומנוחה ← בדיקה נוירולוגית של 5 דקות (בנדס עורי עלול לבשר על סוג II) ← EAP/DAN ← תא לחץ."),t:L("Type I DCS (mild)","DCS סוג I (קל)"),i:[L("Musculoskeletal \"bends\": deep joint/limb pain","\"בנדס\" שרירי-שלדי: כאב עמוק במפרקים/גפיים"),L("Skin bends: itching, marbled rash (cutis marmorata), may precede Type II","\"בנדס\" עורי: גרד, פריחה משוישת (cutis marmorata), עלול לבשר על סוג II"),L("Lymphatic: swelling near lymph nodes","לימפטי: נפיחות ליד בלוטות לימפה")]},
+  {fa:L("Medical emergency: ABCs → EAP/EMS → 100% O₂ → supine, treat for shock → repeat neuro exam → CPR if needed → chamber.","מקרה חירום: ABC ← EAP/חירום ← 100% חמצן ← על הגב, טיפול בהלם ← בדיקה נוירולוגית חוזרת ← החייאה לפי הצורך ← תא לחץ."),t:L("Type II DCS (serious)","DCS סוג II (חמור)"),sev:1,i:[L("Neurological: numbness, tingling, weakness, paralysis","נוירולוגי: נימול, עקצוץ, חולשה, שיתוק"),L("Vestibular \"staggers\": vertigo, tinnitus, hearing loss","וסטיבולרי \"staggers\": ורטיגו, טנטון, אובדן שמיעה"),L("Cardiopulmonary \"chokes\": dry cough, chest pain, breathlessness","לב-ריאה \"chokes\": שיעול יבש, כאב בחזה, קוצר נשימה")]},
+  {fa:L("Same first aid as any DCI: ABCs, EAP, 100% O₂ early, lay down, neuro exam, recompression in a chamber.","אותה עזרה ראשונה כמו בכל DCI: ABC, EAP, 100% חמצן מוקדם, השכבה, בדיקה נוירולוגית, טיפול בתא לחץ."),t:L("AGE as part of DCI","AGE כחלק מ-DCI"),sev:1,i:[L("DCI = DCS + AGE","DCI = DCS + AGE"),L("AGE more often from lung over-pressurization than from DCS","AGE נובע לרוב מלחץ יתר בריאות ולא מ-DCS"),L("Inner-ear DCS: same first aid as any DCI","DCS של האוזן הפנימית: אותה עזרה ראשונה כמו בכל DCI")]}],
  aid:[L("ABCs, activate EAP / EMS","ABC, הפעלת תוכנית חירום / שירותי חירום"),L("100% oxygen: speeds off-gassing, shrinks bubbles. Start even before symptoms after a rapid ascent or missed stop","100% חמצן: מאיץ שחרור חנקן ומקטין בועות. להתחיל גם לפני תסמינים אחרי עלייה מהירה או דילוג על עצירה"),L("Lay supine / recovery, treat for shock, CPR if needed","השכבה על הגב / תנוחת התאוששות, טיפול בהלם, החייאה במידת הצורך"),L("5-minute neuro exam, repeat periodically","בדיקה נוירולוגית של 5 דקות, לחזור עליה מדי פעם"),L("Recompression in a hyperbaric chamber is the definitive treatment","טיפול בתא לחץ (רה-קומפרסיה) הוא הטיפול המוגדר")],
  nums:[["15 min–2 h",L("typical DCS onset","הופעת DCS אופיינית")],["24 h+",L("possible delay","עיכוב אפשרי")],["~5×",L("N₂ solubility in fat","מסיסות N₂ בשומן")],["10–20%",L("people with PFO","אנשים עם PFO")]]},
 
@@ -552,13 +593,13 @@ const CH=[
 {id:"other",d:"35 m",tag:L("Physiology · environment","פיזיולוגיה · סביבה"),t:L("Additional concerns","בעיות נוספות"),
  lead:L("Not tied to one gas law, but just as important to recognize and prevent.","לא קשורות לחוק גז אחד, אבל חשוב באותה מידה לזהות ולמנוע."),
  acc:[
-  {t:L("Drowning / near-drowning","טביעה / כמעט-טביעה"),sev:1,i:[L("Water in the airway blocks oxygen uptake","מים בנתיב האוויר חוסמים קליטת חמצן"),L("Near-drowning: fluid can build up over hours to days (secondary drowning). Always get medical care","כמעט-טביעה: נוזל יכול להצטבר במשך שעות עד ימים (טביעה משנית). תמיד לפנות לטיפול")]},
-  {t:L("Dehydration","התייבשות"),i:[L("A significant DCS risk factor","גורם סיכון משמעותי ל-DCS"),L("Dry tank air, sweating, cold diuresis, caffeine, alcohol","אוויר מיכל יבש, הזעה, השתנה בקור, קפאין, אלכוהול"),L("Urine should be clear to light yellow","השתן צריך להיות שקוף עד צהוב בהיר")]},
-  {t:L("Disorientation & seasickness","חוסר התמצאות ומחלת ים"),i:[L("Mid-water with no reference → dizziness, panic. Use a line, instruments, buddy","באמצע המים ללא נקודת ייחוס ← סחרחורת, פאניקה. להשתמש בחבל, במכשירים, בבן הזוג"),L("Seasickness: eye/inner-ear conflict. Ask a dive physician about medication","מחלת ים: סתירה בין העין לאוזן הפנימית. להתייעץ עם רופא צלילה לגבי תרופות")]},
-  {t:L("Carotid sinus reflex","רפלקס הסינוס הקרוטידי"),i:[L("Tight hood or neck seal fools pressure sensors","ברדס הדוק או אטם צוואר מטעים את חיישני הלחץ"),L("Drop in heart rate and blood pressure, even unconsciousness","ירידה בדופק ובלחץ הדם, ואף אובדן הכרה")]},
-  {t:L("Shallow water blackout","עילפון במים רדודים"),sev:1,i:[L("Falling pressure on ascent drops O₂ below consciousness threshold","ירידת הלחץ בעלייה מורידה את החמצן מתחת לסף ההכרה"),L("Mainly breath-hold diving after hyperventilation","בעיקר בצלילה חופשית אחרי היפרוונטילציה")]},
-  {t:L("Marine life & trauma","בעלי חיים ימיים וטראומה"),i:[L("Most injuries are defensive, from touching or handling","רוב הפגיעות הן תגובת הגנה למגע או טיפול"),L("Stings: <b>no fresh water</b>; vinegar/alcohol/baking soda, then scrape","עקיצות: <b>לא לשטוף במים מתוקים</b>; חומץ/אלכוהול/סודה לשתייה, ואז לגרד"),L("Punctures: remove spine, soak in ~45°C water for 30–90 min","דקירות: להוציא קוץ, לטבול במים ~45°C למשך 30–90 דק'")]},
-  {t:L("IPE, SWAS, HPNS","IPE, SWAS, HPNS"),i:[L("IPE: lung fluid with cold + exertion + tight suit; pink frothy sputum → emergency","IPE: נוזל בריאות בשילוב קור, מאמץ וחליפה הדוקה; כיח ורדרד מוקצף ← חירום"),L("SWAS: inhaled sea-spray → flu-like symptoms hours later","SWAS: שאיפת רסס מי ים ← תסמינים דמויי שפעת כעבור שעות"),L("HPNS: deep helium diving → tremors; not at scientific depths","HPNS: צלילת הליום עמוקה ← רעד; לא בעומקים מדעיים")]}],
+  {fa:L("Safety first → CABC: O₂ via NRB if breathing, full CPR if not, AED once out and dry. Near-drowning: always hospital.","קודם בטיחות ← CABC: חמצן ב-NRB אם נושם, החייאה מלאה אם לא, AED אחרי הוצאה וייבוש. כמעט-טביעה: תמיד בית חולים."),t:L("Drowning / near-drowning","טביעה / כמעט-טביעה"),sev:1,i:[L("Water in the airway blocks oxygen uptake","מים בנתיב האוויר חוסמים קליטת חמצן"),L("Near-drowning: fluid can build up over hours to days (secondary drowning). Always get medical care","כמעט-טביעה: נוזל יכול להצטבר במשך שעות עד ימים (טביעה משנית). תמיד לפנות לטיפול")]},
+  {fa:L("Drink adequately and avoid caffeine/alcohol; keep urine clear to light yellow.","לשתות מספיק ולהימנע מקפאין ואלכוהול; לשמור על שתן שקוף עד צהוב בהיר."),t:L("Dehydration","התייבשות"),i:[L("A significant DCS risk factor","גורם סיכון משמעותי ל-DCS"),L("Dry tank air, sweating, cold diuresis, caffeine, alcohol","אוויר מיכל יבש, הזעה, השתנה בקור, קפאין, אלכוהול"),L("Urine should be clear to light yellow","השתן צריך להיות שקוף עד צהוב בהיר")]},
+  {fa:L("Fix on a line, instruments or your buddy. Seasickness often eases underwater; ask a dive physician before taking medication.","להתמקד בחבל, במכשירים או בבן הזוג. מחלת ים חולפת לרוב מתחת למים; להתייעץ עם רופא צלילה לפני תרופות."),t:L("Disorientation & seasickness","חוסר התמצאות ומחלת ים"),i:[L("Mid-water with no reference → dizziness, panic. Use a line, instruments, buddy","באמצע המים ללא נקודת ייחוס ← סחרחורת, פאניקה. להשתמש בחבל, במכשירים, בבן הזוג"),L("Seasickness: eye/inner-ear conflict. Ask a dive physician about medication","מחלת ים: סתירה בין העין לאוזן הפנימית. להתייעץ עם רופא צלילה לגבי תרופות")]},
+  {fa:L("Loosen the hood, collar or neck seal. If unconscious: ABCs.","לשחרר את הברדס, הצווארון או אטם הצוואר. אם איבד הכרה: ABC."),t:L("Carotid sinus reflex","רפלקס הסינוס הקרוטידי"),i:[L("Tight hood or neck seal fools pressure sensors","ברדס הדוק או אטם צוואר מטעים את חיישני הלחץ"),L("Drop in heart rate and blood pressure, even unconsciousness","ירידה בדופק ובלחץ הדם, ואף אובדן הכרה")]},
+  {fa:L("Bring the diver to the surface, open the airway, check breathing: CPR if needed. Prevent: never hyperventilate before breath-hold.","להעלות לפני המים, לפתוח נתיב אוויר, לבדוק נשימה: החייאה לפי הצורך. מניעה: לא לבצע היפרוונטילציה לפני צלילה חופשית."),t:L("Shallow water blackout","עילפון במים רדודים"),sev:1,i:[L("Falling pressure on ascent drops O₂ below consciousness threshold","ירידת הלחץ בעלייה מורידה את החמצן מתחת לסף ההכרה"),L("Mainly breath-hold diving after hyperventilation","בעיקר בצלילה חופשית אחרי היפרוונטילציה")]},
+  {fa:L("Stings: no fresh water; vinegar/alcohol/baking soda, scrape. Spines: remove, hot water ~45°C 30–90 min, watch for allergy. Trauma: ABCs, then treat the injury.","עקיצות: לא מים מתוקים; חומץ/אלכוהול/סודה, לגרד. קוצים: להוציא, מים חמים ~45°C ל-30–90 דק', לעקוב אחר אלרגיה. טראומה: ABC ואז טיפול בפציעה."),t:L("Marine life & trauma","בעלי חיים ימיים וטראומה"),i:[L("Most injuries are defensive, from touching or handling","רוב הפגיעות הן תגובת הגנה למגע או טיפול"),L("Stings: <b>no fresh water</b>; vinegar/alcohol/baking soda, then scrape","עקיצות: <b>לא לשטוף במים מתוקים</b>; חומץ/אלכוהול/סודה לשתייה, ואז לגרד"),L("Punctures: remove spine, soak in ~45°C water for 30–90 min","דקירות: להוציא קוץ, לטבול במים ~45°C למשך 30–90 דק'")]},
+  {fa:L("IPE: medical emergency, O₂, evacuate. SWAS: usually self-limited, see a doctor if it persists. HPNS: deep-diving only.","IPE: מקרה חירום, חמצן, פינוי. SWAS: חולף לרוב לבד, לפנות לרופא אם נמשך. HPNS: רק בצלילה עמוקה."),t:L("IPE, SWAS, HPNS","IPE, SWAS, HPNS"),i:[L("IPE: lung fluid with cold + exertion + tight suit; pink frothy sputum → emergency","IPE: נוזל בריאות בשילוב קור, מאמץ וחליפה הדוקה; כיח ורדרד מוקצף ← חירום"),L("SWAS: inhaled sea-spray → flu-like symptoms hours later","SWAS: שאיפת רסס מי ים ← תסמינים דמויי שפעת כעבור שעות"),L("HPNS: deep helium diving → tremors; not at scientific depths","HPNS: צלילת הליום עמוקה ← רעד; לא בעומקים מדעיים")]}],
  nums:[["~45°C",L("hot-water soak","טבילה במים חמים")],["30–90 min",L("soak time","זמן טבילה")]]},
 
 {id:"emerg",d:L("Surface","פני המים"),tag:L("Emergencies","חירום"),t:L("Recognizing & responding","זיהוי ותגובה"),
@@ -571,6 +612,24 @@ const CH=[
   L("Current CPR, First Aid and O₂-provider certification is a prerequisite for AAUS diving.","הסמכה בתוקף להחייאה, עזרה ראשונה ומתן חמצן היא תנאי מוקדם לצלילת AAUS.")],
  nums:[["12",L("neuro exam checks","בדיקות נוירולוגיות")],["5 min",L("exam length","משך הבדיקה")]]},
 
+{id:"rescue",d:L("Shore","חוף"),aidTable:true,thermo:true,tag:L("Rescue & first aid","הצלה ועזרה ראשונה"),t:L("Rescue & first aid basics","הצלה ועזרה ראשונה – יסודות"),
+ lead:L("The core of the first-aid lesson: why oxygen matters, how fast to act, and the CAB sequence.","תמצית שיעור העזרה הראשונה: למה חמצן קריטי, כמה מהר צריך לפעול, ורצף ה-CAB."),
+ pts:[
+  L("<b>Life triangle:</b> heart, brain, breathing. When one fails the others follow, and the brain cannot survive without oxygen.","<b>משולש החיים:</b> לב, מוח, נשימה. כשאחד נכשל השאר בעקבותיו, והמוח לא שורד בלי חמצן."),
+  L("Exhaled air still holds <b>16–17% oxygen</b>, which is why rescue breaths work.","באוויר הנשוף יש עדיין <b>16–17% חמצן</b>, ולכן הנשמה מפה לפה עובדת."),
+  L("Many alveoli give the lung a huge surface area. In smokers alveoli merge, so surface area is lost.","ריבוי הנאדיות נותן לריאה שטח פנים עצום. אצל מעשנים הנאדיות מתאחדות, וכך נאבד שטח פנים."),
+  L("<b>Pneumothorax</b> involves the pleura, the fluid-filled layer that separates the lung from its sac. In class: the lung repairs itself within about half an hour.","<b>חזה אוויר</b> קשור לקרום הריאה (פלאורה), השכבה עם הנוזל שמפרידה בין השק לריאה. בשיעור: הריאה מתקנת את עצמה תוך כחצי שעה."),
+  L("Gases reach the lungs and blood by <b>diffusion</b>. A rise in CO₂ lowers blood <b>pH</b>, and that triggers the urge to breathe.","הגזים עוברים לריאות ולדם ב<b>דיפוזיה</b>. עלייה ב-CO₂ מורידה את ה-<b>pH</b> בדם, וזה מה שגורם לצורך לנשום."),
+  L("<b>Hemoglobin</b> in red blood cells carries O₂. <b>CO</b> binds to it even more strongly than oxygen.","<b>ההמוגלובין</b> בכדוריות הדם האדומות נושא חמצן. <b>CO</b> נקשר אליו אפילו יותר מחמצן."),
+  L("The heart's <b>pacemaker</b> runs on electricity. Blood leaves through arteries and returns through veins. The <b>coronary artery</b> feeds the heart muscle itself.","<b>הקוצב</b> של הלב עובד על חשמל. הדם יוצא בעורקים וחוזר בוורידים. <b>העורק הכלילי</b> מספק חמצן לשריר הלב עצמו."),
+  L("<b>Defibrillation:</b> within 30 seconds of cardiac arrest about 90% success; after 5 minutes only about 3%.","<b>דפיברילציה:</b> תוך 30 שניות מדום לב כ-90% הצלחה; אחרי 5 דקות רק כ-3%."),
+  L("High body temperature lowers the chance of a successful resuscitation; cold water raises it.","חום גוף גבוה מוריד את הסיכוי להחייאה מוצלחת; מים קרים מעלים אותו."),
+  L("<b>ABC</b> = Airway, Breathing, Circulation. In practice we do <b>CAB</b>: compressions first.","<b>ABC</b> = נתיב אוויר, נשימה, מחזור דם. בפועל עושים <b>CAB</b>: קודם עיסויים.")],
+ aid:[L("Make sure the scene is safe for you","לוודא שהזירה בטוחה עבורך"),L("Check for a response","לבדוק תגובה"),L("Point at one person: \"You, call 101 and bring a defibrillator\"","להצביע על אדם מסוים: \"את/ה, תתקשר/י ל-101 ותביא/י דפיברילטור\""),
+  L("Start CAB: chest compressions, 30:2","להתחיל CAB: עיסויים, 30:2"),L("Swap the rescuer every 2 minutes or at fatigue, whichever comes first","להחליף מעסה כל 2 דקות או בעייפות, המוקדם מביניהם"),
+  L("Attach the AED the moment it arrives","לחבר את הדפיברילטור ברגע שהוא מגיע"),L("Alone? Give 2 minutes of CPR, then call for help","לבד? 2 דקות החייאה, ואז לקרוא לעזרה")],
+ nums:[["30 s → 90%",L("defibrillation success","הצלחת דפיברילציה")],["5 min → 3%",L("defibrillation success","הצלחת דפיברילציה")],["16–17%",L("O₂ in exhaled air","חמצן באוויר הנשוף")],["2 min",L("swap compressor","החלפת מעסה")],["101",L("MDA emergency, Israel","מד״א")],["30:2",L("compressions : breaths","עיסויים : הנשמות")]]},
+
 {id:"cpr",d:L("Deck","סיפון"),tag:L("CPR & rescue","החייאה וחילוץ"),t:L("CPR & rescue for diving","החייאה וחילוץ בצלילה"),
  lead:L("Drowning is a respiratory arrest first. Oxygen debt comes first, cardiac arrest last.","טביעה היא קודם כל דום נשימה. חוסר החמצן בא ראשון, דום הלב אחרון."),
  pts:[
@@ -581,10 +640,10 @@ const CH=[
   L("Suspected DCS/AGE: <b>supine</b>, not head-down (Trendelenburg). Keep still, warm, hydrated if conscious. Call EMS and DAN's 24-h hotline.","חשד ל-DCS/AGE: <b>שכיבה על הגב</b>, לא ראש למטה (טרנדלנבורג). לשמור במנוחה, חם, ושתייה אם בהכרה. להתקשר לשירותי חירום ולמוקד DAN 24 שעות."),
   L("<b>OSHA:</b> commercial diving falls under 29 CFR 1910 Subpart T. AAUS programs are exempt if: a Diving Control Board with a majority of active scientific divers; diving only to advance science, non-proprietary data; divers only observe/gather data; divers are scientists or in training. The exemption doesn't lower the safety bar.","<b>OSHA:</b> צלילה מסחרית מוסדרת ב-29 CFR 1910 Subpart T. תוכניות AAUS פטורות אם: ועדת צלילה עם רוב של צוללנים מדעיים פעילים; צלילה רק לקידום המדע ונתונים לא קנייניים; הצוללנים רק צופים/אוספים נתונים; הצוללנים הם מדענים או בהכשרה. הפטור לא מוריד את רף הבטיחות.")],
  acc:[
-  {t:L("Unresponsive at surface, water aspirated","ללא תגובה על פני המים, שאיפת מים"),sev:1,i:[L("Drowning: respiratory-first arrest","טביעה: דום נשימה ראשוני"),L("O₂ if breathing; CPR if not; AED once out of water and dry","חמצן אם נושם; החייאה אם לא; AED אחרי הוצאה מהמים וייבוש")]},
-  {t:L("Collapse during or right after ascent","קריסה בעלייה או מיד אחריה"),sev:1,i:[L("AGE from lung over-expansion","AGE מהתפשטות יתר של הריאות"),L("O₂ / CPR + AED; supine, not head-down; activate EAP","חמצן / החייאה + AED; על הגב, לא ראש למטה; הפעלת EAP")]},
-  {t:L("Joint pain, rash or neuro signs 15 min–24 h after","כאב מפרקים, פריחה או סימנים נוירולוגיים 15 דק'–24 ש' אחרי"),i:[L("DCS Type I or II","DCS סוג I או II"),L("O₂, neuro exam, document, EAP / DAN","חמצן, בדיקה נוירולוגית, תיעוד, EAP / DAN")]},
-  {t:L("Collapse unrelated to the dive","קריסה שלא קשורה לצלילה"),i:[L("Primary cardiac arrest","דום לב ראשוני"),L("Standard BLS: CPR 30:2, AED ASAP","החייאה בסיסית: 30:2, AED מוקדם ככל האפשר")]}],
+  {fa:L("Safety → CABC: O₂ if breathing; CPR if not; AED once out of the water and dry.","בטיחות ← CABC: חמצן אם נושם; החייאה אם לא; AED אחרי הוצאה מהמים וייבוש."),t:L("Unresponsive at surface, water aspirated","ללא תגובה על פני המים, שאיפת מים"),sev:1,i:[L("Drowning: respiratory-first arrest","טביעה: דום נשימה ראשוני"),L("O₂ if breathing; CPR if not; AED once out of water and dry","חמצן אם נושם; החייאה אם לא; AED אחרי הוצאה מהמים וייבוש")]},
+  {fa:L("O₂ if breathing, CPR + AED if not; keep supine, not head-down; activate EAP and evacuation.","חמצן אם נושם, החייאה + AED אם לא; על הגב, לא ראש למטה; הפעלת EAP ופינוי."),t:L("Collapse during or right after ascent","קריסה בעלייה או מיד אחריה"),sev:1,i:[L("AGE from lung over-expansion","AGE מהתפשטות יתר של הריאות"),L("O₂ / CPR + AED; supine, not head-down; activate EAP","חמצן / החייאה + AED; על הגב, לא ראש למטה; הפעלת EAP")]},
+  {fa:L("NRB O₂, 5-min neuro exam, document findings and timing, EAP / DAN hotline.","חמצן ב-NRB, בדיקה נוירולוגית של 5 דקות, תיעוד ממצאים וזמנים, EAP / מוקד DAN."),t:L("Joint pain, rash or neuro signs 15 min–24 h after","כאב מפרקים, פריחה או סימנים נוירולוגיים 15 דק'–24 ש' אחרי"),i:[L("DCS Type I or II","DCS סוג I או II"),L("O₂, neuro exam, document, EAP / DAN","חמצן, בדיקה נוירולוגית, תיעוד, EAP / DAN")]},
+  {fa:L("Standard BLS: CPR 30:2, AED as soon as available.","החייאה בסיסית: 30:2, AED מוקדם ככל האפשר."),t:L("Collapse unrelated to the dive","קריסה שלא קשורה לצלילה"),i:[L("Primary cardiac arrest","דום לב ראשוני"),L("Standard BLS: CPR 30:2, AED ASAP","החייאה בסיסית: 30:2, AED מוקדם ככל האפשר")]}],
  nums:[["30:2",L("compressions : breaths","עיסויים : הנשמות")],["10–15 L/min",L("NRB flow","זרימה במסכת NRB")],["60–80%+",L("O₂ via NRB","חמצן במסכת NRB")],["21%",L("room air","אוויר רגיל")]]},
 
 ];
@@ -766,6 +825,50 @@ q("cpr",["Which is NOT a condition for the OSHA scientific-diving exemption?","D
 q("cpr",["What does the OSHA exemption change for AAUS programs?","Which federal regulation applies, not the safety bar","It removes all CPR requirements","It allows diving without oxygen on site","It removes the need for an EAP","AAUS standards still require training, emergency O₂, an EAP and DCB oversight."],
  ["מה משנה פטור OSHA עבור תוכניות AAUS?","איזו תקנה פדרלית חלה, לא את רף הבטיחות","מבטל את כל דרישות ההחייאה","מאפשר צלילה בלי חמצן באתר","מבטל את הצורך ב-EAP","תקני AAUS עדיין דורשים הכשרה, חמצן חירום, EAP ופיקוח ועדת צלילה."]);
 
+q("laws",["Which law explains why a breath-held ascent can rupture the lungs?","Boyle's law","Henry's law","Dalton's law","Charles's law","Boyle: as pressure drops on ascent, trapped gas expands."],
+ ["איזה חוק מסביר למה עלייה בעצירת נשימה יכולה לקרוע את הריאות?","חוק בויל","חוק הנרי","חוק דלטון","חוק שארל","בויל: כשהלחץ יורד בעלייה, הגז הכלוא מתפשט."]);
+q("laws",["Which law explains decompression sickness?","Henry's law","Boyle's law","Gay-Lussac's law","Archimedes' principle","Henry: dissolved gas follows partial pressure, so nitrogen comes out of solution on ascent."],
+ ["איזה חוק מסביר את מחלת הדקומפרסיה?","חוק הנרי","חוק בויל","חוק גיי-ליסאק","עקרון ארכימדס","הנרי: כמות הגז המומס תלויה בלחץ החלקי, ולכן החנקן יוצא מהתמיסה בעלייה."]);
+q("laws",["Which law explains narcosis and oxygen toxicity?","Dalton's law","Henry's law","Boyle's law","Charles's law","Dalton: each gas's partial pressure rises with depth."],
+ ["איזה חוק מסביר נרקוזיס ורעילות חמצן?","חוק דלטון","חוק הנרי","חוק בויל","חוק שארל","דלטון: הלחץ החלקי של כל גז עולה עם העומק."]);
+q("laws",["A cylinder left in the sun rises in pressure. Which law?","Gay-Lussac's law","Charles's law","Boyle's law","Henry's law","Gay-Lussac: at constant volume, pressure follows absolute temperature."],
+ ["מיכל שנשאר בשמש – הלחץ בו עולה. איזה חוק?","חוק גיי-ליסאק","חוק שארל","חוק בויל","חוק הנרי","גיי-ליסאק: בנפח קבוע, הלחץ משתנה לפי הטמפרטורה המוחלטת."]);
+q("laws",["Which law is about volume and temperature at constant pressure?","Charles's law","Gay-Lussac's law","Dalton's law","Boyle's law","Charles: V₁/T₁ = V₂/T₂."],
+ ["איזה חוק עוסק בנפח וטמפרטורה בלחץ קבוע?","חוק שארל","חוק גיי-ליסאק","חוק דלטון","חוק בויל","שארל: V₁/T₁ = V₂/T₂."]);
+q("laws",["PV = nRT is the:","Ideal gas law","Combined gas law","Dalton's law","Henry's law","The ideal gas law adds moles (n) and the gas constant (R)."],
+ ["PV = nRT הוא:","חוק הגז האידיאלי","חוק הגזים המשולב","חוק דלטון","חוק הנרי","חוק הגז האידיאלי מוסיף את מספר המולים (n) ואת קבוע הגזים (R)."]);
+q("rescue",["What are the three parts of the life triangle?","Heart, brain, breathing","Airway, bones, skin","Blood, liver, kidneys","Eyes, ears, nose","The life triangle: heart, brain and breathing depend on one another."],
+ ["מהם שלושת חלקי משולש החיים?","לב, מוח, נשימה","נתיב אוויר, עצמות, עור","דם, כבד, כליות","עיניים, אוזניים, אף","משולש החיים: לב, מוח ונשימה תלויים זה בזה."]);
+q("rescue",["About how much oxygen is in exhaled air?","16–17%","21%","5%","0%","Exhaled air still holds 16–17% O₂, enough for rescue breaths."],
+ ["כמה חמצן יש בערך באוויר הנשוף?","16–17%","21%","5%","0%","באוויר הנשוף נשארים 16–17% חמצן, מספיק להנשמה."]);
+q("rescue",["What mainly triggers the urge to breathe?","A rise in CO₂ that lowers blood pH","A drop in body temperature","A rise in blood oxygen","Low blood pressure","Rising CO₂ lowers blood pH, which drives breathing."],
+ ["מה מעורר בעיקר את הצורך לנשום?","עלייה ב-CO₂ שמורידה את ה-pH בדם","ירידה בחום הגוף","עלייה בחמצן בדם","לחץ דם נמוך","עלייה ב-CO₂ מורידה את ה-pH בדם, וזה מניע את הנשימה."]);
+q("rescue",["Defibrillation within 30 seconds of cardiac arrest succeeds about:","90% of the time","50% of the time","3% of the time","10% of the time","~90% at 30 seconds, falling to ~3% after 5 minutes."],
+ ["דפיברילציה תוך 30 שניות מדום לב מצליחה בערך ב:","90% מהמקרים","50% מהמקרים","3% מהמקרים","10% מהמקרים","כ-90% ב-30 שניות, ויורד לכ-3% אחרי 5 דקות."]);
+q("rescue",["In practice, the resuscitation order taught is:","CAB: compressions, airway, breathing","ABC: airway, breathing, compressions","BAC","Only breathing","We do CAB: start compressions first."],
+ ["בפועל, סדר ההחייאה שנלמד הוא:","CAB: עיסויים, נתיב אוויר, נשימה","ABC: נתיב אוויר, נשימה, עיסויים","BAC","רק הנשמות","עושים CAB: מתחילים בעיסויים."]);
+q("rescue",["How often should the person giving compressions be swapped?","Every 2 minutes or at fatigue, whichever comes first","Every 10 minutes","Only when the ambulance arrives","Never","Swap every 2 minutes or when tired, whichever is first."],
+ ["כל כמה זמן מחליפים את המעסה?","כל 2 דקות או בעייפות, המוקדם מביניהם","כל 10 דקות","רק כשהאמבולנס מגיע","אף פעם","מחליפים כל 2 דקות או כשמתעייפים, המוקדם מביניהם."]);
+q("rescue",["While doing compressions, how do you get help?","Point at a specific person: call 101 and bring a defibrillator","Shout \"someone call\" to the crowd","Stop compressions and call yourself","Wait for someone to offer","Addressing a specific person makes sure the call actually happens."],
+ ["תוך כדי עיסויים, איך מזעיקים עזרה?","פונים לאדם מסוים: תתקשר ל-101 ותביא דפיברילטור","צועקים לקהל \"שמישהו יתקשר\"","מפסיקים עיסויים ומתקשרים בעצמך","מחכים שמישהו יציע","פנייה לאדם מסוים מבטיחה שהשיחה באמת תתבצע."]);
+q("rescue",["You are alone with a casualty. What do you do?","Give 2 minutes of CPR, then call for help","Call first and wait","Leave to find help immediately","Only check the pulse","When alone: 2 minutes of CPR, then call."],
+ ["אתה לבד עם נפגע. מה עושים?","2 דקות החייאה ואז לקרוא לעזרה","להתקשר קודם ולחכות","ללכת מיד לחפש עזרה","רק לבדוק דופק","כשלבד: 2 דקות החייאה, ואז לקרוא לעזרה."]);
+q("rescue",["How does body temperature affect resuscitation?","High temperature lowers the chance; cold water raises it","Temperature has no effect","Cold water lowers the chance","Only fever matters","Cold slows oxygen demand, improving the odds."],
+ ["איך טמפרטורת הגוף משפיעה על החייאה?","חום גבוה מוריד את הסיכוי; מים קרים מעלים אותו","אין לה השפעה","מים קרים מורידים את הסיכוי","רק חום משנה","הקור מאט את צריכת החמצן ומשפר את הסיכוי."]);
+
+q("rescue",["Which body areas lose heat fastest?","Head and neck, armpits, sides of the chest, groin","Back and buttocks","Knees and elbows","Fingers only","Large blood vessels run near the skin in these areas."],
+ ["אילו אזורים בגוף מאבדים חום הכי מהר?","ראש וצוואר, בתי שחי, צידי בית החזה, מפשעה","גב וישבן","ברכיים ומרפקים","רק האצבעות","בגלל כלי דם גדולים שעוברים קרוב לעור באזורים האלה."]);
+q("rescue",["When rewarming a hypothermic diver, warm first:","The core: armpits, chest, groin","The hands and feet","By rubbing the arms and legs","With a hot alcoholic drink","Warm the core gradually; don't rub limbs and give no alcohol."],
+ ["בחימום צוללן בהיפותרמיה, מחממים קודם:","את הליבה: בתי שחי, חזה, מפשעה","את הידיים והרגליים","בשפשוף הידיים והרגליים","במשקה אלכוהולי חם","מחממים את הליבה בהדרגה; לא משפשפים גפיים ולא נותנים אלכוהול."]);
+q("rescue",["A cold diver who stops shivering and becomes confused is:","Getting worse: moderate hypothermia","Recovering","Just tired","Overheating","Shivering stopping with confusion marks moderate hypothermia."],
+ ["צוללן קר שהפסיק לרעוד ונעשה מבולבל:","מחמיר: היפותרמיה בינונית","מחלים","סתם עייף","מתחמם יותר מדי","הפסקת רעד יחד עם בלבול מסמנת היפותרמיה בינונית."]);
+q("rescue",["Hot skin, confusion and a core temperature above ~40°C suggest:","Heat stroke, a life-threatening emergency","Mild dehydration","Hypothermia","Seasickness","Heat stroke: call 101 and cool aggressively."],
+ ["עור חם, בלבול וחום ליבה מעל ~40°C מרמזים על:","מכת חום, מצב מסכן חיים","התייבשות קלה","היפותרמיה","מחלת ים","מכת חום: 101 וקירור אגרסיבי."]);
+q("rescue",["Why is dehydration a concern for divers?","It raises DCS risk and speeds heat illness","It causes narcosis","It increases buoyancy","It raises PO₂","Less fluid means poorer off-gassing, and the body overheats faster."],
+ ["למה התייבשות מדאיגה צוללנים?","מעלה סיכון ל-DCS ומאיצה מחלות חום","גורמת לנרקוזיס","מגבירה ציפה","מעלה את ה-PO₂","פחות נוזלים פירושו שחרור חנקן פחות יעיל, והגוף מתחמם מהר יותר."]);
+q("rescue",["Why do hands and feet get cold first?","The body reduces their blood flow to protect the core","They have more fat","They are closer to the water surface","They produce no sweat","Vasoconstriction keeps warm blood in the core."],
+ ["למה הידיים והרגליים מתקררות ראשונות?","הגוף מצמצם אליהן זרימת דם כדי להגן על הליבה","יש בהן יותר שומן","הן קרובות לפני המים","הן לא מזיעות","כיווץ כלי הדם משאיר את הדם החם בליבה."]);
+
 /* =========================== CHEAT SHEET DATA =========================== */
 const LAW=[[L("Archimedes' principle","עקרון ארכימדס"),L("Buoyancy loss, uncontrolled ascent/descent, entanglement","אובדן ציפה, עלייה/ירידה בלתי מבוקרת, הסתבכות")],
 [L("Boyle's law","חוק בויל"),L("Ear, sinus, mask, tooth, GI barotrauma; pneumothorax, emphysema, AGE","ברוטראומה של אוזן, סינוסים, מסכה, שן, מעיים; חזה אוויר, אמפיזמה, AGE")],
@@ -778,9 +881,119 @@ const O2T=[["1.6","45",L("Absolute ceiling; contingency deco gas","תקרה מו
 const DCST=[[L("Type I","סוג I"),L("Musculoskeletal (bends)","שרירי-שלדי (bends)"),L("Deep joint/limb pain","כאב עמוק במפרקים/גפיים")],[L("Type I","סוג I"),L("Cutaneous (skin bends)","עורי"),L("Itching, marbled rash","גרד, פריחה משוישת")],[L("Type I","סוג I"),L("Lymphatic","לימפטי"),L("Swelling near lymph nodes","נפיחות ליד בלוטות לימפה")],[L("Type II","סוג II"),L("Neurological","נוירולוגי"),L("Numbness, weakness, paralysis","נימול, חולשה, שיתוק")],[L("Type II","סוג II"),L("Vestibular (staggers)","וסטיבולרי (staggers)"),L("Vertigo, tinnitus, hearing loss","ורטיגו, טנטון, אובדן שמיעה")],[L("Type II","סוג II"),L("Cardiopulmonary (chokes)","לב-ריאה (chokes)"),L("Dry cough, chest pain, breathlessness","שיעול יבש, כאב בחזה, קוצר נשימה")]];
 const NEURO=[[L("Orientation","התמצאות"),L("Name, age, place, date, time","שם, גיל, מקום, תאריך, שעה")],[L("Eyes","עיניים"),L("Track a finger; pupils; vision","מעקב אחרי אצבע; אישונים; ראייה")],[L("Forehead","מצח"),L("Sensation; raise eyebrows evenly","תחושה; הרמת גבות סימטרית")],[L("Face","פנים"),L("Whistle, smile, clench teeth","שריקה, חיוך, הידוק שיניים")],[L("Ears","אוזניים"),L("Hearing each side; ringing","שמיעה בכל צד; צלצולים")],[L("Gag reflex","רפלקס הקאה"),L("Swallow; watch the neck","בליעה; מעקב אחרי הצוואר")],[L("Tongue","לשון"),L("Drooping or drift","צניחה או סטייה לצד")],[L("Shoulders","כתפיים"),L("Raise against resistance","הרמה נגד התנגדות")],[L("Arms & hands","ידיים"),L("Sensation; squeeze strength","תחושה; כוח לחיצה")],[L("Chest","חזה"),L("Sensation; breathing pattern","תחושה; דפוס נשימה")],[L("Legs","רגליים"),L("Move against resistance","תנועה נגד התנגדות")],[L("Heel-to-toe","עקב-בוהן"),L("Balance (skip on a moving boat)","שיווי משקל (לא בסירה נעה)")]];
 
+/* =========================== HEAT, COLD & FLUIDS =========================== */
+const THERMO=[
+ {k:"hypo",t:L("Hypothermia (getting cold)","היפותרמיה (התקררות)"),
+  know:[L("Water drains body heat about 25× faster than air at the same temperature, even in water that feels comfortable.","המים מוציאים חום מהגוף מהר פי 25 בערך מאוויר באותה טמפרטורה, גם במים שמרגישים נעימים."),
+   L("Shivering can start after a 1°C drop in core temperature. Cold also intensifies narcosis and is a DCS risk factor.","רעד יכול להתחיל כבר בירידה של 1°C בחום הליבה. קור גם מגביר נרקוזיס ומהווה גורם סיכון ל-DCS."),
+   L("Stages: mild 35–32°C · moderate 32–28°C · severe below 28°C.","שלבים: קלה 35–32°C · בינונית 32–28°C · קשה מתחת ל-28°C.")],
+  signs:[L("Mild: shivering, pale cold skin, clumsy hands","קלה: רעד, עור חיוור וקר, ידיים מגושמות"),L("Moderate: shivering <b>stops</b>, confusion, slurred speech, drowsiness","בינונית: הרעד <b>נפסק</b>, בלבול, דיבור משובש, ישנוניות"),L("Severe: unconscious, slow weak pulse and breathing","קשה: חוסר הכרה, דופק ונשימה איטיים וחלשים"),L("Remember the \"-umbles\": stumbles, mumbles, fumbles, grumbles","לזכור: מועד, ממלמל, מגשש, רוטן")],
+  aid:[L("End the dive; get out of the water and the wind","לסיים את הצלילה; לצאת מהמים ומהרוח"),L("Remove the wet suit, dry, cover with blankets or a foil sheet, add a hat","להוריד את החליפה הרטובה, לייבש, לכסות בשמיכות או ביריעת אלומיניום, לשים כובע"),
+   L("Warm the <b>core</b> gradually: warm packs on armpits, chest and groin, not on arms and legs","לחמם את <b>הליבה</b> בהדרגה: חמים על בתי השחי, החזה והמפשעה, לא על הידיים והרגליים"),L("Warm sweet drink only if fully conscious; no alcohol, no rubbing limbs","שתייה חמה ומתוקה רק אם בהכרה מלאה; בלי אלכוהול ובלי לשפשף גפיים"),
+   L("Moderate/severe: handle gently, keep horizontal, call 101, CPR if needed","בינונית/קשה: לטפל בעדינות, להשאיר בשכיבה, 101, החייאה לפי הצורך")]},
+ {k:"hyper",t:L("Hyperthermia (overheating)","היפרתרמיה (התחממות)"),
+  know:[L("The body takes in or makes more heat than it can shed, typically in a full exposure suit on a hot, sunny deck.","הגוף קולט או מייצר יותר חום ממה שהוא מפנה, בדרך כלל בחליפה מלאה על סיפון חם ושמשי."),
+   L("Heat exhaustion can progress to heat stroke, which is life-threatening.","תשישות חום יכולה להתקדם למכת חום, שהיא מסכנת חיים."),
+   L("Prevention: suit up last, cool off with water, shade and fluids between dives.","מניעה: ללבוש חליפה ברגע האחרון, להתקרר במים, צל ושתייה בין צלילות.")],
+  signs:[L("Heat exhaustion: heavy sweating, pale clammy skin, headache, nausea, dizziness, fainting","תשישות חום: הזעה רבה, עור חיוור ודביק, כאב ראש, בחילה, סחרחורת, עילפון"),L("Heat stroke: core above ~40°C, hot skin (sweating may stop), confusion, seizures, collapse","מכת חום: חום ליבה מעל ~40°C, עור חם (ההזעה עלולה להיפסק), בלבול, פרכוסים, קריסה")],
+  aid:[L("Stop activity; move to shade; remove the exposure suit","להפסיק פעילות; להעביר לצל; להוריד את החליפה"),L("Cool down: wet the skin and fan; cold packs on neck, armpits and groin","לקרר: להרטיב את העור ולאוורר; קרח על הצוואר, בתי השחי והמפשעה"),
+   L("Drink water or electrolytes if fully conscious","לשתות מים או תמיסת מלחים אם בהכרה מלאה"),L("Heat stroke: call 101, cool aggressively (cool-water immersion), ABCs","מכת חום: 101, קירור אגרסיבי (טבילה במים קרירים), ABC")]},
+ {k:"dehyd",t:L("Dehydration","התייבשות"),
+  know:[L("A significant DCS risk factor: less blood and tissue fluid means slower, poorer off-gassing.","גורם סיכון משמעותי ל-DCS: פחות נוזלים בדם וברקמות פירושו שחרור חנקן איטי ופחות יעיל."),
+   L("Causes: dry cylinder air, sweating, cold-water diuresis (immersion makes you urinate), seasickness, caffeine and alcohol.","גורמים: אוויר מיכל יבש, הזעה, השתנה מוגברת במים קרים, מחלת ים, קפאין ואלכוהול."),
+   L("Easy to miss on a long, hot field day; it also speeds up heat illness.","קל לפספס ביום שטח ארוך וחם; היא גם מאיצה מחלות חום.")],
+  signs:[L("Thirst, dry mouth, dark urine","צמא, יובש בפה, שתן כהה"),L("Headache, fatigue, dizziness, cramps","כאב ראש, עייפות, סחרחורת, התכווצויות")],
+  aid:[L("Drink water or an electrolyte drink, a little and often","לשתות מים או משקה מלחים, מעט ולעיתים קרובות"),L("Aim for urine that is clear to light yellow","לשאוף לשתן שקוף עד צהוב בהיר"),L("Avoid alcohol and limit caffeine before and between dives","להימנע מאלכוהול ולהגביל קפאין לפני ובין צלילות"),L("Severe signs (confusion, no urine, fainting): medical care","סימנים קשים (בלבול, אין שתן, עילפון): טיפול רפואי")]}
+];
+const HEATZ=[L("Head & neck","ראש וצוואר"),L("Armpits","בתי השחי"),L("Sides of the chest","צידי בית החזה"),L("Groin","מפשעה")];
+function thermoHTML(){
+  const he=S.lang==="he",H=(a,b)=>he?b:a;
+  const body=`<svg viewBox="0 0 160 260" class="bodymap" role="img" aria-label="${H("Body areas that lose heat fastest","אזורי הגוף שמאבדים חום הכי מהר")}">
+   <g fill="var(--sunk)" stroke="var(--muted)" stroke-width="1.5">
+    <circle cx="80" cy="28" r="18"/><rect x="72" y="44" width="16" height="12" rx="4"/>
+    <rect x="52" y="54" width="56" height="86" rx="18"/>
+    <rect x="30" y="58" width="18" height="78" rx="9" transform="rotate(8 39 58)"/><rect x="112" y="58" width="18" height="78" rx="9" transform="rotate(-8 121 58)"/>
+    <rect x="56" y="134" width="20" height="104" rx="10"/><rect x="84" y="134" width="20" height="104" rx="10"/></g>
+   <g fill="var(--flag)" fill-opacity=".55">
+    <circle cx="80" cy="30" r="16"/><rect x="72" y="44" width="16" height="12" rx="4"/>
+    <ellipse cx="56" cy="70" rx="9" ry="10"/><ellipse cx="104" cy="70" rx="9" ry="10"/>
+    <ellipse cx="58" cy="100" rx="6" ry="16"/><ellipse cx="102" cy="100" rx="6" ry="16"/>
+    <ellipse cx="80" cy="140" rx="16" ry="9"/></g>
+   <g fill="var(--sea)" fill-opacity=".45"><circle cx="34" cy="138" r="8"/><circle cx="126" cy="138" r="8"/><ellipse cx="66" cy="244" rx="12" ry="6"/><ellipse cx="94" cy="244" rx="12" ry="6"/></g></svg>`;
+  const card=x=>`<article class="th th-${x.k}"><h4>${esc(tx(x.t))}</h4>
+    <ul class="points">${x.know.map(i=>`<li>${tx(i)}</li>`).join("")}</ul>
+    <h5>${H("Signs","סימנים")}</h5><ul>${x.signs.map(i=>`<li>${tx(i)}</li>`).join("")}</ul>
+    <div class="fa"><b>${T().aid}</b><ol>${x.aid.map(i=>`<li>${tx(i)}</li>`).join("")}</ol></div></article>`;
+  return `<div class="sec"><h3>${H("Cold, heat & fluids","קור, חום ונוזלים")}</h3><div class="thgrid">${THERMO.map(card).join("")}</div></div>
+  <div class="sec"><h3>${H("Where the body loses heat fastest","איפה הגוף מאבד חום הכי מהר")}</h3>
+   <div class="heat">${body}<div style="min-width:0">
+    <p style="margin:0 0 10px">${H("The <b>head and neck, armpits, sides of the chest and groin</b> lose heat fastest: large blood vessels run close to the skin there and the head has no shivering muscle to make heat.","<b>הראש והצוואר, בתי השחי, צידי בית החזה והמפשעה</b> מאבדים חום הכי מהר: כלי דם גדולים עוברים שם קרוב לעור, ולראש אין שרירים גדולים שמייצרים חום ברעד.")}</p>
+    <div class="chipsrow">${HEATZ.map(z=>`<span class="hz">${esc(tx(z))}</span>`).join("")}<span class="hz cold">${H("Hands & feet cool first","ידיים ורגליים מתקררות ראשונות")}</span></div>
+    <ul class="points" style="margin-top:12px">
+     <li>${H("<b>Hands and feet</b> get cold first because the body shuts down blood flow to them to protect the core. Cold fingers mean lost dexterity for sampling work.","<b>הידיים והרגליים</b> מתקררות ראשונות כי הגוף מצמצם אליהן את זרימת הדם כדי להגן על הליבה. אצבעות קרות = פחות שליטה בעבודת דגימה.")}</li>
+     <li>${H("<b>Cold casualty:</b> warm these areas first (warm packs in the armpits, on the chest and groin) and cover the head.","<b>נפגע קר:</b> לחמם קודם את האזורים האלה (חמים בבתי השחי, על החזה והמפשעה) ולכסות את הראש.")}</li>
+     <li>${H("<b>Hot casualty:</b> put cold packs on the same areas: neck, armpits, groin.","<b>נפגע חם:</b> קרח על אותם אזורים: צוואר, בתי שחי, מפשעה.")}</li>
+     <li>${H("<b>In the water:</b> wear a hood. If waiting for pickup, use the HELP position (knees to chest, arms crossed over the chest) or huddle together, to cover these areas.","<b>במים:</b> לחבוש ברדס. בהמתנה לאיסוף – תנוחת HELP (ברכיים לחזה, ידיים משולבות על החזה) או התקבצות יחד, כדי לכסות את האזורים האלה.")}</li>
+    </ul></div></div></div>`;
+}
+
+/* =========================== LAWS =========================== */
+const LAWS=[
+ {big:1,n:L("Boyle's law","חוק בויל"),f:"P₁V₁ = P₂V₂",s:L("At constant temperature, a gas's volume is inversely proportional to its pressure: double the pressure, half the volume.","בטמפרטורה קבועה, נפח הגז ביחס הפוך ללחץ: לחץ כפול – חצי נפח."),
+  d:L("Equalizing, barotrauma, lung over-expansion and AGE, air use at depth, buoyancy changes.","השוואת לחצים, ברוטראומה, התפשטות יתר בריאות ו-AGE, צריכת אוויר בעומק, שינויי ציפה.")},
+ {big:1,n:L("Dalton's law","חוק דלטון"),f:"P_total = P₁ + P₂ + …",s:L("In a gas mixture each gas exerts its own partial pressure according to its fraction, and together they add up to the total pressure.","בתערובת גזים כל גז מפעיל לחץ חלקי משלו לפי האחוז שלו, וכולם יחד שווים ללחץ הכולל."),
+  d:L("Narcosis, oxygen toxicity, CO₂ and CO toxicity, nitrox and MOD.","נרקוזיס, רעילות חמצן, רעילות CO₂ ו-CO, ניטרוקס ו-MOD.")},
+ {big:1,n:L("Henry's law","חוק הנרי"),f:"C = k_H × P_gas",s:L("The amount of a gas that dissolves in a liquid is proportional to that gas's partial pressure above it.","כמות הגז שמתמוססת בנוזל יחסית ללחץ החלקי של אותו גז מעליו."),
+  d:L("Nitrogen loading at depth, off-gassing on ascent, decompression sickness.","ספיגת חנקן בעומק, שחרור בעלייה, מחלת דקומפרסיה.")},
+ {n:L("Charles's law","חוק שארל"),f:"V₁/T₁ = V₂/T₂",s:L("At constant pressure, a gas's volume rises and falls with its absolute temperature.","בלחץ קבוע, נפח הגז עולה ויורד עם הטמפרטורה המוחלטת."),
+  d:L("Flexible containers: a BCD or lift bag shrinks in cold water.","מיכלים גמישים: מאזן או מצנח מתכווצים במים קרים.")},
+ {n:L("Gay-Lussac's law","חוק גיי-ליסאק"),f:"P₁/T₁ = P₂/T₂",s:L("At constant volume, a gas's pressure rises and falls with its absolute temperature.","בנפח קבוע, לחץ הגז עולה ויורד עם הטמפרטורה המוחלטת."),
+  d:L("Rigid cylinders: a tank in a hot car over-pressurizes; in cold water the gauge drops.","מיכלים קשיחים: מיכל ברכב חם עובר את הלחץ המותר; במים קרים המד יורד.")},
+ {n:L("Combined gas law","חוק הגזים המשולב"),f:"P₁V₁/T₁ = P₂V₂/T₂",s:L("Ties pressure, volume and temperature together for a fixed amount of gas, so you can solve for any one of them.","מחבר לחץ, נפח וטמפרטורה עבור כמות גז קבועה, כך שאפשר לחשב כל אחד מהם."),
+  d:L("Any problem where more than one variable changes.","כל שאלה שבה משתנה יותר ממשתנה אחד.")},
+ {n:L("Ideal gas law","חוק הגז האידיאלי"),f:"PV = nRT",s:L("Adds the amount of gas (n) and a universal constant (R); real gases deviate slightly at high pressure.","מוסיף את כמות הגז (n) וקבוע אוניברסלי (R); גזים אמיתיים סוטים מעט בלחץ גבוה."),
+  d:L("A good working approximation for all diving gas calculations.","קירוב עבודה טוב לכל חישובי הגזים בצלילה.")},
+ {n:L("Archimedes' principle","עקרון ארכימדס"),f:"F_b = ρ × V × g",s:L("An immersed object is pushed up by a force equal to the weight of the fluid it displaces.","גוף הטבול בנוזל נדחף כלפי מעלה בכוח השווה למשקל הנוזל שהוא דוחה."),
+  d:L("Buoyancy control, weighting, salt vs fresh water, lift bags.","שליטה בציפה, משקולות, מי ים מול מים מתוקים, מצנחי הרמה.")},
+ {n:L("Haldane's model","המודל של הולדיין"),f:"P_t = P₀ + (P_i − P₀)(1 − 2^(−t/T½))",s:L("Models the body as tissue compartments that take up and release nitrogen exponentially, each with its own half-time and M-value.","מתאר את הגוף כתאי רקמה שסופגים ומשחררים חנקן באופן מעריכי, לכל אחד זמן מחצית וערך M משלו."),
+  d:L("The basis of dive tables and computers.","הבסיס לטבלאות ולמחשבי צלילה.")}
+];
+function lawsHTML(c){
+  const t=T(), idx=CH.indexOf(c)+1, card=l=>`<article class="law ${l.big?"big":""}"><h4>${esc(tx(l.n))}</h4><code>${esc(l.f)}</code><p>${esc(tx(l.s))}</p><p class="ld"><b>${S.lang==="he"?"בצלילה:":"In diving:"}</b> ${esc(tx(l.d))}</p></article>`;
+  return `<div class="ch-head"><div class="eyebrow"><span>${t.ch} ${idx} · ${esc(tx(c.tag))}</span><span class="depth">▼ ${tx(c.d)}</span></div>
+   <h1>${esc(tx(c.t))}</h1><p class="lead">${esc(tx(c.lead))}</p></div>
+   <div class="sec"><h3>${S.lang==="he"?"שלושת הגדולים":"The big three"}</h3><div class="laws">${LAWS.filter(l=>l.big).map(card).join("")}</div></div>
+   <div class="sec"><h3>${S.lang==="he"?"חוקים נוספים":"More laws"}</h3><div class="laws">${LAWS.filter(l=>!l.big).map(card).join("")}</div></div>`;
+}
+function allAid(){return CH.flatMap(c=>(c.acc||[]).filter(a=>a.fa).map(a=>({c,a})))}
+function aidTableHTML(filter){
+  const t=T(), rows=allAid().filter(x=>!filter||filter(tx(x.a.t)+" "+tx(x.a.fa)));
+  if(!rows.length) return "";
+  return `<div class="sec"><h3>${S.lang==="he"?"כל התאונות – עזרה ראשונה":"Every accident: first aid"}</h3><div class="tbl"><table><tr><th>${S.lang==="he"?"תאונה":"Accident"}</th><th>${t.aid}</th></tr>${rows.map(x=>`<tr><td style="white-space:normal">${esc(tx(x.a.t))}${x.a.sev?' <span class="tag">'+(S.lang==="he"?"חמור":"Serious")+'</span>':""}</td><td>${esc(tx(x.a.fa))}</td></tr>`).join("")}</table></div></div>`;
+}
+
 /* =========================== CHEAT SHEET =========================== */
 const R="!"; /* lines starting with ! are red-flag (serious) */
 const SHEET={
+laws:[L("Boyle: P₁V₁ = P₂V₂. Volume ∝ 1/pressure → barotrauma, AGE","בויל: P₁V₁ = P₂V₂. נפח ∝ 1/לחץ ← ברוטראומה, AGE"),
+ L("Dalton: P_total = ΣP. Partial pressure rises with depth → narcosis, O₂/CO/CO₂ toxicity","דלטון: P_total = ΣP. הלחץ החלקי עולה עם העומק ← נרקוזיס, רעילות O₂/CO/CO₂"),
+ L("Henry: dissolved gas ∝ partial pressure → N₂ loading, DCS","הנרי: גז מומס ∝ לחץ חלקי ← ספיגת חנקן, DCS"),
+ L("Charles: V ∝ T (P constant) · Gay-Lussac: P ∝ T (V constant)","שארל: V ∝ T (P קבוע) · גיי-ליסאק: P ∝ T (V קבוע)"),
+ L("Combined: P₁V₁/T₁ = P₂V₂/T₂ · Ideal: PV = nRT","משולב: P₁V₁/T₁ = P₂V₂/T₂ · אידיאלי: PV = nRT"),
+ L("Archimedes: lift = weight of displaced fluid","ארכימדס: עילוי = משקל הנוזל הנדחה"),
+ L("Haldane: tissue compartments, half-times, M-values","הולדיין: תאי רקמה, זמני מחצית, ערכי M")],
+rescue:[L("Life triangle: heart, brain, breathing","משולש החיים: לב, מוח, נשימה"),
+ L("Exhaled air: 16–17% O₂ → rescue breaths work","אוויר נשוף: 16–17% חמצן ← הנשמה עובדת"),
+ L("CO₂ ↑ → blood pH ↓ → urge to breathe","CO₂ ↑ ← pH בדם ↓ ← צורך לנשום"),
+ L("Hemoglobin carries O₂; CO binds even more strongly","המוגלובין נושא חמצן; CO נקשר חזק יותר"),
+ L("!Defib: 30 s → ~90% · 5 min → ~3%","!דפיברילטור: 30 שניות ← ~90% · 5 דק' ← ~3%"),
+ L("Cold water raises resuscitation odds; high temperature lowers them","מים קרים מעלים את סיכויי ההחייאה; חום גבוה מוריד"),
+ L("CAB: compressions first; swap every 2 min or at fatigue","CAB: קודם עיסויים; החלפה כל 2 דק' או בעייפות"),
+ L("Point at one person: call 101 + bring AED · alone: 2 min CPR, then call","פונים לאדם מסוים: 101 + דפיברילטור · לבד: 2 דק' החייאה ואז לקרוא"),
+ L("Fastest heat loss: head & neck, armpits, chest sides, groin; hands & feet cool first","איבוד חום מהיר: ראש וצוואר, בתי שחי, צידי החזה, מפשעה; ידיים ורגליים מתקררות ראשונות"),
+ L("Cold: warm the core gradually, no alcohol, no rubbing · shivering stops + confusion = worse","קור: לחמם את הליבה בהדרגה, בלי אלכוהול ובלי שפשוף · רעד נפסק + בלבול = החמרה"),
+ L("!Heat stroke (>40°C, confusion): 101 + aggressive cooling","!מכת חום (>40°C, בלבול): 101 + קירור אגרסיבי"),
+ L("Dehydration: DCS risk; drink little and often, urine light yellow","התייבשות: סיכון DCS; לשתות מעט ולעיתים קרובות, שתן צהוב בהיר")],
 phys:[L("Breathing reflex ← blood CO₂, not O₂. Hypoxic drive is secondary","רפלקס הנשימה ← CO₂ בדם, לא O₂. הדחף ההיפוקסי משני"),
  L("~300M alveoli; exchange = passive diffusion along the partial-pressure gradient","~300 מיליון נאדיות; החילוף = דיפוזיה סבילה לפי מפל הלחץ החלקי"),
  L("O₂ rides on hemoglobin; CO₂ returns mostly as bicarbonate","O₂ נקשר להמוגלובין; CO₂ חוזר בעיקר כביקרבונט"),
@@ -882,6 +1095,7 @@ function renderSheet(){
     tbl(t.lawacc,[t.law,t.explains],rows(LAW,r=>[tx(r[0]),tx(r[1])]))+
     tbl(t.formula,[t.law,t.formula,S.lang==="he"?"קבוע":"Constant"],rows([["Boyle","בויל","P₁V₁ = P₂V₂","T"],["Charles","שארל","V₁/T₁ = V₂/T₂","P"],["Gay-Lussac","גיי-ליסאק","P₁/T₁ = P₂/T₂","V"],["Combined","משולב","P₁V₁/T₁ = P₂V₂/T₂","n"],["Ideal gas","גז אידיאלי","PV = nRT","R"],["Dalton","דלטון","P_gas = P_total × F_gas","—"],["Henry","הנרי","C = k_H × P_gas","T"],["Archimedes","ארכימדס","F_b = ρ × V × g","—"]],r=>[S.lang==="he"?r[1]:r[0],r[2],r[3]],[1,2]))+
     tbl(t.coll,[t.pres,t.cause,t.resp],rows(COLL,r=>r.map(tx)))+
+    aidTableHTML(qv?hit:null)+
     tbl(t.dcs,[t.type,t.cat,t.signs],rows(DCST,r=>r.map(tx)))+
     tbl(t.o2tbl,[t.po2c,t.maxc,t.usec],rows(O2T,r=>[r[0],r[1]+" min",tx(r[2])],[0,1]))+
     tbl(t.neuro,["#",t.chk,t.look],rows(NEURO.map((r,i)=>[String(i+1),...r]),r=>[r[0],tx(r[1]),tx(r[2])],[0]));
@@ -943,6 +1157,27 @@ const CU={
   pn2:"PN₂ at depth",nx:"N₂ exposure vs surface",best:"Best mix for this depth",narc:"Narcotic like air at",
   c13:"Oxygen exposure (CNS clock)",c13s:"Share of the single-exposure oxygen limit used by a dive",lim:"Single-exposure limit",cns:"CNS clock used",
   cnsNote:"Limits interpolated linearly between the teaching table values (1.6/45 … 0.6/720 min). Check your program's manual.",
+  c15:"Gas reserve & turn pressure",c15s:"Rock bottom: gas two divers need to reach the surface from depth while sharing air, plus the rule of thirds",ssac:"Stressed SAC (per diver)",ascR:"Ascent rate",
+  rb:"Rock bottom (min. reserve)",rbL:"Gas for a shared ascent",turn:"Turn pressure (thirds)",usableB:"Usable above reserve",rbBad:"Your reserve is larger than your fill. This dive is not possible with this cylinder.",
+  rbNote:"Gas management extends Boyle's law: everything at depth costs × ATA. A common way to avoid out-of-air emergencies.",
+  c16:"Ascent time & safety stop",c16s:"How long a controlled ascent takes, and the gas it uses",stopQ:"Safety stop 3 min at 5 m",yes:"Yes",no:"No",
+  ascT:"Total ascent time",toStop:"To the safety stop",toSurf:"To the surface",ascGas:"Gas used on the ascent",fastAsc:"Faster than ~9–10 m/min raises the risk of lung over-expansion and DCS.",
+  c17:"Breath-hold ascent: lung expansion",c17s:"Boyle in the lungs: what happens to a held breath as you rise",lungV:"Lung volume (held breath)",from2:"From depth",to2:"To depth",
+  lungEnd:"Volume at the end",lungEx:"Extra volume",ratio:"Expansion ratio",rise:"Rise",lungBad:"The lungs cannot stretch this much. Alveoli rupture: pneumothorax, emphysema, AGE.",
+  lungNote:"Full lungs can be injured by a rise of only about a metre near the surface. Never hold your breath on scuba.",
+  c18:"Gas density & breathing effort",c18s:"Denser gas is harder to breathe and raises CO₂ retention",dens:"Gas density",dens0:"At the surface",effort:"Breathing effort vs surface",
+  densWarn:"Above 5.2 g/L: recommended limit for gas density.",densBad:"Above 6.2 g/L: hard limit. High risk of CO₂ retention.",
+  densNote:"Density limits (5.2 recommended / 6.2 max g/L) come from diving research (Anthony & Mitchell), not from the lecture.",
+  c19:"Colour loss with depth",c19s:"Which colours are still visible, in clear water",red:"Red",orange:"Orange",yellow:"Yellow",green:"Green",blue:"Blue",gone:"Gone",
+  colNote:"Approximate depths for clear water. Long wavelengths go first; by ~15–20 m most scenes read blue-green. Use a light or white balance for ID work.",
+  c20:"Suit compression & BCD air",c20s:"Buoyancy your wetsuit loses with depth, and the BCD air that replaces it",suitB:"Suit buoyancy at the surface",
+  suitLost:"Buoyancy lost",bcdD:"BCD air needed at depth",bcdFree:"As free air from the tank",suitLeft:"Suit volume left",
+  suitNote:"Upper estimate: it treats the neoprene's gas as fully compressible. Real suits lose a bit less.",
+  c21:"CO contamination at depth",c21s:"Dalton: a contaminant's effect scales with its partial pressure",coPpm:"CO in the cylinder",
+  coEq:"Surface-equivalent CO",coX:"Effect multiplier",coStd:"Within 10 ppm air standard",
+  coNote:"Breathing-air standards (e.g. EN 12021) allow at most 10 ppm CO. Never breathe gas that smells or tastes odd.",
+  c22:"Unit converter",c22s:"Switch between the metric and imperial figures in the lecture",val:"Value",inVal:"Input",
+  unitNote:"1 bar ≈ 14.5 psi · 1 atm = 14.7 psi · 1 ft³ = 28.3 L · 1 m = 3.28 ft · 1 kg = 2.2 lb",
   c14:"Haldane compartments",c14s:"How far each theoretical tissue gets toward saturation in a given time at depth",ht:"Half-time",sat:"Toward new equilibrium",tn2:"Tissue PN₂",
   htNote:"Each half-time closes half of the remaining gap: 50% after 1, 75% after 2, ~98% after 6.",
   model:"Model: Bühlmann ZH-L16C (16 Haldane compartments), instant descent and ascent, seawater. Table values differ a little."},
@@ -981,6 +1216,27 @@ const CU={
   pn2:"PN₂ בעומק",nx:"חשיפה לחנקן מול פני המים",best:"התערובת המיטבית לעומק",narc:"נרקוטי כמו אוויר ב",
   c13:"חשיפה לחמצן (שעון CNS)",c13s:"כמה אחוז מגבול החשיפה הבודדת לחמצן צלילה מנצלת",lim:"גבול חשיפה בודדת",cns:"ניצול שעון CNS",
   cnsNote:"הגבולות מחושבים באינטרפולציה ליניארית בין ערכי טבלת הלימוד (1.6/45 … 0.6/720 דק'). יש לבדוק במדריך של התוכנית.",
+  c15:"רזרבת גז ולחץ חזרה",c15s:"Rock bottom: הגז ששני צוללנים צריכים כדי לעלות מהעומק תוך שיתוף אוויר, וגם כלל השלישים",ssac:"SAC בלחץ (לצוללן)",ascR:"קצב עלייה",
+  rb:"Rock bottom (רזרבה מינימלית)",rbL:"גז לעלייה משותפת",turn:"לחץ חזרה (שלישים)",usableB:"זמין מעל הרזרבה",rbBad:"הרזרבה גדולה מהמילוי. הצלילה לא אפשרית עם המיכל הזה.",
+  rbNote:"ניהול גז הוא הרחבה של חוק בויל: כל דבר בעומק עולה × ATA. דרך מקובלת למנוע מקרי חוסר אוויר.",
+  c16:"זמן עלייה ועצירת בטיחות",c16s:"כמה זמן לוקחת עלייה מבוקרת וכמה גז היא צורכת",stopQ:"עצירת בטיחות 3 דק' ב-5 מ'",yes:"כן",no:"לא",
+  ascT:"זמן עלייה כולל",toStop:"עד עצירת הבטיחות",toSurf:"עד פני המים",ascGas:"גז שנצרך בעלייה",fastAsc:"עלייה מהירה מ-9–10 מ'/דק' מעלה סיכון לפגיעת ריאות ול-DCS.",
+  c17:"עלייה בעצירת נשימה: התפשטות הריאות",c17s:"בויל בריאות: מה קורה לנשימה עצורה כשעולים",lungV:"נפח ריאות (נשימה עצורה)",from2:"מעומק",to2:"לעומק",
+  lungEnd:"נפח בסוף",lungEx:"נפח עודף",ratio:"יחס התפשטות",rise:"עלייה",lungBad:"הריאות לא יכולות להימתח כל כך. הנאדיות נקרעות: חזה אוויר, אמפיזמה, AGE.",
+  lungNote:"ריאות מלאות יכולות להיפגע מעלייה של כמטר אחד בלבד ליד פני המים. לעולם לא לעצור נשימה עם סקובה.",
+  c18:"צפיפות גז ומאמץ נשימה",c18s:"גז צפוף קשה יותר לנשימה ומגביר הצטברות CO₂",dens:"צפיפות הגז",dens0:"על פני המים",effort:"מאמץ נשימה מול פני המים",
+  densWarn:"מעל 5.2 גרם/ליטר: הגבול המומלץ לצפיפות גז.",densBad:"מעל 6.2 גרם/ליטר: גבול מוחלט. סיכון גבוה להצטברות CO₂.",
+  densNote:"גבולות הצפיפות (5.2 מומלץ / 6.2 מרבי גרם/ליטר) לקוחים ממחקר צלילה (Anthony & Mitchell), לא מההרצאה.",
+  c19:"אובדן צבעים בעומק",c19s:"אילו צבעים עדיין נראים, במים צלולים",red:"אדום",orange:"כתום",yellow:"צהוב",green:"ירוק",blue:"כחול",gone:"נעלם",
+  colNote:"עומקים משוערים למים צלולים. אורכי גל ארוכים נעלמים ראשונים; ב-15–20 מ' הכול נראה כחול-ירוק. לזיהוי מינים – פנס או איזון לבן.",
+  c20:"דחיסת החליפה ואוויר במאזן",c20s:"הציפה שהחליפה מאבדת בעומק, והאוויר במאזן שמחליף אותה",suitB:"ציפת החליפה על פני המים",
+  suitLost:"ציפה שאבדה",bcdD:"אוויר במאזן בעומק",bcdFree:"כאוויר חופשי מהמיכל",suitLeft:"נפח החליפה שנשאר",
+  suitNote:"הערכה עליונה: מניחה שהגז בניאופרן נדחס לגמרי. חליפות אמיתיות מאבדות מעט פחות.",
+  c21:"זיהום CO בעומק",c21s:"דלטון: ההשפעה של מזהם עולה עם הלחץ החלקי שלו",coPpm:"CO במיכל",
+  coEq:"CO שקול לפני המים",coX:"מכפיל השפעה",coStd:"בתוך תקן 10 ppm",
+  coNote:"תקני אוויר נשימה (למשל EN 12021) מתירים עד 10 ppm CO. לעולם לא לנשום גז עם ריח או טעם חריג.",
+  c22:"ממיר יחידות",c22s:"מעבר בין המספרים המטריים והאימפריאליים שבהרצאה",val:"ערך",inVal:"קלט",
+  unitNote:"1 bar ≈ 14.5 psi · 1 atm = 14.7 psi · 1 ft³ = 28.3 ל' · 1 מ' = 3.28 רגל · 1 ק״ג = 2.2 lb",
   c14:"תאי הרקמה של הולדיין",c14s:"כמה כל רקמה תאורטית מתקרבת לרוויה בזמן נתון בעומק",ht:"זמן מחצית",sat:"התקדמות לשיווי משקל",tn2:"PN₂ ברקמה",
   htNote:"כל זמן מחצית סוגר חצי מהפער שנשאר: 50% אחרי 1, 75% אחרי 2, ~98% אחרי 6.",
   model:"מודל: Bühlmann ZH-L16C (16 תאי רקמה לפי הולדיין), ירידה ועלייה מיידיות, מי ים. ערכי הטבלאות שונים מעט."}
@@ -988,7 +1244,7 @@ const CU={
 const CT=()=>CU[S.lang];
 const CDEF={tank:12,fill:200,res:50,cd:20,v0:10,vd:20,vw:"sea",lm:50,lv:10,ld:20,lw:"sea",lt:12,
   gd:25,fo2:32,gt:12,gp:200,gr:50,sac:20,gf:"1",
-  d1:18,t1:40,f1:21,d2:18,t2:40,f2:21,pt:12,pp:200,pr:50,ps:20,sd1:25,st1:15,sd2:15,st2:15,sd3:5,st3:5,tp:200,tt1:25,tt2:50,trp:232,dm:"real",ds:30,dd:4,qt:12,qs:200,qe:90,qm:45,qd:15,kd:30,kw:"sea",wm:100,wl:6,wf:"sea",xf:32,xd:30,xm:"1.4",of:32,od:30,ot:40,hd:30,ht:20,hf:21};
+  d1:18,t1:40,f1:21,d2:18,t2:40,f2:21,pt:12,pp:200,pr:50,ps:20,sd1:25,st1:15,sd2:15,st2:15,sd3:5,st3:5,tp:200,tt1:25,tt2:50,trp:232,dm:"real",ds:30,dd:4,qt:12,qs:200,qe:90,qm:45,qd:15,kd:30,kw:"sea",wm:100,wl:6,wf:"sea",xf:32,xd:30,xm:"1.4",of:32,od:30,ot:40,hd:30,ht:20,hf:21,rd:30,rs:30,rr:9,rt:12,rp:200,ad:25,ar:9,ss:"y",as:20,bv:6,bd1:10,bd2:0,gdd:30,gf2:21,cl:10,ub:6,ud:20,uw:"sea",co:5,od2:30,uv:30,uc:"len"};
 let C=null;
 const nf=(n,d=0)=>Number.isFinite(n)?n.toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d}):"—";
 const ataAt=(d,w="sea")=>1+d/(w==="fresh"?10.3:10);
@@ -1012,7 +1268,7 @@ function cps(k,label,opts,full=true){return `<div class="fld ${full?"full":""}">
 const waterCps=k=>cps(k,CT().water,[["sea",CT().sea],["fresh",CT().fresh]]);
 const gfCps=()=>cps("gf",CT().cons,[["1",CT().std+" · GF 100"],["0.9",CT().cn+" · GF 90"],["0.8",CT().vc+" · GF 80"]]);
 const card=(n,id,title,sub,inner)=>`<section class="calc" id="calc-${id}"><header><span class="n">${n}</span><div><h2>${title}</h2><p>${sub}</p></div></header><div class="fields">${inner}</div><div class="out" id="o-${id}"></div></section>`;
-const fmtLabel={kd:v=>v+" m",xd:v=>v+" m",od:v=>v+" m",hd:v=>v+" m",xf:v=>gasName(v)+" ("+v+"% O₂)",of:v=>gasName(v)+" ("+v+"% O₂)",hf:v=>gasName(v),sd1:v=>v+" m",sd2:v=>v+" m",sd3:v=>v+" m",tt1:v=>v+" °C",tt2:v=>v+" °C",cd:v=>v+" m",vd:v=>v+" m",ld:v=>v+" m",gd:v=>v+" m",d1:v=>v+" m",d2:v=>v+" m",fo2:v=>gasName(v)+(+v>21?" ("+v+"% O₂)":" (21% O₂)"),f1:v=>gasName(v),f2:v=>gasName(v)};
+const fmtLabel={rd:v=>v+" m",ad:v=>v+" m",bd1:v=>v+" m",bd2:v=>v+" m",gdd:v=>v+" m",cl:v=>v+" m",ud:v=>v+" m",od2:v=>v+" m",gf2:v=>gasName(v),kd:v=>v+" m",xd:v=>v+" m",od:v=>v+" m",hd:v=>v+" m",xf:v=>gasName(v)+" ("+v+"% O₂)",of:v=>gasName(v)+" ("+v+"% O₂)",hf:v=>gasName(v),sd1:v=>v+" m",sd2:v=>v+" m",sd3:v=>v+" m",tt1:v=>v+" °C",tt2:v=>v+" °C",cd:v=>v+" m",vd:v=>v+" m",ld:v=>v+" m",gd:v=>v+" m",d1:v=>v+" m",d2:v=>v+" m",fo2:v=>gasName(v)+(+v>21?" ("+v+"% O₂)":" (21% O₂)"),f1:v=>gasName(v),f2:v=>gasName(v)};
 
 function renderCalc(){
   if(!C)C=Object.assign({},CDEF,store.get("calc",{}));
@@ -1021,7 +1277,7 @@ function renderCalc(){
   $("#main").innerHTML=`<div class="view">
    <div class="sh-head"><div><div class="eyebrow"><span>P₁V₁ = P₂V₂ · ρVg · PₜₒₜF</span></div><h1>${t.calcT}</h1><p class="lead" style="margin-top:6px">${t.calcS}</p></div></div>
    <div class="warnbar"><span>⚠</span><span>${t.warn}</span></div>
-   <nav class="jump">${["c1","c2","c3","c4","c5","c6","c7","c8","c9","c10","c11","c12","c13","c14"].map((c,i)=>`<a href="#calc-${c}" data-cj="${c}">${i+1} · ${t[c]}</a>`).join("")}</nav>
+   <nav class="jump">${["c1","c2","c3","c4","c5","c6","c7","c8","c9","c10","c11","c12","c13","c14","c15","c16","c17","c18","c19","c20","c21","c22"].map((c,i)=>`<a href="#calc-${c}" data-cj="${c}">${i+1} · ${t[c]}</a>`).join("")}</nav>
    <div class="cgrid">
    ${card(1,"c1",t.c1,t.c1s,cps("tank",t.tank,tanks)+fld("tank",t.tank,"L",{step:.1})+fld("fill",t.fill,"bar",{step:10})+fld("res",t.res,"bar",{step:10})+rng("cd",t.atDepth,{min:0,max:40}))}
    ${card(2,"c2",t.c2,t.c2s,fld("v0",t.v0,"L",{step:.5})+waterCps("vw")+rng("vd",t.depth,{min:0,max:40}))}
@@ -1039,6 +1295,14 @@ function renderCalc(){
    ${card(12,"c12",t.c12,t.c12s,rng("xf",t.gas,{min:21,max:50})+rng("xd",t.depth,{min:0,max:60})+cps("xm",t.maxpo2,[["1.2","1.2"],["1.3","1.3"],["1.4","1.4"],["1.6","1.6"]]))}
    ${card(13,"c13",t.c13,t.c13s,rng("of",t.gas,{min:21,max:50})+rng("od",t.depth,{min:0,max:50})+fld("ot",t.time,t.min,{step:1,full:true}))}
    ${card(14,"c14",t.c14,t.c14s,rng("hd",t.depth,{min:0,max:40})+rng("hf",t.gas,{min:21,max:40})+fld("ht",t.time,t.min,{step:1,full:true}))}
+   ${card(15,"c15",t.c15,t.c15s,rng("rd",t.depth,{min:6,max:40})+fld("rs",t.ssac,"L/min",{step:1})+fld("rr",t.ascR,"m/min",{step:1})+fld("rt",t.tank,"L",{step:.1})+fld("rp",t.fill,"bar",{step:10}))}
+   ${card(16,"c16",t.c16,t.c16s,rng("ad",t.depth,{min:1,max:40})+fld("ar",t.ascR,"m/min",{step:1})+fld("as",t.sac,"L/min",{step:1})+cps("ss",t.stopQ,[["y",t.yes],["n",t.no]]))}
+   ${card(17,"c17",t.c17,t.c17s,fld("bv",t.lungV,"L",{step:.5,full:true})+rng("bd1",t.from2,{min:1,max:40,full:false})+rng("bd2",t.to2,{min:0,max:39,full:false}))}
+   ${card(18,"c18",t.c18,t.c18s,rng("gf2",t.gas,{min:21,max:40})+rng("gdd",t.depth,{min:0,max:60}))}
+   ${card(19,"c19",t.c19,t.c19s,rng("cl",t.depth,{min:0,max:40}))}
+   ${card(20,"c20",t.c20,t.c20s,fld("ub",t.suitB,"kg",{step:.5,full:true})+waterCps("uw")+rng("ud",t.depth,{min:0,max:40}))}
+   ${card(21,"c21",t.c21,t.c21s,fld("co",t.coPpm,"ppm",{step:1,full:true})+rng("od2",t.depth,{min:0,max:40}))}
+   ${card(22,"c22",t.c22,t.c22s,cps("uc","",[["len","m → ft"],["len2","ft → m"],["pres","bar → psi"],["psi","psi → bar"],["vol","L → ft³"],["cuft","ft³ → L"],["tc","°C → °F"],["tf","°F → °C"],["kg","kg → lb"],["lb","lb → kg"]])+fld("uv",t.val,"",{step:.1,min:-100,full:true}))}
    </div><p class="note" style="margin-top:16px">${t.model}</p></div>`;
   document.querySelectorAll("#main [data-k]").forEach(el=>el.addEventListener("input",()=>{const v=parseFloat(el.value);if(Number.isFinite(v)){C[el.dataset.k]=v;calcUpdate(el)}}));
   document.querySelectorAll("#main [data-g] button").forEach(b=>b.onclick=()=>{const k=b.parentElement.dataset.g;const v=b.dataset.v;C[k]=isNaN(+v)?v:(k==="gf"?v:+v);calcUpdate()});
@@ -1193,6 +1457,79 @@ ${lim?`CNS = ${nf(C.ot)} min ÷ ${nf(lim)} min = ${nf(pct,0)}%`:po<0.6?"PO₂ < 
    <div class="work">P_tissue = P₀ + (P_inspired − P₀) × (1 − 2^(−t / half-time))
 20-min tissue: ${nf(P0,2)} + (${nf(Pt,2)} − ${nf(P0,2)}) × ${nf(1-Math.pow(2,-C.ht/20),3)} = ${nf(P0+(Pt-P0)*(1-Math.pow(2,-C.ht/20)),2)} bar</div><p class="note">${t.htNote}</p>`}
 
+  /* 15 gas reserve */
+  {const A=ataAt(C.rd),stopA=ataAt(5),asc=Math.max(C.rd-5,0)/C.rr,ascA=(A+stopA)/2,top=5/C.rr,
+    gasL=2*C.rs*(1*A+asc*ascA+(C.rd>5?3*stopA:0)+top*(1+stopA)/2),rb=Math.ceil(gasL/C.rt/10)*10,third=Math.round(C.rp/3/5)*5,turn=C.rp-third,usable=C.rp-Math.max(rb,third);
+   $("#o-c15").innerHTML=`<div class="big">${tile(nf(rb)+" bar",t.rb,"hero")}${tile(nf(gasL)+" L",t.rbL)}${tile(nf(turn)+" bar",t.turn)}${tile(nf(Math.max(usable,0))+" bar",t.usableB,usable<=0?"bad":"")}</div>
+   ${rb>=C.rp?`<p class="note bad">${t.rbBad}</p>`:""}
+   <div class="work">2 divers × ${nf(C.rs)} L/min (stressed SAC)
+  1 min problem solving  × ${nf(A,1)} ATA
++ ${nf(asc,1)} min ascent to 5 m × ${nf(ascA,2)} ATA (avg)
++ 3 min stop at 5 m      × ${nf(stopA,1)} ATA
++ ${nf(top,1)} min to surface   × ${nf((1+stopA)/2,2)} ATA
+= ${nf(gasL)} L ÷ ${nf(C.rt,1)} L = ${nf(gasL/C.rt)} → ${nf(rb)} bar
+Thirds: ${nf(C.rp)} − ${nf(C.rp)}/3 = turn at ${nf(turn)} bar</div><p class="note">${t.rbNote}</p>`}
+
+  /* 16 ascent time */
+  {const stop=C.ss==="y"&&C.ad>5,t1=(stop?C.ad-5:C.ad)/C.ar,t2=stop?3:0,t3=stop?5/C.ar:0,tot=t1+t2+t3,A=ataAt(C.ad);
+   const gas=C.as*((t1*(A+ataAt(stop?5:0))/2)+t2*ataAt(5)+t3*(ataAt(5)+1)/2);
+   $("#o-c16").innerHTML=`<div class="big">${tile(nf(tot,1)+" "+t.min,t.ascT,"hero")}${tile(nf(t1,1)+" "+t.min,stop?t.toStop:t.toSurf)}${tile(nf(gas)+" L",t.ascGas)}</div>
+   <div class="work">${stop?`${C.ad} → 5 m: ${nf(C.ad-5)} m ÷ ${C.ar} m/min = ${nf(t1,1)} min
+Safety stop: 3 min
+5 → 0 m: 5 ÷ ${C.ar} = ${nf(t3,1)} min`:`${C.ad} → 0 m: ${C.ad} ÷ ${C.ar} = ${nf(t1,1)} min`}
+Total = ${nf(tot,1)} min</div>${C.ar>10?`<p class="note warn">${t.fastAsc}</p>`:""}`}
+
+  /* 17 breath-hold ascent */
+  {const A1=ataAt(C.bd1),A2=ataAt(Math.min(C.bd2,C.bd1)),V2=C.bv*A1/A2,ex=V2-C.bv;
+   const rows=[0,1,2,5,10].filter(r=>r<=C.bd1).map(r=>{const d=C.bd1-r,v=C.bv*A1/ataAt(d);return `<tr><td>${r} m ↑ (${nf(d)} m)</td><td>${nf(v,2)} L</td><td>+${nf((v/C.bv-1)*100)}%</td></tr>`}).join("");
+   $("#o-c17").innerHTML=`<div class="big">${tile(nf(V2,2)+" L",t.lungEnd,ex>0.3?"bad":"hero")}${tile("+"+nf(ex,2)+" L",t.lungEx,ex>0.3?"bad":"")}${tile("×"+nf(A1/A2,2),t.ratio)}</div>
+   ${ex>0.3?`<p class="note bad">${t.lungBad}</p>`:""}
+   <div class="work">V₂ = ${nf(C.bv,1)} L × ${nf(A1,2)} / ${nf(A2,2)} = ${nf(V2,2)} L</div>
+   <table class="mini"><tr><th>${t.rise}</th><th>V</th><th>%</th></tr>${rows}</table><p class="note">${t.lungNote}</p>`}
+
+  /* 18 gas density */
+  {const f=C.gf2/100,rho0=(f*32+(1-f)*28)/22.4,A=ataAt(C.gdd),rho=rho0*A;
+   const rows=[0,10,20,30,40,50].map(d=>{const r=rho0*ataAt(d);return `<tr class="${d===C.gdd?"me":""}"><td>${d} m</td><td>${nf(r,2)} g/L</td><td>×${nf(ataAt(d),1)}</td></tr>`}).join("");
+   $("#o-c18").innerHTML=`<div class="big">${tile(nf(rho,2)+" g/L",t.dens,rho>6.2?"bad":rho>5.2?"warn":"hero")}${tile("×"+nf(A,1),t.effort)}${tile(nf(rho0,2)+" g/L",t.dens0)}</div>
+   ${rho>6.2?`<p class="note bad">${t.densBad}</p>`:rho>5.2?`<p class="note warn">${t.densWarn}</p>`:""}
+   <div class="work">ρ₀ = (${nf(f,2)} × 32 + ${nf(1-f,2)} × 28) ÷ 22.4 = ${nf(rho0,3)} g/L
+ρ  = ${nf(rho0,3)} × ${nf(A,1)} ATA = ${nf(rho,2)} g/L</div>
+   <table class="mini"><tr><th>${t.depth}</th><th>${t.dens}</th><th>${t.effort}</th></tr>${rows}</table><p class="note">${t.densNote}</p>`}
+
+  /* 19 colour loss */
+  {const cols=[[t.red,"#E0262B",5],[t.orange,"#F07E1A",12],[t.yellow,"#F4CC23",20],[t.green,"#2FA84F",30],[t.blue,"#1E6FD9",60]];
+   $("#o-c19").innerHTML=`<div class="spec">${cols.map(([n,c,z])=>{const k=Math.max(0,1-C.cl/z);return `<div><i style="background:${c};opacity:${Math.max(.08,k).toFixed(2)}"></i><b>${n}</b><span>${k<=0?t.gone:nf(k*100)+"%"}</span><small>~${z} m</small></div>`}).join("")}</div>
+   <div class="scene" style="background:linear-gradient(135deg,rgba(224,38,43,${Math.max(0,1-C.cl/5).toFixed(2)}),rgba(240,126,26,${Math.max(0,1-C.cl/12).toFixed(2)}),rgba(244,204,35,${Math.max(0,1-C.cl/20).toFixed(2)})),linear-gradient(#1E6FD9,#0b3f7a)"><span>${C.cl} m</span></div>
+   <p class="note">${t.colNote}</p>`}
+
+  /* 20 suit compression */
+  {const r=rho(C.uw),A=ataAt(C.ud,C.uw),lost=C.ub*(1-1/A),bcd=lost/r,fa=bcd*A;
+   $("#o-c20").innerHTML=`<div class="big">${tile(nf(lost,1)+" kg",t.suitLost,"hero")}${tile(nf(bcd,1)+" L",t.bcdD)}${tile(nf(fa,1)+" L",t.bcdFree)}${tile(nf(100/A)+"%",t.suitLeft)}</div>
+   <div class="work">Lost = ${nf(C.ub,1)} kg × (1 − 1/${nf(A,2)}) = ${nf(lost,2)} kg
+BCD at depth = ${nf(lost,2)} ÷ ${r} = ${nf(bcd,2)} L
+Free air = ${nf(bcd,2)} × ${nf(A,2)} = ${nf(fa,1)} L</div><p class="note">${t.suitNote}</p>`}
+
+  /* 21 CO contamination */
+  {const A=ataAt(C.od2),eq=C.co*A;
+   const rows=[0,10,20,30,40].map(d=>`<tr class="${d===C.od2?"me":""}"><td>${d} m</td><td>${nf(C.co*ataAt(d),1)} ppm</td></tr>`).join("");
+   $("#o-c21").innerHTML=`<div class="big">${tile(nf(eq,1)+" ppm",t.coEq,eq>C.co*2?"warn":"hero")}${tile("×"+nf(A,1),t.coX)}${tile(C.co>10?"✕":"✓",t.coStd,C.co>10?"bad":"good")}</div>
+   <div class="work">Surface-equivalent = ${nf(C.co,1)} ppm × ${nf(A,1)} ATA = ${nf(eq,1)} ppm</div>
+   <table class="mini"><tr><th>${t.depth}</th><th>${t.coEq}</th></tr>${rows}</table><p class="note">${t.coNote}</p>`}
+
+  /* 22 units */
+  {const v=C.uv,cat=C.uc;let rows=[];
+   if(cat==="len") rows=[["m",v],["ft",v*3.2808]];
+   if(cat==="len2") rows=[["ft",v],["m",v/3.2808]];
+   if(cat==="pres") rows=[["bar",v],["psi",v*14.5038],["atm",v/1.01325],["kPa",v*100]];
+   if(cat==="psi") rows=[["psi",v],["bar",v/14.5038],["atm",v/14.696]];
+   if(cat==="vol") rows=[["L",v],["ft³",v/28.317]];
+   if(cat==="cuft") rows=[["ft³",v],["L",v*28.317]];
+   if(cat==="tc") rows=[["°C",v],["°F",v*9/5+32],["K",v+273.15]];
+   if(cat==="tf") rows=[["°F",v],["°C",(v-32)*5/9],["K",(v-32)*5/9+273.15]];
+   if(cat==="kg") rows=[["kg",v],["lb",v*2.2046]];
+   if(cat==="lb") rows=[["lb",v],["kg",v/2.2046]];
+   $("#o-c22").innerHTML=`<div class="big">${rows.map((r,i)=>tile(nf(r[1],r[1]%1&&Math.abs(r[1])<1000?2:0)+" "+r[0],i?"=":t.inVal,i===1?"hero":"")).join("")}</div><p class="note">${t.unitNote}</p>`}
+
 }
 
 /* =========================== STATE =========================== */
@@ -1258,6 +1595,7 @@ function renderStudy(){
 }
 function goCh(i){if(i<0||i>=CH.length)return;S.ch=i;store.set("ch",i);renderStudy();window.scrollTo({top:0,behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"})}
 function chapterHTML(c){
+  if(c.laws) return lawsHTML(c);
   const t=T(), idx=CH.indexOf(c)+1;
   let h=`<div class="ch-head"><div class="eyebrow"><span>${t.ch} ${idx} · ${esc(tx(c.tag))}</span><span class="depth">▼ ${tx(c.d)}</span></div>
    <h1>${esc(tx(c.t))}</h1><p class="lead">${esc(tx(c.lead))}</p>
@@ -1266,8 +1604,10 @@ function chapterHTML(c){
   if(c.pts) h+=`<div class="sec"><h3>${t.keypoints}</h3><ul class="points">${c.pts.map(p=>`<li>${tx(p)}</li>`).join("")}</ul></div>`;
   if(c.gauge) h+=`<div class="sec"><h3>${t.gauge}</h3>${gaugeHTML()}</div>`;
   if(c.nums) h+=`<div class="sec"><h3>${t.nums}</h3><div class="nums">${c.nums.map(n=>`<div><strong>${esc(n[0])}</strong><span>${esc(tx(n[1]))}</span></div>`).join("")}</div></div>`;
-  if(c.acc) h+=`<div class="sec"><h3>${t.accidents}</h3><div class="acc">${c.acc.map(a=>`<article><header><span class="tag ${a.sev?"":"t1"}">${a.sev?(S.lang==="he"?"חמור":"Serious"):(S.lang==="he"?"תאונה":"Injury")}</span><h4>${esc(tx(a.t))}</h4></header><ul>${a.i.map(x=>`<li>${tx(x)}</li>`).join("")}</ul></article>`).join("")}</div></div>`;
-  if(c.aid) h+=`<div class="sec"><h3>${t.aid}</h3><ol class="aid">${c.aid.map(x=>`<li><span>${esc(tx(x))}</span></li>`).join("")}</ol></div>`;
+  if(c.acc) h+=`<div class="sec"><h3>${t.accidents}</h3><div class="acc">${c.acc.map(a=>`<article><header><span class="tag ${a.sev?"":"t1"}">${a.sev?(S.lang==="he"?"חמור":"Serious"):(S.lang==="he"?"תאונה":"Injury")}</span><h4>${esc(tx(a.t))}</h4></header><ul>${a.i.map(x=>`<li>${tx(x)}</li>`).join("")}</ul>${a.fa?`<div class="fa"><b>${t.aid}</b><span>${esc(tx(a.fa))}</span></div>`:""}</article>`).join("")}</div></div>`;
+  if(c.aid) h+=`<div class="sec"><h3>${c.aidTable?(S.lang==="he"?"רצף ההחייאה":"Resuscitation sequence"):t.aid}</h3><ol class="aid">${c.aid.map(x=>`<li><span>${esc(tx(x))}</span></li>`).join("")}</ol></div>`;
+  if(c.thermo) h+=thermoHTML();
+  if(c.aidTable) h+=aidTableHTML();
   return h;
 }
 function gaugeHTML(){const t=T();return `<div class="gauge"><div class="col"><div class="bal" id="bal"></div><div class="dl" id="gDl">0 m</div></div>
@@ -1377,4 +1717,5 @@ if(S.ch>=CH.length)S.ch=0;
 render();
 </script>
 
-</body></html>
+</body>
+</html>

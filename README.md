@@ -33,8 +33,9 @@ Built for divers training at the Interuniversity Institute for Marine Sciences i
 The app has four modes, switched from the top bar on desktop or the bottom tab bar on phones.
 
 ### 📖 Study
-- 12 chapters that follow the lecture: respiration and circulation, properties of water, Archimedes, pressure, Boyle, temperature laws, Dalton, Henry and DCS, Haldane, additional concerns, emergencies, CPR and rescue.
-- Each chapter has key points, formulas, numbers to know, accident cards (serious ones flagged in red) and step-by-step first aid.
+- 14 chapters that follow the lecture: respiration and circulation, **the laws in one sentence**, properties of water, Archimedes, pressure, Boyle, temperature laws, Dalton, Henry and DCS, Haldane, additional concerns, emergencies, **rescue and first-aid basics**, CPR and rescue.
+- Each chapter has key points, formulas, numbers to know and step-by-step first aid. **Every accident card has its own first-aid box**, taken from the lecture.
+- The rescue chapter adds the class-notes essentials (life triangle, CAB, defibrillation timing, calling 101), a cold / heat / dehydration section with a body map of the areas that lose heat fastest, and a table of first aid for every accident.
 - An interactive **depth gauge** (Boyle and Dalton chapters) shows ambient pressure, relative gas volume, PO₂ and PN₂ from 0 to 40 m.
 - "Mark as learned" with a progress bar. Progress is saved in the browser.
 
@@ -46,9 +47,10 @@ The app has four modes, switched from the top bar on desktop or the bottom tab b
   - DCS types
   - oxygen exposure limits
   - the 12-step field neuro exam
+  - first aid for every accident
 - **Live search** filters and highlights matching lines, for example `AGE` or `1.4`.
 
-### 🧮 Calculators (14)
+### 🧮 Calculators (22)
 Every calculator shows the working with your numbers, so you can check it by hand.
 
 | # | Calculator | Based on |
@@ -67,9 +69,17 @@ Every calculator shows the working with your numbers, so you can check it by han
 | 12 | Partial pressures and best nitrox mix | Dalton |
 | 13 | Oxygen exposure (CNS clock) | NOAA teaching table |
 | 14 | Haldane tissue compartments | Half-time equation |
+| 15 | Gas reserve (rock bottom) and turn pressure | Boyle, gas management |
+| 16 | Ascent time and safety stop | Ascent rate |
+| 17 | Breath-hold ascent: lung expansion | Boyle |
+| 18 | Gas density and breathing effort | Dalton / density × ATA |
+| 19 | Colour loss with depth | Light absorption |
+| 20 | Wetsuit compression and BCD air | Boyle + Archimedes |
+| 21 | CO contamination at depth | Dalton |
+| 22 | Unit converter (m/ft, bar/psi, L/ft³, °C/°F, kg/lb) | — |
 
 ### ✅ Exam
-- About 80 multiple-choice questions written from the lecture, in both languages.
+- About 100 multiple-choice questions written from the lecture, in both languages.
 - Pick topics and question count (10 / 20 / 30 / all). Answer order is shuffled each time.
 - Instant feedback with an explanation after every question.
 - Results: score ring, per-topic breakdown, review of mistakes, "retry mistakes" and best score.
@@ -135,7 +145,8 @@ Inside `index.html`, the `<script>` is organized in blocks:
 |---|---|
 | `LOGO` | Base64 PNG logos (`he`, `en`, plus `_d` dark variants) |
 | `UI` | Interface strings, `en` / `he` |
-| `CH` | The 12 study chapters (points, formulas, numbers, accidents, first aid) |
+| `CH` | The 14 study chapters (points, formulas, numbers, accidents, first aid) |
+| `LAWS` | The laws chapter: formula, one-sentence explanation, diving relevance |
 | `Q` | Exam questions. The first option is always the correct one, and options are shuffled at runtime |
 | `LAW`, `O2T`, `DCST`, `NEURO`, `COLL`, `CORE` | Cheat-sheet tables |
 | `SHEET` | Condensed cheat-sheet lines per chapter (a leading `!` marks a red-flag line) |
@@ -165,7 +176,7 @@ q("boyle",
   ["שאלה?",     "נכון",    "שגוי 1",  "שגוי 2",  "שגוי 3",  "הסבר."]);
 ```
 
-**Edit a chapter.** Find its object in `CH` by `id` (`phys`, `water`, `arch`, `press`, `boyle`, `temp`, `dalton`, `henry`, `haldane`, `other`, `emerg`, `cpr`). Every text field uses `L("English", "עברית")`.
+**Edit a chapter.** Find its object in `CH` by `id` (`phys`, `laws`, `water`, `arch`, `press`, `boyle`, `temp`, `dalton`, `henry`, `haldane`, `other`, `emerg`, `rescue`, `cpr`). Every text field uses `L("English", "עברית")`. To give an accident its own first-aid box, add `fa:L("…", "…")` to its object in `acc`.
 
 ---
 
@@ -198,10 +209,10 @@ q("boyle",
 **אפליקציית לימוד והכנה למבחן לקורס צוללן מדעי AAUS: פיזיקה, פיזיולוגיה ותאונות צלילה.** האפליקציה נבנתה עבור צוללנים בהכשרה במכון הבינאוניברסיטאי למדעי הים באילת.
 
 **ארבעה מצבים:**
-- **לימוד:** 12 פרקים לפי ההרצאה, מד עומק אינטראקטיבי ומעקב התקדמות.
+- **לימוד:** 14 פרקים לפי ההרצאה, כולל פרק חוקים ופרק הצלה ועזרה ראשונה, עזרה ראשונה לכל תאונה, מד עומק אינטראקטיבי ומעקב התקדמות.
 - **צ׳יט שיט:** כל החומר בעמוד אחד, עם טבלאות עזר וחיפוש.
-- **חישובים:** 14 מחשבונים, כולל אוויר במיכל, בויל, מצנח הרמה, ניטרוקס ו-NDL, מרווח שטח, לחץ וטמפרטורה, עיוות ראייה, SAC, משקולות, דלטון, שעון CNS ותאי הולדיין.
-- **מבחן:** כ-80 שאלות אמריקאיות, הסבר אחרי כל שאלה, וסיכום לפי נושא.
+- **חישובים:** 22 מחשבונים, כולל אוויר במיכל, בויל, מצנח הרמה, ניטרוקס ו-NDL, מרווח שטח, לחץ וטמפרטורה, עיוות ראייה, SAC, משקולות, דלטון, שעון CNS ותאי הולדיין.
+- **מבחן:** כ-100 שאלות אמריקאיות, הסבר אחרי כל שאלה, וסיכום לפי נושא.
 
 **הרצה:** פותחים את `index.html` בדפדפן. אין צורך בהתקנה.
 
